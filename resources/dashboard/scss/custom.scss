@@ -1,0 +1,60 @@
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #5f5858;
+}
+.form-group{
+  margin-bottom: 1em;
+  label{
+    font-weight:600;
+  }
+}
+.form-control {
+
+  &:focus {
+     box-shadow: none !important;
+  }
+
+}
+.report-view{
+  max-height: 75vh;
+  overflow-y: scroll;
+}
+
+.sidebar-link {
+  &.active{
+    background: yellow !important;
+    color: black;
+      i{
+      color: black !important;
+      }
+    }
+}
+
+.location-action {
+    span {
+      display: none;
+      &:hover {
+        display: inline-block;
+    }
+  }
+}
+
+.table-analytics > :not(caption) > * > * {
+  padding: 0 0px !important;
+}
+
+.table-search-analytics > :not(caption) > * > * {
+  padding: 0 0rem !important;
+}
+
+.table-responsive {
+  overflow-x: visible !important;
+}

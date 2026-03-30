@@ -1,0 +1,77 @@
+      <!-- Footer-->
+      <footer class="footer bg-dark pt-5">
+        <div class="px-lg-3 pt-2 pb-4">
+          <div class="mx-auto px-3" style="max-width: 80rem;">
+            <div class="row">
+              <div class="col-xl-2 col-lg-3 col-sm-4 pb-2 mb-4">
+                
+              <a class="navbar-brand d-none d-sm-block flex-shrink-0" href="{{ url('/') }}">
+                <img src="{{ asset('img/logo-large.png') }}" width="142" alt="rembeka">
+              </a>
+              <a class="navbar-brand d-sm-none flex-shrink-0 me-2"  href="{{ url('/') }}">
+                <img src="{{ asset('img/logo-large.png') }}" height="50" width="60" alt="rembeka">
+              </a>
+
+              </div>
+              <div class="col-xl-3 col-lg-4 col-sm-4">
+                <div class="widget widget-links widget-light pb-2 mb-4">
+                  <h3 class="widget-title text-light">Product catalog</h3>
+                  <ul class="widget-list">
+                    @foreach($menus as $menu)
+                      <li class="widget-list-item"><a class="widget-list-link" href="{{route('browse-by-menu.index', $menu->id)}}">{{ $menu->name }}</a></li>
+                    @endforeach
+                  </ul>
+                </div>
+              </div>
+              <div class="col-xl-3 col-lg-4 col-sm-4">
+                <div class="widget widget-links widget-light pb-2 mb-4">
+                  <h3 class="widget-title text-light">Company</h3>
+                  <ul class="widget-list">
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">About us</a></li>
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">Store locator</a></li>
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">Careers at rembeka</a></li>
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">Contacts</a></li>
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">Help center</a></li>
+                    <li class="widget-list-item"><a class="widget-list-link" href="#">Actions and News</a></li>
+                  </ul>
+                </div>
+                <div class="widget widget-light pb-2 mb-4">
+                  <h3 class="widget-title text-light">Follow us</h3><a class="btn-social bs-light bs-twitter me-2 mb-2" href="#"><i class="ci-twitter"></i></a><a class="btn-social bs-light bs-facebook me-2 mb-2" href="https://www.facebook.com/RembekaOnline"><i class="ci-facebook"></i></a>
+                  <a class="btn-social bs-light bs-instagram me-2 mb-2" href="https://www.instagram.com/rembekaonline/"><i class="ci-instagram"></i></a><a class="btn-social bs-light bs-youtube me-2 mb-2" href="#"><i class="ci-youtube"></i></a>
+                </div>
+              </div>
+              <div class="col-xl-4 col-sm-8">
+                <div class="widget pb-2 mb-4">
+                  <h3 class="widget-title text-light pb-1">Stay informed</h3>
+                  <form action="{{ route('news-letter.subscribe') }}" method="post">
+                    @csrf
+                    <div class="input-group flex-nowrap"><i class="ci-mail position-absolute top-50 translate-middle-y text-muted fs-base ms-3"></i>
+                      <input class="form-control rounded-start" type="email" name="email" placeholder="Your email" required>
+                      <button class="btn btn-primary" type="submit" name="subscribe">Subscribe*</button>
+                    </div>
+                    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                      <input class="subscription-form-antispam" type="text" name="b_c7103e2c981361a6639545bd5_29ca296126" tabindex="-1">
+                    </div>
+                    <div class="form-text text-light opacity-50">*Subscribe to our newsletter to receive early discount offers, updates and new products info.</div>
+                    <div class="subscription-status"></div>
+                  </form>
+                </div>
+                <!-- <div class="widget pb-2 mb-4">
+                  <h3 class="widget-title text-light pb-1">Download our app</h3>
+                  <div class="d-flex flex-wrap">
+                    <div class="me-2 mb-2"><a class="btn-market btn-apple" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">App Store</span></a></div>
+                    <div class="mb-2"><a class="btn-market btn-google" href="#" role="button"><span class="btn-market-subtitle">Download on the</span><span class="btn-market-title">Google Play</span></a></div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-darker px-lg-3 py-3">
+          <div class="d-sm-flex justify-content-between align-items-center mx-auto px-3" style="max-width: 80rem;">
+            <div class="fs-xs text-light opacity-50 text-center text-sm-start py-3">© All rights reserved. Made by <a class="text-light" href="" target="_blank" rel="noopener">Rembeka Online Limited</a></div>
+            <div class="py-3"></div>
+          </div>
+        </div>
+      </footer>

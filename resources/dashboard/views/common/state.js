@@ -1,0 +1,23 @@
+export default (emptyEntity, namespace = '') => ({
+  namespace,
+  items: [],
+  itemsNormalized: {},
+  relations: [],
+  filters: [],
+  fields: [],
+  hasFilters: [],
+  relationCounts: [],
+  sorts: [],
+  loadingItems: false,
+  loadingItem: false,
+  selected: { ...emptyEntity },
+  pagination: {
+    paginate: false,
+    page: 1,
+    perPage: 50,
+    total: 0,
+  },
+  searchStr: '',
+  formType: 'create',
+  submittingForm: false,
+});

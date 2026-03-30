@@ -1,0 +1,72 @@
+@import 'theme.css';
+@import 'animate-cart';
+@import "toastr";
+
+.whatsapp-web{
+	position: fixed;
+	bottom: 50px;
+	right: 14px;
+	z-index: 2;
+}
+.whatsapp-mobile{
+	position: fixed; 
+	bottom: 70px;
+	right: 25px;
+	z-index:2;
+}
+
+.product-image{
+	max-height: 200px;
+}
+
+.btn-social {
+	color: #fff;
+}
+.bs-google {
+	background-color: #ea4335;
+	box-shadow: 0 0.5rem 1.125rem -0.5rem rgb(234 67 53 / 90%);
+}
+.bs-facebook {
+	background-color: #3b5998;
+	box-shadow: 0 0.5rem 1.125rem -0.5rem rgb(59 89 152 / 90%);
+}
+.bs-twitter {
+	background-color: #1da1f2;
+	box-shadow: 0 0.5rem 1.125rem -0.5rem rgb(29 161 242 / 90%);
+}
+.cursor-pointer{
+	cursor: pointer;
+}
+
+.address-check{
+	input[type=radio] {
+		transform: scale(1.5);
+	}
+}
+
+.selectedSylist {
+	font-size: 50px;
+	font-weight: 800!important;
+	color: #568203;
+}
+
+.profile-padding{
+	padding-top: 7rem;
+}
+
+@media(max-width: 991.98px) {
+	.mb-sm-100 {
+		margin-bottom: 100px;
+ }
+ .profile-padding{
+		padding-top: 4rem;
+	}
+}
+@media(max-width: 380.98px) {
+	.mb-sm-100 {
+		margin-bottom: 100px;
+ }
+ .profile-padding{
+		padding-top: 4rem;
+	}
+}

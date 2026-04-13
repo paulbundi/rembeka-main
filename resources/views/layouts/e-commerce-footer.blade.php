@@ -36,8 +36,9 @@
                   </ul>
                 </div>
                 <div class="widget widget-light pb-2 mb-4">
-                  <h3 class="widget-title text-light">Follow us</h3><a class="btn-social bs-light bs-twitter me-2 mb-2" href="#"><i class="ci-twitter"></i></a><a class="btn-social bs-light bs-facebook me-2 mb-2" href="https://www.facebook.com/RembekaOnline"><i class="ci-facebook"></i></a>
-                  <a class="btn-social bs-light bs-instagram me-2 mb-2" href="https://www.instagram.com/rembekaonline/"><i class="ci-instagram"></i></a><a class="btn-social bs-light bs-youtube me-2 mb-2" href="#"><i class="ci-youtube"></i></a>
+                   <h3 class="widget-title text-light">Follow us</h3><a class="btn-social bs-light bs-facebook me-2 mb-2" href="https://www.facebook.com/RembekaOnline"><i class="ci-facebook"></i></a>
+                  <a class="btn-social bs-light bs-instagram me-2 mb-2" href="https://www.instagram.com/rembekaonline/"><i class="ci-instagram"></i></a><a class="btn-social bs-light bs-youtube me-2 mb-2" href="https://www.youtube.com/@rembekaonline4295"><i class="ci-youtube"></i></a>
+                  <a class="btn-social bs-light bs-tiktok me-2 mb-2" href="https://www.tiktok.com/@rembekaonline?_r=1&_t=ZS-95UxwGwkb5D"><i class="ci-tiktok"></i></a>
                 </div>
               </div>
               <div class="col-xl-4 col-sm-8">

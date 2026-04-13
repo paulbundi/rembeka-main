@@ -5,6 +5,7 @@
       <a class="btn-social bs-light bs-facebook me-2" href="https://www.facebook.com/RembekaOnline"><i class="ci-facebook"></i></a>
       <a class="btn-social bs-light bs-instagram me-2" href="https://www.instagram.com/rembekaonline/"><i class="ci-instagram"></i></a>
       <a class="btn-social bs-light bs-youtube me-2" href="https://www.youtube.com/@rembekaonline4295"><i class="ci-youtube"></i></a>
+      <a class="btn-social bs-light bs-tiktok me-2" href="https://www.tiktok.com/@rembekaonline?_r=1&_t=ZS-95UxwGwkb5D"><i class="ci-tiktok"></i></a>
 
       <b class="text-white d-none d-sm-block ms-3"> or Call Us</b>
       <a class="btn-social bs-light bs-facebook me-2" href="tel:+254 789 311440"><i class="ci-support"></i> </a>

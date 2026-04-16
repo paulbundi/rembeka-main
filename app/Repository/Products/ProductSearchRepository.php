@@ -33,21 +33,13 @@ class ProductSearchRepository
             });
         }
 
-        if (isset($data['searchStr'])) {
-            $products->where('name', 'like', '%'.$data['searchStr'].'%')
-                    ->orWhere('keywords', 'like', '%'.$data['searchStr'].'%');
-
-            // $products->orWhereHas('productPrice.location', function ($query) use ($data) {
-            //     return $query->where('name', 'like', '%'.$data['searchStr'].'%');
-            // });
-
-            // $products->orWhereHas('productPrice.provider', function ($query) use ($data) {
-            //     return $query->where('first_name', 'like', '%'.$data['searchStr'].'%')
-            //         ->orWhere('last_name', 'like', '%'.$data['searchStr'].'%');
-            // });
-
-            $products->orWhereHas('supplierPrice.supplier', function ($query) use ($data) {
-                return $query->where('name', 'like', '%'.$data['searchStr'].'%');
+        if (isset($data['searchStr']) && $data['searchStr'] !== '') {
+            $products->where(function ($query) use ($data) {
+                $query->where('name', 'like', '%'.$data['searchStr'].'%')
+                    ->orWhere('keywords', 'like', '%'.$data['searchStr'].'%')
+                    ->orWhereHas('supplierPrice.supplier', function ($query) use ($data) {
+                        return $query->where('name', 'like', '%'.$data['searchStr'].'%');
+                    });
             });
         }
 

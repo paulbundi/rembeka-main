@@ -5,7 +5,7 @@ export default {
   name: 'MediaShow',
   props: {
     id: {
-      type: Number,
+      type: [Number, String],
       required: true,
     }
   },

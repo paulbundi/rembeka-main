@@ -1,5 +1,5 @@
 export default {
   prefix: {
-    api: 'system/',
+    api: '',
   },
 };

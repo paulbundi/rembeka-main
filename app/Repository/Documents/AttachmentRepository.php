@@ -22,11 +22,11 @@ class AttachmentRepository
      */
     public function create(UploadedFile $file, string $path): Media
     {
-        $filename = Storage::putFile($path, $file, 'public');
+        $filename = Storage::disk('public')->putFile($path, $file, 'public');
 
         return Media::create([
             'path' => $filename,
-            'disk' => config('filesystems.default'),
+            'disk' => 'public',
             'name' => $file->getClientOriginalName(),
             'mime_type' => $file->getClientMimeType(),
             'extension' => $file->getClientOriginalExtension(),

@@ -52,7 +52,7 @@ export default {
       <div class="card card-body table-responsive single-item-table">
         <div class="col-12">
           <b>Media Details</b>
-          <a v-if="canUserAccess('media.edit')" class="btn btn-sm btn-primary float-end" :href="`/media/${this.id}/edit`">Edit</a>
+          <a v-if="canUserAccess('media.edit')" class="btn btn-sm btn-primary float-end" :href="`/medias/${this.id}/edit`">Edit</a>
         </div>
         <table class="table table-striped">
             <tr>

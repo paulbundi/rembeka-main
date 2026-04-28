@@ -9,7 +9,7 @@ class MediaController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can-access:media.view')->only('index');
+        $this->middleware('can-access:media.view')->only(['index', 'show']);
         $this->middleware('can-access:media.create')->only('create');
         $this->middleware('can-access:media.update')->only('edit');
     }

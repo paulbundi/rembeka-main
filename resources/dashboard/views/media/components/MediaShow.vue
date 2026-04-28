@@ -19,28 +19,38 @@ export default {
       selected: state => state.Media.selected,
       user: state => state.authUser,
     }),
+    mediaData() {
+      // Fallback if selected is empty
+      return this.selected || {};
+    },
     isImage() {
-      return this.selected.mime_type && this.selected.mime_type.startsWith('image/');
+      return this.mediaData.mime_type && this.mediaData.mime_type.startsWith('image/');
     },
     isVideo() {
-      return this.selected.mime_type && this.selected.mime_type.startsWith('video/');
+      return this.mediaData.mime_type && this.mediaData.mime_type.startsWith('video/');
     },
     isAudio() {
-      return this.selected.mime_type && this.selected.mime_type.startsWith('audio/');
+      return this.mediaData.mime_type && this.mediaData.mime_type.startsWith('audio/');
     }
   },
 
   created() {
+    console.log('MediaShow created with id:', this.id);
     this.fetchItems();
   },
   methods: {
     ...mapActions('Media', ['fetchOne', 'setProperty', 'attachRelations','removeItemRelations']),
     fetchItems() {
+      console.log('Fetching media item with id:', this.id);
       this.setProperty({
         property: 'relations',
-        value: ['user', 'shop']
+        value: ['user']
       });
-      this.fetchOne({ id: this.id });
+      this.fetchOne({ id: this.id }).then((response) => {
+        console.log('Media data fetched:', response);
+      }).catch((error) => {
+        console.error('Error fetching media:', error);
+      });
     },
   }
 };
@@ -57,39 +67,39 @@ export default {
         <table class="table table-striped">
             <tr>
               <td>File Name</td>
-              <td>{{selected.name}}</td>
+              <td>{{mediaData.name || 'N/A'}}</td>
             </tr>
             <tr>
               <td>File Type</td>
-              <td>{{selected.mime_type}}</td>
+              <td>{{mediaData.mime_type || 'N/A'}}</td>
             </tr>
             <tr>
               <td>File Size</td>
-              <td>{{selected.size}} bytes</td>
+              <td>{{mediaData.size ? (mediaData.size + ' bytes') : 'N/A'}}</td>
             </tr>
             <tr>
               <td>URL</td>
-              <td><a :href="selected.url" target="_blank">{{selected.url}}</a></td>
+              <td><a v-if="mediaData.url" :href="mediaData.url" target="_blank">{{mediaData.url}}</a><span v-else>N/A</span></td>
             </tr>
             <tr>
               <td>Uploaded By</td>
-              <td>{{selected.user ? selected.user.name : 'N/A'}}</td>
+              <td>{{(mediaData.user && mediaData.user.name) ? mediaData.user.name : 'N/A'}}</td>
             </tr>
             <tr>
               <td>Created At</td>
-              <td>{{selected.created_at}}</td>
+              <td>{{mediaData.created_at || 'N/A'}}</td>
             </tr>
         </table>
       </div>
     </div>
-    <div class="col-12" v-if="selected.url">
+    <div class="col-12" v-if="mediaData.url">
       <div class="card">
         <div class="card-body">
           <b>Preview</b>
           <div class="mt-3">
-            <img v-if="isImage" :src="selected.url" class="img-fluid" style="max-height: 400px;" />
-            <video v-else-if="isVideo" :src="selected.url" controls class="img-fluid" style="max-height: 400px;"></video>
-            <audio v-else-if="isAudio" :src="selected.url" controls></audio>
+            <img v-if="isImage" :src="mediaData.url" class="img-fluid" style="max-height: 400px;" />
+            <video v-else-if="isVideo" :src="mediaData.url" controls class="img-fluid" style="max-height: 400px;"></video>
+            <audio v-else-if="isAudio" :src="mediaData.url" controls></audio>
             <div v-else class="text-muted">
               <i class="fas fa-file"></i> File preview not available
             </div>
@@ -102,10 +112,10 @@ export default {
     <div class="card">
       <div class="card-body">
         <h5>File Information</h5>
-        <p><strong>Disk:</strong> {{selected.disk}}</p>
-        <p><strong>Path:</strong> {{selected.path}}</p>
-        <p v-if="selected.alt_text"><strong>Alt Text:</strong> {{selected.alt_text}}</p>
-        <p v-if="selected.description"><strong>Description:</strong> {{selected.description}}</p>
+        <p><strong>Disk:</strong> {{mediaData.disk || 'N/A'}}</p>
+        <p><strong>Path:</strong> {{mediaData.path || 'N/A'}}</p>
+        <p v-if="mediaData.alt_text"><strong>Alt Text:</strong> {{mediaData.alt_text}}</p>
+        <p v-if="mediaData.description"><strong>Description:</strong> {{mediaData.description}}</p>
       </div>
     </div>
   </div>

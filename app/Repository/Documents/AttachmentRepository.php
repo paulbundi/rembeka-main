@@ -26,7 +26,7 @@ class AttachmentRepository
 
         return Media::create([
             'path' => $filename,
-            'disk' => 'public', // Use 'public' since we're storing in the public disk
+            'disk' => config('filesystems.default'),
             'name' => $file->getClientOriginalName(),
             'mime_type' => $file->getClientMimeType(),
             'extension' => $file->getClientOriginalExtension(),
@@ -51,9 +51,9 @@ class AttachmentRepository
     public function download(Attachment $attachment, ?bool $inline = false)
     {
         set_time_limit(600);
-        $path = str_replace('original', $attachment->size, $attachment->path.'/'.$attachment->name);
+        $path = str_replace('original', $attachment->size, $attachment->path . '/' . $attachment->name);
         $file = Storage::get($path);
-        $contentDisposition = ($inline ? 'inline' : 'attachment').'; filename='.$attachment->original_name;
+        $contentDisposition = ($inline ? 'inline' : 'attachment') . '; filename=' . $attachment->original_name;
 
         return (new Response($file, 200))
             ->header('Content-Type', $attachment->mime_type)
@@ -70,7 +70,7 @@ class AttachmentRepository
     public function delete(int $attachmentId)
     {
         $attachment = Attachment::find($attachmentId);
-        $path = str_replace('original', $attachment->size, $attachment->path.'/'.$attachment->name);
+        $path = str_replace('original', $attachment->size, $attachment->path . '/' . $attachment->name);
         Storage::delete($path);
     }
 }

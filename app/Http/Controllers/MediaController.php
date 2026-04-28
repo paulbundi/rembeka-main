@@ -59,11 +59,27 @@ class MediaController extends Controller
      */
     public function uploadMedia(Request $request)
     {
-        if ($request->has('file') && $request->file('file')->isValid()) {
-            $path = config('filesystems.attachments.media');
-            app(AttachmentRepository::class)->create($request->file, $path);
+        try {
+            if ($request->hasFile('file') && $request->file('file')->isValid()) {
+                $path = config('filesystems.attachments.media');
+                $media = app(AttachmentRepository::class)->create($request->file('file'), $path);
 
-            return response()->json('success');
-        }  //
+                return response()->json([
+                    'success' => true,
+                    'message' => 'File uploaded successfully',
+                    'media' => $media
+                ]);
+            }
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'No valid file provided'
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Upload failed: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -201,14 +201,4 @@ Route::resources([
 
 ]);
 
-/*
- * Alias routes for duplicate /system/system prefix (frontend compatibility)
- * These map /system/system/... to the correct API controllers
- */
-Route::group(['prefix' => 'system'], function () {
-    Route::get('medias', [App\Http\Controllers\Api\MediaController::class, 'index'])->name('medias.system.index');
-    Route::post('medias', [App\Http\Controllers\Api\MediaController::class, 'store'])->name('medias.system.store');
-    Route::get('medias/{media}', [App\Http\Controllers\Api\MediaController::class, 'show'])->name('medias.system.show');
-    Route::put('medias/{media}', [App\Http\Controllers\Api\MediaController::class, 'update'])->name('medias.system.update');
-    Route::delete('medias/{media}', [App\Http\Controllers\Api\MediaController::class, 'destroy'])->name('medias.system.destroy');
-});
+

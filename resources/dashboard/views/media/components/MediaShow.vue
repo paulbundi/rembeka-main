@@ -19,7 +19,17 @@ export default {
       selected: state => state.Media.selected,
       user: state => state.authUser,
     }),
+    isImage() {
+      return this.selected.mime_type && this.selected.mime_type.startsWith('image/');
+    },
+    isVideo() {
+      return this.selected.mime_type && this.selected.mime_type.startsWith('video/');
+    },
+    isAudio() {
+      return this.selected.mime_type && this.selected.mime_type.startsWith('audio/');
+    }
   },
+
   created() {
     this.fetchItems();
   },
@@ -41,79 +51,61 @@ export default {
     <div class="col-12">
       <div class="card card-body table-responsive single-item-table">
         <div class="col-12">
-          <b>User Details</b>
-          <a v-if="canUserAccess('users.edit')" class="btn btn-sm btn-primary float-end" :href="`/schools/${this.id}/edit`">Edit</a>
+          <b>Media Details</b>
+          <a v-if="canUserAccess('media.edit')" class="btn btn-sm btn-primary float-end" :href="`/media/${this.id}/edit`">Edit</a>
         </div>
         <table class="table table-striped">
             <tr>
-              <td>Name</td>
-              <td> {{selected.name }}</td>
+              <td>File Name</td>
+              <td>{{selected.name}}</td>
             </tr>
-              <tr>
-              <td>Email</td>
-              <td>{{selected.email }}</td>
+            <tr>
+              <td>File Type</td>
+              <td>{{selected.mime_type}}</td>
             </tr>
-              <tr>
-              <td>Phone</td>
-              <td>{{selected.phone }}</td>
+            <tr>
+              <td>File Size</td>
+              <td>{{selected.size}} bytes</td>
             </tr>
-              <tr>
-              <td>Status</td>
-              <td>
-                <span v-if="selected.status == 1" class="badge bg-success">Active</span>
-                <span v-else class="badge bg-danger">InActive</span>
-              </td>
+            <tr>
+              <td>URL</td>
+              <td><a :href="selected.url" target="_blank">{{selected.url}}</a></td>
+            </tr>
+            <tr>
+              <td>Uploaded By</td>
+              <td>{{selected.user ? selected.user.name : 'N/A'}}</td>
+            </tr>
+            <tr>
+              <td>Created At</td>
+              <td>{{selected.created_at}}</td>
             </tr>
         </table>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12" v-if="selected.url">
       <div class="card">
         <div class="card-body">
-          <div class="table-responsive  single-item-table">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Descriptions</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="role in selected.roles" :key="role.id">
-                  <td>{{role.title}}</td>
-                  <td>{{role.description}}</td>
-                  <td>
-                    <div class="dropdown show">
-                      <a href="#" data-bs-toggle="dropdown"  :id="`dropdownAction${role.id}`" data-bs-display="static" aria-expanded="false" class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" :aria-labelledby="`dropdownAction${role.id}`">
-                        <li> <a v-if="canUserAccess('roles.view')" class="dropdown-item" :href="`/roles/${role.id}`">View</a></li>
-                        <li><a v-if="canUserAccess('roles.update')" class="dropdown-item" :href="`/roles/${role.id}/edit`">Edit Role</a></li>
-                        <li><a href="#" v-if="canUserAccess('users.remove-role')" class="dropdown-item" @click="() => handleDetachRole(role)">Remove</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <b>Preview</b>
+          <div class="mt-3">
+            <img v-if="isImage" :src="selected.url" class="img-fluid" style="max-height: 400px;" />
+            <video v-else-if="isVideo" :src="selected.url" controls class="img-fluid" style="max-height: 400px;"></video>
+            <audio v-else-if="isAudio" :src="selected.url" controls></audio>
+            <div v-else class="text-muted">
+              <i class="fas fa-file"></i> File preview not available
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div v-if="canUserAccess('users.remove-role')" class="col-4 card">
-    <div class="card-body">
-      <label>Add Role</label>
-      <remote-selector 
-        module="Roles"
-        :multiple='false'
-        @change="handleAddRole"
-        label="title"
-      />
-      <div class="form-group float-end">
-        <button class="btn btn-sm btn-success" @click="addRole">Add Role</button>
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>File Information</h5>
+        <p><strong>Disk:</strong> {{selected.disk}}</p>
+        <p><strong>Path:</strong> {{selected.path}}</p>
+        <p v-if="selected.alt_text"><strong>Alt Text:</strong> {{selected.alt_text}}</p>
+        <p v-if="selected.description"><strong>Description:</strong> {{selected.description}}</p>
       </div>
     </div>
   </div>

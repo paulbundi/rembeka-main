@@ -44,10 +44,15 @@ export default {
       dropzoneOptions: {
           url: '/media-upload',
           thumbnailWidth: 150,
-          maxFilesize: 0.5,
+          maxFilesize: 5, // Increased from 0.5MB to 5MB
+          acceptedFiles: 'image/*,video/*,audio/*,.pdf,.doc,.docx,.txt',
           headers: { 
             "X-CSRF-TOKEN": document.head.querySelector('meta[name="csrf-token"]').content
-           }
+           },
+          dictDefaultMessage: 'Drop files here or click to upload',
+          dictFileTooBig: 'File is too big ({{filesize}}MB). Max filesize: {{maxFilesize}}MB.',
+          dictInvalidFileType: 'You can\'t upload files of this type.',
+          dictResponseError: 'Server responded with {{statusCode}} code.',
       }
     };
   },
@@ -75,9 +80,21 @@ export default {
       this.fetchAll();
     },
     handleSuccess(file, response) {
-      if(response == 'success') {
+      console.log('Upload response:', response);
+      if(response && (response === 'success' || response.success)) {
+        this.$toast.success('File uploaded successfully');
         this.fetchItems();
+      } else {
+        this.$toast.error('Upload failed');
       }
+    },
+    handleError(file, message, xhr) {
+      console.error('Upload error:', message, xhr);
+      this.$toast.error('Upload failed: ' + message);
+    },
+    handleImageError(event) {
+      event.target.style.display = 'none';
+      event.target.nextElementSibling.style.display = 'flex';
     },
     deleteMedia(media) {
       this.destroy(media.id).then(() => {
@@ -88,15 +105,16 @@ export default {
         
       })
     },
-    handleCheckBox(event , media) {
+    handleCheckBox(event, media) {
       if(this.singleItem) {
         this.selectedIds = media;
         return;
       }
-      if(this.selectedIds.indexOf(media.id) == -1) {
+      const index = this.selectedIds.indexOf(media.id);
+      if(index === -1) {
         this.selectedIds.push(media.id);
-      }else {
-        this.selectedIds.pop(this.selectedIds.indexOf(media.id));
+      } else {
+        this.selectedIds.splice(index, 1);
       }
     },
     handleAttach() {
@@ -116,6 +134,7 @@ export default {
             id="dropzone"
             :options="dropzoneOptions"
             @vdropzone-success="handleSuccess"
+            @vdropzone-error="handleError"
           />
         </div>
       </div>
@@ -157,14 +176,18 @@ export default {
               <tr v-for="media in items" :key="media.id">
                 <td>
                   <input type="checkbox" 
-                    :checked="singleItem ? selectedIds.id == media.id : selectedIds.indexOf(media.id) != -1" 
+                    :checked="singleItem ? (selectedIds && selectedIds.id == media.id) : selectedIds.indexOf(media.id) != -1" 
                     :value="media.id"
                     @change="(e)=> handleCheckBox(e,media)" 
                   />
                   {{media.id}}
                 </td>
                 <td>
-                  <img class="rounded" :src="media.url" width="80" height="80" /><br/>
+                  <img v-if="media.url" class="rounded" :src="media.url" width="80" height="80" @error="handleImageError" />
+                  <div v-else class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-file"></i>
+                  </div>
+                  <br/>
                   {{media.name}}<br/>
                   <small>{{media.created_at| formatDate('LL')}}</small>
                 </td>
@@ -180,8 +203,8 @@ export default {
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" :aria-labelledby="`dropdownAction${media.id}`">
-                      <a v-if="canUserAccess('media.update')" class="dropdown-item" :href="`/users/${media.id}`">view</a>
-                      <a v-if="canUserAccess('media.update')" class="dropdown-item" :href="`/users/${media.id}/edit`">Edit</a>
+                      <a v-if="canUserAccess('media.view')" class="dropdown-item" :href="`/media/${media.id}`">View</a>
+                      <a v-if="canUserAccess('media.update')" class="dropdown-item" :href="`/media/${media.id}/edit`">Edit</a>
                       <a class="dropdown-item" href="#" @click="()=>deleteMedia(media)">Delete</a>
                     </div>
                   </div>

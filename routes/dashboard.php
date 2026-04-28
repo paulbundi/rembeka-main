@@ -65,6 +65,12 @@ use Illuminate\Support\Facades\Route;
  */
 Route::post('media-upload', [MediaController::class, 'uploadMedia']);
 
+// Explicit media routes (fallback if resource routes don't work)
+Route::get('medias', [MediaController::class, 'index'])->name('medias.index');
+Route::get('medias/create', [MediaController::class, 'create'])->name('medias.create');
+Route::get('medias/{id}', [MediaController::class, 'show'])->name('medias.show');
+Route::get('medias/{id}/edit', [MediaController::class, 'edit'])->name('medias.edit');
+
 /*
  * Menus
  */

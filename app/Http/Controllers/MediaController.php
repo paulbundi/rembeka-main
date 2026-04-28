@@ -31,23 +31,23 @@ class MediaController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param \App\Models\Media $media
      *
      * @return void
      */
-    public function edit(int $id)
+    public function edit(\App\Models\Media $media)
     {
-        return view('dashboard.page', ['page' => 'media-create', 'id' => $id]);
+        return view('dashboard.page', ['page' => 'media-create', 'id' => $media->id]);
     }
 
     /**
-     * @param int $id
+     * @param \App\Models\Media $media
      *
      * @return void
      */
-    public function show(int $id)
+    public function show(\App\Models\Media $media)
     {
-        return view('dashboard.page', ['page' => 'media-show', 'id' => $id]);
+        return view('dashboard.page', ['page' => 'media-show', 'id' => $media->id]);
     }
 
     /**

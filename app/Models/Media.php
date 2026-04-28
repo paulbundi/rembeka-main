@@ -56,6 +56,12 @@ class Media extends Model
             return 'https://'.config('services.aws_bucket').'.s3.amazonaws.com/'.$this->path;
         }
 
+        // Handle both 'public' disk and 'local' disk
+        if ($this->disk == 'public' || $this->disk == 'local') {
+            return asset('storage/' . $this->path);
+        }
+
+        // Fallback for other disks
         return '/storage/'.$this->path;
     }
 }

@@ -26,7 +26,7 @@ class AttachmentRepository
 
         return Media::create([
             'path' => $filename,
-            'disk' => config('filesystems.default'),
+            'disk' => 'public', // Use 'public' since we're storing in the public disk
             'name' => $file->getClientOriginalName(),
             'mime_type' => $file->getClientMimeType(),
             'extension' => $file->getClientOriginalExtension(),

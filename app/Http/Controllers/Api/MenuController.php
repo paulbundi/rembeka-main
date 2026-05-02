@@ -24,8 +24,24 @@ class MenuController extends AbstractApiController
     protected function getAllowedIncludes(): array
     {
         return [
-            'users', 'children', 'children.children', 'children.children.children',
+            'users',
+            'children',
+            'children.children',
+            'children.children.children',
             'children.children.children.children'
+        ];
+    }
+
+    /**
+     * Get the allowed counts.
+     *
+     * @return array
+     */
+    protected function getAllowedCounts(): array
+    {
+        return [
+            'products',
+            'children.products'
         ];
     }
 }

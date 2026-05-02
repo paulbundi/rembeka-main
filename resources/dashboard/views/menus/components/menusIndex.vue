@@ -28,7 +28,7 @@ export default {
       user: state => state.authUser,
     }),
   },
-  watch:{
+  watch: {
     menus() {
 
       this.nestableItems = [...this.menus];
@@ -56,6 +56,7 @@ export default {
     fetchItems() {
       this.setProperty({property: 'relations',value: ['children.children.children.children']});
       this.setProperty({property: 'filterMenuBy', value: 'parentOnly'});
+      this.setProperty({property: 'counts', value: ['products', 'children.products']});
       
       this.fetchAll();
 
@@ -69,7 +70,7 @@ export default {
     handleDelete(menu) {
       this.$confirm().then(() => {
         this.destroy(menu.id).then(() => {
-         	this.$toast.success('menu deleted Successfully');
+          this.$toast.success('menu deleted Successfully');
         });
       })
     },
@@ -113,8 +114,9 @@ export default {
                 <div class="d-flex align-items-center">
                   <div v-html="item.icon" class="me-2"></div>
                   {{ item.name }}
-                  <span v-if="item.status == 1" class="badge bg-success text-success rounded-circle">.</span>
-                  <span v-else class="badge bg-danger text-danger rounded-circle"> . </span>
+                  <span v-if="item.products_count" class="badge bg-info ms-2">
+                    {{ item.products_count }} products
+                  </span>
                 </div>
                 <div class="actions">
                   <i class="bi bi-qr-code me-2 cursor-pointer" @click="()=>generateQrCode(item)"></i>

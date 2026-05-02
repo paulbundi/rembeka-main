@@ -15,7 +15,7 @@ class MediaController extends Controller
     }
 
     /**
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -23,7 +23,7 @@ class MediaController extends Controller
     }
 
     /**
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
@@ -33,7 +33,7 @@ class MediaController extends Controller
     /**
      * @param \App\Models\Media $media
      *
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(\App\Models\Media $media)
     {
@@ -43,7 +43,7 @@ class MediaController extends Controller
     /**
      * @param \App\Models\Media $media
      *
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show(\App\Models\Media $media)
     {
@@ -55,7 +55,7 @@ class MediaController extends Controller
      *
      * @param Request $request
      *
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function uploadMedia(Request $request)
     {
@@ -70,7 +70,7 @@ class MediaController extends Controller
                     'media' => $media
                 ]);
             }
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'No valid file provided'

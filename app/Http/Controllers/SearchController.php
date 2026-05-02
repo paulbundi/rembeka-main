@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AgeGroup;
 use App\Models\Menu;
+use App\Models\Product;
 use App\Models\ProviderPricing;
 use App\Models\SearchTerm;
 use App\Repository\Products\ProductSearchRepository;
@@ -14,7 +15,7 @@ class SearchController extends Controller
     /**
      * Search data from products.
      *
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -61,45 +62,46 @@ class SearchController extends Controller
     public function getMenus()
     {
         $menus = Menu::active()->with(['children.children.children.children'])
-                ->whereNull('parent_id')
-                ->get();
-        
+            ->whereNull('parent_id')
+            ->get();
+
         // Add product count to each menu
-        $menus = $menus->map(function($menu) {
+        $menus = $menus->map(function ($menu) {
             $menu->product_count = $menu->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
-            
+
             // Also add product count to children recursively
             if ($menu->children) {
-                $menu->children = $menu->children->map(function($child) {
+                $menu->children = $menu->children->map(function ($child) {
                     $child->product_count = $child->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
-                    
+
                     // Add product count to grandchildren
                     if ($child->children) {
-                        $child->children = $child->children->map(function($grandchild) {
+                        $child->children = $child->children->map(function ($grandchild) {
                             $grandchild->product_count = $grandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
-                            
+
                             // Add product count to great-grandchildren
                             if ($grandchild->children) {
-                                $grandchild->children = $grandchild->children->map(function($greatGrandchild) {
+                                $grandchild->children = $grandchild->children->map(function ($greatGrandchild) {
                                     $greatGrandchild->product_count = $greatGrandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
                                     return $greatGrandchild;
                                 });
                             }
-                            
+
                             return $grandchild;
                         });
                     }
-                    
+
                     return $child;
                 });
             }
-            
+
             return $menu;
         });
-        
+
         $ageGroups = AgeGroup::get();
 
-        return response()->json(['data' =>[
+        return response()->json([
+            'data' => [
                 'menus' => $menus,
                 'age_groups' => $ageGroups,
             ]
@@ -113,16 +115,16 @@ class SearchController extends Controller
      *
      * @return void
      */
-    public function filter(? string $searchStr = null)
+    public function filter(?string $searchStr = null)
     {
-        $products =  ProviderPricing::whereHas('product', function ($query) use ($searchStr) {
-            return $query->where('name', 'like', '%'.$searchStr.'%')
-                ->where('description', 'like', '%'.$searchStr.'%')
-                    ->where('keywords', 'like', '%'.$searchStr.'%');
+        $products = ProviderPricing::whereHas('product', function ($query) use ($searchStr) {
+            return $query->where('name', 'like', '%' . $searchStr . '%')
+                ->where('description', 'like', '%' . $searchStr . '%')
+                ->where('keywords', 'like', '%' . $searchStr . '%');
         })
-        ->with(['product.attachments.media', 'product.discount'])
-        ->groupBy('product_id')
-        ->paginate(20);
+            ->with(['product.attachments.media', 'product.discount'])
+            ->groupBy('product_id')
+            ->paginate(20);
 
         return response()->json(['data' => $products]);
     }
@@ -136,7 +138,7 @@ class SearchController extends Controller
      */
     public function productSearch(ProductSearchRepository $searchRepository, Request $request)
     {
-        $products =  $searchRepository->search($request->all());
+        $products = $searchRepository->search($request->all());
 
         return response()->json([
             'products' => $products,

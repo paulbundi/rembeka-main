@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\AgeGroup;
 use App\Models\Menu;
-use App\Models\Product;
 use App\Models\ProviderPricing;
 use App\Models\SearchTerm;
 use App\Repository\Products\ProductSearchRepository;
@@ -15,7 +14,7 @@ class SearchController extends Controller
     /**
      * Search data from products.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return void
      */
     public function index()
     {
@@ -35,7 +34,7 @@ class SearchController extends Controller
     /**
      * browse by categories.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return void
      */
     public function browseByCategory($id)
     {
@@ -47,7 +46,7 @@ class SearchController extends Controller
     /**
      * browse by menu.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return void
      */
     public function browseByMenu($id)
     {
@@ -57,87 +56,51 @@ class SearchController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function getMenus()
     {
-        // Get the menus with their nested children
         $menus = Menu::active()->with(['children.children.children.children'])
-            ->whereNull('parent_id')
-            ->get();
-
-        // Create a copy of the menus data with product counts added
-        // This avoids modifying the original relationships which was causing issues
-        $menusWithCounts = $menus->map(function ($menu) {
-            // Get product count for this menu
-            $productCount = $menu->products()
-                ->where('status', Menu::STATUS_ACTIVE)
-                ->where('is_published', Product::IS_PUBLISHED)
-                ->count();
-
-            // Create a new array with the menu data plus product count
-            $menuData = $menu->toArray();
-            $menuData['product_count'] = $productCount;
-
-            // Process children recursively
-            if (!empty($menuData['children'])) {
-                $menuData['children'] = array_map(function ($child) use ($menu) {
-                    // Get product count for this child
-                    $childProductCount = $child->products()
-                        ->where('status', Menu::STATUS_ACTIVE)
-                        ->where('is_published', Product::IS_PUBLISHED)
-                        ->count();
-
-                    // Create child data with product count
-                    $childData = $child->toArray();
-                    $childData['product_count'] = $childProductCount;
-
-                    // Process grandchildren
-                    if (!empty($childData['children'])) {
-                        $childData['children'] = array_map(function ($grandchild) use ($child) {
-                            // Get product count for this grandchild
-                            $grandchildProductCount = $grandchild->products()
-                                ->where('status', Menu::STATUS_ACTIVE)
-                                ->where('is_published', Product::IS_PUBLISHED)
-                                ->count();
-
-                            // Create grandchild data with product count
-                            $grandchildData = $grandchild->toArray();
-                            $grandchildData['product_count'] = $grandchildProductCount;
-
-                            // Process great-grandchildren
-                            if (!empty($grandchildData['children'])) {
-                                $grandchildData['children'] = array_map(function ($greatGrandchild) use ($grandchild) {
-                                    // Get product count for this great-grandchild
-                                    $greatGrandchildProductCount = $greatGrandchild->products()
-                                        ->where('status', Menu::STATUS_ACTIVE)
-                                        ->where('is_published', Product::IS_PUBLISHED)
-                                        ->count();
-
-                                    // Create great-grandchild data with product count
-                                    $greatGrandchildData = $greatGrandchild->toArray();
-                                    $greatGrandchildData['product_count'] = $greatGrandchildProductCount;
-
-                                    return $greatGrandchildData;
-                                }, $grandchildData['children']);
+                ->whereNull('parent_id')
+                ->get();
+        
+        // Add product count to each menu
+        $menus = $menus->map(function($menu) {
+            $menu->product_count = $menu->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+            
+            // Also add product count to children recursively
+            if ($menu->children) {
+                $menu->children = $menu->children->map(function($child) {
+                    $child->product_count = $child->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                    
+                    // Add product count to grandchildren
+                    if ($child->children) {
+                        $child->children = $child->children->map(function($grandchild) {
+                            $grandchild->product_count = $grandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                            
+                            // Add product count to great-grandchildren
+                            if ($grandchild->children) {
+                                $grandchild->children = $grandchild->children->map(function($greatGrandchild) {
+                                    $greatGrandchild->product_count = $greatGrandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                                    return $greatGrandchild;
+                                });
                             }
-
-                            return $grandchildData;
-                        }, $childData['children']);
+                            
+                            return $grandchild;
+                        });
                     }
-
-                    return $childData;
-                }, $menuData['children']);
+                    
+                    return $child;
+                });
             }
-
-            return $menuData;
+            
+            return $menu;
         });
-
+        
         $ageGroups = AgeGroup::get();
 
-        return response()->json([
-            'data' => [
-                'menus' => $menusWithCounts,
+        return response()->json(['data' =>[
+                'menus' => $menus,
                 'age_groups' => $ageGroups,
             ]
         ]);
@@ -146,20 +109,20 @@ class SearchController extends Controller
     /**
      * Api filter
      *
-     * @param string|null $searchStr
+     * @param Type|null $var
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
-    public function filter(?string $searchStr = null)
+    public function filter(? string $searchStr = null)
     {
-        $products = ProviderPricing::whereHas('product', function ($query) use ($searchStr) {
-            return $query->where('name', 'like', '%' . $searchStr . '%')
-                ->where('description', 'like', '%' . $searchStr . '%')
-                ->where('keywords', 'like', '%' . $searchStr . '%');
+        $products =  ProviderPricing::whereHas('product', function ($query) use ($searchStr) {
+            return $query->where('name', 'like', '%'.$searchStr.'%')
+                ->where('description', 'like', '%'.$searchStr.'%')
+                    ->where('keywords', 'like', '%'.$searchStr.'%');
         })
-            ->with(['product.attachments.media', 'product.discount'])
-            ->groupBy('product_id')
-            ->paginate(20);
+        ->with(['product.attachments.media', 'product.discount'])
+        ->groupBy('product_id')
+        ->paginate(20);
 
         return response()->json(['data' => $products]);
     }
@@ -169,11 +132,11 @@ class SearchController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return void
      */
     public function productSearch(ProductSearchRepository $searchRepository, Request $request)
     {
-        $products = $searchRepository->search($request->all());
+        $products =  $searchRepository->search($request->all());
 
         return response()->json([
             'products' => $products,

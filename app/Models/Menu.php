@@ -48,4 +48,14 @@ class Menu extends Model
     {
         return $this->hasMany(self::class, 'parent_id', 'id');
     }
+
+    /**
+     * Get products associated with this menu.
+     *
+     * @return HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -130,8 +130,8 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
                       <div class="accordion-body">
                         <div class="widget widget-links">
                           <ul class="widget-list">
-                            <li class="widget-list-item"><a class="widget-list-link d-flex justify-content-between align-items-center" href="#" 
-                              @click="() => filterByMenu(menu.id)"><span>View all</span><span class="fs-xs text-muted ms-3">1,842</span></a></li>
+                           <li class="widget-list-item"><a class="widget-list-link d-flex justify-content-between align-items-center" href="#" 
+                             @click="() => filterByMenu(menu.id)"><span>View all</span><span class="fs-xs text-muted ms-3">{{ menu.product_count }}</span></a></li>
                             <li v-for="levelOne in menu.children" class="widget-list-item">
                               <a class="widget-list-link d-flex justify-content-between align-items-center" href="#"
                                 @click="() => filterByMenu(levelOne.id)"
@@ -160,8 +160,8 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
                       <div class="accordion-body">
                         <div class="widget widget-links">
                           <ul class="widget-list">
-                            <li class="widget-list-item"><a class="widget-list-link d-flex justify-content-between align-items-center" href="#" 
-                              @click="() => filterByMenu(pmenu.id)"><span>View all</span><span class="fs-xs text-muted ms-3">1,842</span></a></li>
+                           <li class="widget-list-item"><a class="widget-list-link d-flex justify-content-between align-items-center" href="#" 
+                             @click="() => filterByMenu(pmenu.id)"><span>View all</span><span class="fs-xs text-muted ms-3">{{ pmenu.product_count }}</span></a></li>
                             <li v-for="level_one in pmenu.children" class="widget-list-item">
                               <a class="widget-list-link d-flex justify-content-between align-items-center" href="#"
                                 @click="() => filterByMenu(level_one.id)"

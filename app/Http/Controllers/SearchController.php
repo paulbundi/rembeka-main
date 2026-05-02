@@ -63,6 +63,40 @@ class SearchController extends Controller
         $menus = Menu::active()->with(['children.children.children.children'])
                 ->whereNull('parent_id')
                 ->get();
+        
+        // Add product count to each menu
+        $menus = $menus->map(function($menu) {
+            $menu->product_count = $menu->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+            
+            // Also add product count to children recursively
+            if ($menu->children) {
+                $menu->children = $menu->children->map(function($child) {
+                    $child->product_count = $child->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                    
+                    // Add product count to grandchildren
+                    if ($child->children) {
+                        $child->children = $child->children->map(function($grandchild) {
+                            $grandchild->product_count = $grandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                            
+                            // Add product count to great-grandchildren
+                            if ($grandchild->children) {
+                                $grandchild->children = $grandchild->children->map(function($greatGrandchild) {
+                                    $greatGrandchild->product_count = $greatGrandchild->products()->where('status', Menu::STATUS_ACTIVE)->where('is_published', Product::IS_PUBLISHED)->count();
+                                    return $greatGrandchild;
+                                });
+                            }
+                            
+                            return $grandchild;
+                        });
+                    }
+                    
+                    return $child;
+                });
+            }
+            
+            return $menu;
+        });
+        
         $ageGroups = AgeGroup::get();
 
         return response()->json(['data' =>[

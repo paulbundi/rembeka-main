@@ -1,25 +1,26 @@
 @extends('layouts.e-commerce')
 @section('content')
-<main class="profile-padding">
+  <main class="profile-padding">
     <div class="container pb-5 mb-2 mb-md-4">
-        <div class="row">
-          @include('layouts.account-partial')
+      <div class="row">
+        @include('layouts.account-partial')
 
-          <section class="col-lg-8">
-            @if(isset($address))
-                <form method="POST" action="{{ route('addresses.update',$address->id) }}">
-                @method('PUT')
-            @else
-                <form method="POST" action="{{ route('addresses.store')}}">
+        <section class="col-lg-8">
+          @if(isset($address))
+            <form method="POST" action="{{ route('addresses.update', $address->id) }}">
+              @method('PUT')
+          @else
+              <form method="POST" action="{{ route('addresses.store')}}">
             @endif
-            @csrf
+              @csrf
               <div class="row gx-4 gy-3">
 
                 <div class="col-12">
                   <div id="pac-container">
                     <label>Enter Your Location</label>
-                    <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control" value="{{old('name', isset($address) ? $address->name: '')}}" />
-                    <input type="hidden" name="lat_long"  id="lat_long"/>
+                    <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control"
+                      value="{{old('name', isset($address) ? $address->name : '')}}" />
+                    <input type="hidden" name="lat_long" id="lat_long" />
                   </div>
                   <div id="map" style="height: 250px;"></div>
                   <div id="infowindow-content">
@@ -29,21 +30,24 @@
                 </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="account-ln">Appartment</label>
-                  <input class="form-control" type="text" name="appartment" id="account-ln" value="{{old('appartment',isset($address) ? $address->appartment: '')}}">
+                  <input class="form-control" type="text" name="appartment" id="account-ln"
+                    value="{{old('appartment', isset($address) ? $address->appartment : '')}}">
                   @error('appartment')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="account-floor">floor</label>
-                  <input class="form-control" type="text" name="floor" id="account-floor" value="{{old('floor',isset($address) ? $address->floor: '')}}">
+                  <input class="form-control" type="text" name="floor" id="account-floor"
+                    value="{{old('floor', isset($address) ? $address->floor : '')}}">
                   @error('floor')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="account-room">Room</label>
-                  <input class="form-control" type="text" name="room" id="account-room"  value="{{old('room', isset($address) ? $address->room: '')}}">
+                  <input class="form-control" type="text" name="room" id="account-room"
+                    value="{{old('room', isset($address) ? $address->room : '')}}">
                   @error('room')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
@@ -51,123 +55,82 @@
 
                 <div class="col-12">
                   <hr class="mt-2 mb-3">
-                    <button class="btn btn-primary mt-3 mt-sm-0" type="submit">@if(isset($address)) update @else Create @endif address</button>
-                  </div>
+                  <button class="btn btn-primary mt-3 mt-sm-0" type="submit">@if(isset($address)) update @else Create
+                  @endif address</button>
                 </div>
               </div>
-            </form>
-         
-          </section>
+      </div>
+      </form>
 
-        </div>
+      </section>
+
     </div>
-</main>
+    </div>
+  </main>
 @endsection
 
+@push('styles')
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+@endpush
+
 @push('scripts')
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key={key}&callback=initMap&libraries=places&v=weekly"
-  defer
-></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<script>
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-function initMap() {
-  const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 40.749933, lng: -73.98633 },
-    zoom: 13,
-    mapTypeControl: false,
-  });
-  const card = document.getElementById("pac-card");
-  const input = document.getElementById("pac-input");
-  const biasInputElement = document.getElementById("use-location-bias");
-  const strictBoundsInputElement = document.getElementById("use-strict-bounds");
-  const options = {
-    fields: ["formatted_address", "geometry", "name"],
-    strictBounds: false,
-  };
+  <script>
+    function initMap() {
+      // Leaflet Map
+      const map = L.map('map').setView([1.2921, 36.8219], 10);
 
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(card);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
 
-  const autocomplete = new google.maps.places.Autocomplete(input, options);
-  autocomplete.bindTo("bounds", map);
+      let marker = L.marker([1.2921, 36.8219]).addTo(map);
 
-  const infowindow = new google.maps.InfoWindow();
-  const infowindowContent = document.getElementById("infowindow-content");
+      const input = document.getElementById('pac-input');
+      const latLongInput = document.getElementById('lat_long');
+      const placeName = document.getElementById('place-name');
+      const placeAddress = document.getElementById('place-address');
 
-  infowindow.setContent(infowindowContent);
+      let timeout;
+      input.addEventListener('input', function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(searchAddress, 400);
+      });
 
-  const marker = new google.maps.Marker({
-    map,
-    anchorPoint: new google.maps.Point(0, -29),
-  });
+      function searchAddress() {
+        const query = input.value.trim();
+        if (query.length < 3) return;
 
-  autocomplete.addListener("place_changed", () => {
-    infowindow.close();
-    marker.setVisible(false);
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}&countrycodes=ke&addressdetails=1`, {
+          headers: { 'User-Agent': 'Rembeka/1.0' }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data && data[0]) {
+              const place = data[0];
+              const lat = parseFloat(place.lat);
+              const lng = parseFloat(place.lon);
 
-    const place = autocomplete.getPlace();
+              latLongInput.value = `${lat}, ${lng}`;
 
-    if (!place.geometry || !place.geometry.location) {
-      window.alert("No details available for input: '" + place.name + "'");
-      return;
+              map.setView([lat, lng], 16);
+              marker.setLatLng([lat, lng]);
+
+              placeName.textContent = place.display_name.split(',')[0] || place.display_name;
+              placeAddress.textContent = place.display_name;
+            }
+          })
+          .catch(err => console.log('Search error:', err));
+      }
     }
-
-    const latitude = place.geometry.location.lat();
-    const longitude = place.geometry.location.lng();
-
-    inputElement = document.getElementById('lat_long');
-
-    if(inputElement) {
-      inputElement.value = `${latitude}, ${longitude}`;
-    }
-
-
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    } else {
-      map.setCenter(place.geometry.location);
-      map.setZoom(17);
-    }
-
-    marker.setPosition(place.geometry.location);
-    marker.setVisible(true);
-    infowindowContent.children["place-name"].textContent = place.name;
-    infowindowContent.children["place-address"].textContent =
-      place.formatted_address;
-    infowindow.open(map, marker);
-  });
-  biasInputElement.addEventListener("change", () => {
-    if (biasInputElement.checked) {
-      autocomplete.bindTo("bounds", map);
-    } else {
-      // User wants to turn off location bias, so three things need to happen:
-      // 1. Unbind from map
-      // 2. Reset the bounds to whole world
-      // 3. Uncheck the strict bounds checkbox UI (which also disables strict bounds)
-      autocomplete.unbind("bounds");
-      autocomplete.setBounds({ east: 180, west: -180, north: 90, south: -90 });
-      strictBoundsInputElement.checked = biasInputElement.checked;
-    }
-
-    input.value = "";
-  });
-  strictBoundsInputElement.addEventListener("change", () => {
-    autocomplete.setOptions({
-      strictBounds: strictBoundsInputElement.checked,
-    });
-    if (strictBoundsInputElement.checked) {
-      biasInputElement.checked = strictBoundsInputElement.checked;
-      autocomplete.bindTo("bounds", map);
-    }
-
-    input.value = "";
-  });
-}
-
-window.initMap = initMap;
+    window.initMap = initMap;
   </script>
+
+  <!--
+  Google Maps - Commented (awaiting API key)
+  -->
 @endpush

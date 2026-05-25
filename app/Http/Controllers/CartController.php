@@ -78,20 +78,20 @@ class CartController extends Controller
      */
     public function paymentMode(Request $request)
     {
-        if (request()->method() == 'GET') {
+        if ($request->isMethod('get')) {
             return view('e-commerce.checkouts.payment-mode');
         }
 
         $data = $this->validate($request, [
             'name' => 'required_if:address_id,null',
             'address_id' => 'required_if:name,null',
-            'lat_long'=> 'required_with:name',
-            'appartment'=> 'required_with:name',
-            'floor'=> 'nullable',
-            'room'=> 'nullable',
+            'lat_long' => 'required_with:name',
+            'appartment' => 'required_with:name',
+            'floor' => 'nullable',
+            'room' => 'nullable',
         ]);
 
-        $id = isset($data['address_id']) ? $data['address_id'] : null;
+        $id = $data['address_id'] ?? null;
 
         if (!isset($data['address_id'])) {
             $coordinates = explode(',', $data['lat_long']);
@@ -103,7 +103,7 @@ class CartController extends Controller
 
         session()->put('address_id', $id);
 
-        return view('e-commerce.checkouts.payment-mode');
+        return redirect()->route('payment.mode');
     }
 
     /**
@@ -113,21 +113,21 @@ class CartController extends Controller
      */
     public function createAccount(CheckOutRequest $request)//CheckOutFormRequest
     {
-        $data =  $request->validated();
+        $data = $request->validated();
 
         if (auth()->check() && count(Cart::items()) > 0) {//TODO: check has phone number validated
             return redirect()->route('payment.mode');
         } elseif (auth()->check()) {
             return redirect()->route('home');
         }
-        $user =  User::create($data);
+        $user = User::create($data);
 
         $content = Cart::getContent();
 
         auth()->login($user);
 
-        if(isset($data['lat_long'])) {
-            $coordinates = explode(',',$data['lat_long']);
+        if (isset($data['lat_long'])) {
+            $coordinates = explode(',', $data['lat_long']);
             $data['lat'] = $coordinates[0];
             $data['long'] = $coordinates[1];
         }
@@ -135,8 +135,8 @@ class CartController extends Controller
         $address = Address::create([
             'user_id' => auth()->id(),
             'name' => $data['name'],
-            'lat' => $data['lat']?? null,
-            'long' => $data['long']?? null,
+            'lat' => $data['lat'] ?? null,
+            'long' => $data['long'] ?? null,
             'appartment' => $data['appartment'],
             'floor' => $data['floor'],
             'room' => $data['room'],
@@ -177,7 +177,7 @@ class CartController extends Controller
     {
         $response = $cartRepository->createOrder($request->phone);
 
-        return view('e-commerce.checkouts.payment-mode', ['response' =>$response]);
+        return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
     }
 
 
@@ -198,7 +198,7 @@ class CartController extends Controller
         ]);
     }
 
-    
+
     /**
      * Validate payment.
      *
@@ -211,21 +211,21 @@ class CartController extends Controller
         $response = $validatePayment->validateTopUp(false);
 
         if (isset($response['transaction'])) {
-            $order =  Order::with('items')
+            $order = Order::with('items')
                 ->where('order_no', $response['transaction']->reference_id)
                 ->first();
 
-            if (isset($response['type']) && $response['type'] =='success') {
+            if (isset($response['type']) && $response['type'] == 'success') {
                 return view('e-commerce.checkouts.payment-complete', [
-                        'order' => $order
-                    ]);
+                    'order' => $order
+                ]);
             } else {
-                return view('e-commerce.checkouts.payment-mode', ['response' =>$response]);
+                return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
             }
         }
 
         return redirect()->route('home')->with([
-            'message' =>[
+            'message' => [
                 'type' => 'error',
                 'message' => 'Failed to make payment, we will contact you shortly to help out',
             ],
@@ -241,7 +241,7 @@ class CartController extends Controller
      */
     public function additionalInformation(Request $request)
     {
-        $data =  $request->validate([
+        $data = $request->validate([
             'notes' => 'required',
         ]);
 

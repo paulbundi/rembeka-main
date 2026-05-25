@@ -86,7 +86,7 @@ class CartController extends Controller
             'name' => 'required_if:address_id,null',
             'address_id' => 'required_if:name,null',
             'lat_long' => 'required_with:name',
-            'appartment' => 'required_with:name',
+            'apartment' => 'required_with:name',
             'floor' => 'nullable',
             'room' => 'nullable',
         ]);

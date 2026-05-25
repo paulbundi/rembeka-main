@@ -26,7 +26,7 @@
   </div>
   <div class="col-sm-6">
     <label class="form-label" for="account-ln">Apartment/Building/Estate<small>(required)</small></label>
-    <input class="form-control" type="text" name="appartment" id="account-ln" value="{{old('appartment')}}">
+    <input class="form-control" type="text" name="apartment" id="account-ln" value="{{old('apartment')}}">
     @error('apartment')
       <span class="text-danger">{{ $message }}</span>
     @enderror

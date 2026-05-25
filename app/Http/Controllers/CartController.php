@@ -137,7 +137,7 @@ class CartController extends Controller
             'name' => $data['name'],
             'lat' => $data['lat'] ?? null,
             'long' => $data['long'] ?? null,
-            'appartment' => $data['appartment'],
+            'apartment' => $data['apartment'],
             'floor' => $data['floor'],
             'room' => $data['room'],
         ]);

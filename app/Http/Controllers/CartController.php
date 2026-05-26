@@ -78,7 +78,7 @@ class CartController extends Controller
     public function paymentMode(Request $request)
     {
         if ($request->isMethod('get')) {
-            return view('e-commerce.checkouts.payment-mode');
+            return view('e-commerce.checkouts.payment-mode', ['response' => []]);
         }
 
         $data = $this->validate($request, [

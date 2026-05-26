@@ -170,7 +170,7 @@
           </section>
           <!-- Sidebar-->
           <aside class="col-lg-4 pt-4 pt-lg-0 ps-xl-5">
-          @if(isset($response['type']) && $response['order'])
+          @if(isset($response['type']) && isset($response['order']) && $response['order'])
 
             @include('e-commerce.orders.payment-order-summary')
 

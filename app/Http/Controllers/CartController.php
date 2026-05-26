@@ -84,8 +84,8 @@ class CartController extends Controller
         $data = $this->validate($request, [
             'name' => 'required_if:address_id,null',
             'address_id' => 'required_if:name,null',
-            'lat_long' => 'required_with:name',
-            'apartment' => 'required_with:name',
+            'lat_long' => 'nullable',
+            'appartment' => 'nullable',
             'floor' => 'nullable',
             'room' => 'nullable',
         ]);
@@ -93,9 +93,9 @@ class CartController extends Controller
         $id = $data['address_id'] ?? null;
 
         if (!isset($data['address_id'])) {
-            $coordinates = array_map('trim', explode(',', $data['lat_long']));
-            $data['lat'] = $coordinates[0];
-            $data['long'] = $coordinates[1];
+            $coordinates = array_map('trim', explode(',', $data['lat_long'] ?? '0,0'));
+            $data['lat'] = $coordinates[0] ?? null;
+            $data['long'] = $coordinates[1] ?? null;
             $data['user_id'] = auth()->id();
             $id = Address::create($data)->id;
         }
@@ -136,9 +136,9 @@ class CartController extends Controller
             'name' => $data['name'],
             'lat' => $data['lat'] ?? null,
             'long' => $data['long'] ?? null,
-            'apartment' => $data['apartment'],
-            'floor' => $data['floor'],
-            'room' => $data['room'],
+            'appartment' => $data['appartment'] ?? null,
+            'floor' => $data['floor'] ?? null,
+            'room' => $data['room'] ?? null,
         ]);
 
         $cart = Cart::session(session()->getId());

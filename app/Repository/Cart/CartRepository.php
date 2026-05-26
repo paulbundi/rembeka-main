@@ -114,13 +114,14 @@ class CartRepository
      */
     public function createProductOrderItem(Order $order, $item)
     {
-        $product =  (object) $item->product;
+        $product = (object) $item->product;
 
         OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $product->product_id,
                 'category_id' => 1,
-                'provider_id' => $product->supplier_id,
+                'provider_id' => null,
+                'supplier_id' => $product->supplier_id,
                 'quantity' => $item->qty,
                 'amount' =>  $item->qty * $product->amount,
                 'provider_amount' => $item->qty * $product->supplier_price,

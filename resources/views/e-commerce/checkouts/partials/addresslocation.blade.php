@@ -95,7 +95,7 @@
               const lat = parseFloat(place.lat);
               const lng = parseFloat(place.lon);
 
-              latLongInput.value = `${lat}, ${lng}`;
+              latLongInput.value = `${lat},${lng}`;
 
               map.setView([lat, lng], 16);
               marker.setLatLng([lat, lng]);
@@ -108,19 +108,14 @@
       }
     }
     window.initMap = initMap;
+
+    // Initialize map on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      initMap();
+    });
   </script>
 
   <!--
   GOOGLE MAPS - Ready (add GOOGLE_MAPS_API_KEY to .env)
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&callback=initMap&libraries=places&v=weekly" loading="async" defer></script>
-
-  <script>
-  // Original Google Maps code (note: uses deprecated APIs)
-  function initMap() {
-    // google.maps code here...
-  }
-  window.initMap = initMap;
-  </script>
   -->
-@endpush
+  @endpush

@@ -29,7 +29,7 @@ Route::get('/nail-services', [ProductController::class, 'hiddenTreasure'])
 /*8
 * Cart routes
 */
-Route::post('/add-to-cart', [CartController::class, 'addtoCart'])
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])
     ->name('cart.add');
 
 Route::get('/remove-from-cart/{id}', [CartController::class, 'removeFromCart'])

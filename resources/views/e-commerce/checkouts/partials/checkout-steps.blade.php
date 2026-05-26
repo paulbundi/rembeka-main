@@ -12,7 +12,8 @@
     </a>
 
     {{-- STEP 2 --}}
-    <a class="step-item {{ in_array($route, ['checkout.details', 'payment.mode']) ? 'active' : '' }}">
+    <a class="step-item {{ in_array($route, ['checkout.details', 'payment.mode']) ? 'active' : '' }}"
+        href="{{ route('checkout.details') }}">
         <div class="step-progress"><span class="step-count">2</span></div>
         <div class="step-label"><i class="ci-user-circle"></i>Details</div>
     </a>
@@ -20,7 +21,8 @@
     {{-- STEP 3 (optional - shipping skipped) --}}
 
     {{-- STEP 4 --}}
-    <a class="step-item {{ $route == 'payment.mode' ? 'active' : '' }}">
+    <a class="step-item {{ in_array($route, ['payment.mode', 'complete.order', 'pay-on.delivery']) ? 'active' : '' }}"
+        href="{{ route('payment.mode') }}">
         <div class="step-progress"><span class="step-count">4</span></div>
         <div class="step-label"><i class="ci-card"></i>Payment</div>
     </a>

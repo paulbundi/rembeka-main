@@ -13,7 +13,6 @@ use App\Models\User;
 use App\Notifications\SmsNotification;
 use App\Repository\Cart\CartRepository;
 use App\Repository\Payment\MpesaValidationRepository;
-use Doctrine\Common\Cache\Cache;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -94,7 +93,7 @@ class CartController extends Controller
         $id = $data['address_id'] ?? null;
 
         if (!isset($data['address_id'])) {
-            $coordinates = explode(',', $data['lat_long']);
+            $coordinates = array_map('trim', explode(',', $data['lat_long']));
             $data['lat'] = $coordinates[0];
             $data['long'] = $coordinates[1];
             $data['user_id'] = auth()->id();
@@ -127,7 +126,7 @@ class CartController extends Controller
         auth()->login($user);
 
         if (isset($data['lat_long'])) {
-            $coordinates = explode(',', $data['lat_long']);
+            $coordinates = array_map('trim', explode(',', $data['lat_long']));
             $data['lat'] = $coordinates[0];
             $data['long'] = $coordinates[1];
         }

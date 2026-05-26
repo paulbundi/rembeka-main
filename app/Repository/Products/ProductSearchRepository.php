@@ -25,11 +25,14 @@ class ProductSearchRepository
             });
         }
 
-        if (isset($data['rating'])) {
-            $products->whereHas('productPrice.provider', function ($query) use ($data) {
-                return $query->where('rating', $data['rating']);
-            })->orWhereHas('supplierPrice.supplier', function ($query) use ($data) {
-                return $query->where('rating', $data['rating']);
+        if (isset($data['rating']) && is_numeric($data['rating'])) {
+            $rating = (int) $data['rating'];
+            $products->where(function ($query) use ($rating) {
+                $query->whereHas('productPrice.provider', function ($q) use ($rating) {
+                    return $q->where('rating', $rating);
+                })->orWhereHas('supplierPrice.supplier', function ($q) use ($rating) {
+                    return $q->where('rating', $rating);
+                });
             });
         }
 

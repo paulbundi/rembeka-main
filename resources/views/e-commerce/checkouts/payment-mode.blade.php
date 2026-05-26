@@ -50,7 +50,7 @@
                             <div class="row">
                               <div class="col-sm-6">
                                 @if(isset($response['type']) && $response['type'] == 'error')
-                                  <b class="text-danger text-center">{{$response['message'] }}</b>
+                                  <b class="text-danger text-center">{{$response['notice'] ?? $response['message'] ?? ''}}</b>
                                 @endif
                                   <div class="mb-3 w-100">
                                   <label class="form-label" for="checkout-fn">Phone number to pay with</label>

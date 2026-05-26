@@ -16,12 +16,13 @@
       <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control" />
       <input type="hidden" name="lat_long" id="lat_long" />
     </div>
-    <div id="map" style="height: 250px;"></div>
-    <div id="infowindow-content">
-      <span id="place-name" class="title"></span><br />
-      <span id="place-address"></span>
+    <div class="position-relative mt-2" style="height: 250px;">
+      <div id="map" class="w-100 h-100"></div>
     </div>
-
+    <div id="infowindow-content" class="mt-2">
+      <span id="place-name" class="title fw-bold"></span><br />
+      <span id="place-address" class="text-muted small"></span>
+    </div>
 
   </div>
   <div class="col-sm-6">
@@ -102,6 +103,9 @@
 
               placeName.textContent = place.display_name.split(',')[0] || place.display_name;
               placeAddress.textContent = place.display_name;
+
+              // Invalidate map size to fix rendering issues
+              setTimeout(() => map.invalidateSize(), 100);
             }
           })
           .catch(err => console.log('Search error:', err));

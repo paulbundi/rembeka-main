@@ -7,7 +7,6 @@ use App\Http\Resources\BaseResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -109,11 +108,11 @@ class Product extends Model
     /**
      * Provider Pricing
      *
-     * @return BelongsToMany
+     * @return HasMany
      */
-    public function productPrice(): BelongsToMany
+    public function productPrice(): HasMany
     {
-        return $this->belongsToMany(ProviderPricing::class, 'provider_pricings');
+        return $this->hasMany(ProviderPricing::class);
     }
 
     /**

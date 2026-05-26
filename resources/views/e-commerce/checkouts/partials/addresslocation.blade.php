@@ -19,8 +19,8 @@
       <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control" />
       <input type="hidden" name="lat_long" id="lat_long" />
     </div>
-    <div class="position-relative mb-3" style="height: 250px; clear: both;">
-      <div id="map" class="w-100 h-100 rounded border"></div>
+    <div class="mb-3" style="height: 250px; clear: both; overflow: hidden;">
+      <div id="map" style="height: 250px; width: 100%; border-radius: 0.375rem; border: 1px solid #dee2e6;"></div>
     </div>
     <div id="infowindow-content" class="mb-3">
       <span id="place-name" class="title fw-bold d-block"></span>
@@ -29,8 +29,8 @@
   </div>
   <div class="col-sm-6">
     <label class="form-label" for="account-ln">Apartment/Building/Estate<small>(required)</small></label>
-    <input class="form-control" type="text" name="apartment" id="account-ln" value="{{old('apartment')}}">
-    @error('apartment')
+    <input class="form-control" type="text" name="appartment" id="account-ln" value="{{old('appartment')}}">
+    @error('appartment')
       <span class="text-danger">{{ $message }}</span>
     @enderror
   </div>
@@ -137,7 +137,5 @@
     });
   </script>
 
-  <!--
-  GOOGLE MAPS - Ready (add GOOGLE_MAPS_API_KEY to .env)
-  -->
+  {{-- Google Maps - Ready (add GOOGLE_MAPS_API_KEY to .env) --}}
   @endpush

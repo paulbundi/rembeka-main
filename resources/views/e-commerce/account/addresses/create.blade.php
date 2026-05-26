@@ -22,7 +22,7 @@
                       value="{{old('name', isset($address) ? $address->name : '')}}" />
                     <input type="hidden" name="lat_long" id="lat_long" />
                   </div>
-                  <div id="map" style="height: 250px;"></div>
+                  <div id="map" style="height: 250px; width: 100%; border-radius: 0.375rem; border: 1px solid #dee2e6; overflow: hidden;"></div>
                   <div id="infowindow-content">
                     <span id="place-name" class="title"></span><br />
                     <span id="place-address"></span>
@@ -128,6 +128,10 @@
       }
     }
     window.initMap = initMap;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initMap();
+    });
   </script>
 
   <!--

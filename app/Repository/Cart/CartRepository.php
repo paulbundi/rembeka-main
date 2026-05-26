@@ -72,7 +72,11 @@ class CartRepository
 
         $message =  "A new Order {$order->order_no} has been made.";
 
-        (new SmsChannel)->notify(config('services.sms-line'), $message);
+        try {
+            (new SmsChannel)->notify(config('services.sms-line'), $message);
+        } catch (\Exception $e) {
+            \Log::warning('Order SMS notification failed: ' . $e->getMessage());
+        }
 
         if($phone && !$payOnDelivery) {
             $response = $this->requestPayment->viaStkPush($amount, $order->stk_order_no, $order->id, $phone);

@@ -24,7 +24,7 @@ class MpesaValidationRepository
      *
      * @return void
      */
-    public function validateTopUp(?int $transId)
+    public function validateTopUp(?bool $transId)
     {
         $transaction = null;
 
@@ -45,7 +45,7 @@ class MpesaValidationRepository
 
         $response = STK::validate($transaction->checkout_request_id);
 
-        if (property_exists($response, 'ResultCode') && property_exists($response, 'ResponseCode') && $response->ResultCode == '0' && $response->ResponseCode == '0') {
+        if (property_exists($response, 'ResultCode') && property_exists($response, 'ResponseCode') && $response->ResultCode == 0 && $response->ResponseCode == '0') {
             $this->updateOrderStatus($transaction, true);
 
             return ['type' => 'success', 'message' => 'success', 'transaction' => $transaction];
@@ -64,7 +64,7 @@ class MpesaValidationRepository
                 'message' =>$response->errorMessage ?: 'error'
             ];
         }
-        if (property_exists($response, 'ResultCode') && $response->ResultCode != '0') {
+        if (property_exists($response, 'ResultCode') && $response->ResultCode != 0) {
             $transaction->update([
                 'customer_message' => $response->ResultDesc,
                 'status' => MpesaTopUpTransaction::STATUS_CANCELLED,
@@ -72,7 +72,7 @@ class MpesaValidationRepository
 
             return [
                 'type' => 'error',
-                'message' =>$response->errorMessage ?? 'error'
+                'message' => $response->ResultDesc ?? 'Payment failed',
             ];
         }
 
@@ -134,7 +134,7 @@ class MpesaValidationRepository
      */
     public function paymentValidation(Request $request)
     {
-        if ($request->get('secret') == null || ($request->get('secret') && Hash::check('22rembeka20', $request->get('secret')) !== true)) {
+        if ($request->get('secret') == null || $request->get('secret') !== config('services.mpesa_secret')) {
             return response()->json([
                 'ResultCode' => 1,
                 'ResultDesc' => 'Rejected',
@@ -176,7 +176,7 @@ class MpesaValidationRepository
         $account = User::where('phone', 'LIKE', '%'.$phone)
             ->where('status', User::STATUS_ACTIVE)
             ->with(['orders' => function ($query) {
-                $query->latest()->first();
+                $query->latest()->limit(1);
             }])
             ->get();
 
@@ -260,10 +260,10 @@ class MpesaValidationRepository
      *
      * @return void
      */
-    public function paymentConfirmation(Request $request): void
+    public function paymentConfirmation(Request $request)
     {
-        if ($request->get('secret') == null || ($request->get('secret') && Hash::check('22rembeka20', $request->get('secret')) !== true)) {
-            return;
+        if ($request->get('secret') == null || $request->get('secret') !== config('services.mpesa_secret')) {
+            return response()->json(['ResultCode' => 1, 'ResultDesc' => 'Rejected']);
         }
 
         if ($this->isAnSTKPushConfirmation($request)) {
@@ -327,9 +327,12 @@ class MpesaValidationRepository
         }
 
         if ($payment->user) {
-            $message =  'Hi '.$payment->user->first_name.', Payment for order '.$payment->order_no.' amount Ksh '.  $data['TransAmount'].' made. Pending Balance is Ksh '.$balance.' .Thank you for choosing Rembeka';
+            $balance = $payment->order->balance ?? 0;
+            $message = 'Hi '.$payment->user->first_name.', Payment for order '.($payment->order->order_no ?? '').' amount Ksh '.$data['TransAmount'].' made. Pending Balance is Ksh '.$balance.'. Thank you for choosing Rembeka';
             $payment->user->notify(new SmsNotification($message));
         }
+
+        return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Accepted']);
     }
 
     /**
@@ -415,7 +418,7 @@ class MpesaValidationRepository
             $order->status;
 
         $order->paid += $transaction->amount;
-        $order->balance -= $transaction->amount;
+        $order->balance = max(0, $order->balance - $transaction->amount);
         $order->save();
 
         if (isset($data['OrgAccountBalance'])) {

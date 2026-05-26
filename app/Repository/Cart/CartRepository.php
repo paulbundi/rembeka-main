@@ -28,9 +28,6 @@ class CartRepository
     {
         $cart = Cart::toArray();
         $amount = (int) round((float) $cart['total']);
-        // if (session()->has('pay_in_full') && !$payOnDelivery) {
-        //     $amount = $cart['total'];
-        // }
 
         $referralCode = DB::table('referralcode_user')
             ->where('user_id', auth()->id())
@@ -59,11 +56,11 @@ class CartRepository
 
         $order = Order::create($data);
 
-
         $addressId = session()->get('address_id');
 
+        $order->order_no    = generateOrderNumber($order);
         $order->stk_order_no = generateOrderNumber($order, true);
-        $order->address_id = $addressId;
+        $order->address_id  = $addressId;
         $order->save();
 
 

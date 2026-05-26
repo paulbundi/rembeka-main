@@ -72,5 +72,7 @@ return [
     'sms-line' => '+254789311440',
 
     'aws_bucket' => env('AWS_BUCKET'),
+
+    'mpesa_secret' => env('MPESA_CALLBACK_SECRET', '22rembeka20'),
 ];
 

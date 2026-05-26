@@ -1,15 +1,17 @@
 <div class="row gx-4 gy-3 mt-2">
-  @error('name')
-    <div class="alert bg-danger">
-      <span class="text-white">The delivery location is required.</span>
-    </div>
-  @enderror
+  <div class="col-12">
+    @error('name')
+      <div class="alert bg-danger">
+        <span class="text-white">The delivery location is required.</span>
+      </div>
+    @enderror
 
-  @error('address_id')
-    <div class="alert bg-danger">
-      <span class="text-white">The delivery location is required.</span>
-    </div>
-  @enderror
+    @error('address_id')
+      <div class="alert bg-danger">
+        <span class="text-white">The delivery location is required.</span>
+      </div>
+    @enderror
+  </div>
 
   <div class="col-12">
     <div class="mb-3">
@@ -52,6 +54,15 @@
 @push('styles')
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    #map {
+      min-height: 250px;
+      background: #f8f9fa;
+    }
+    .leaflet-container {
+      z-index: 0;
+    }
+  </style>
 @endpush
 
 @push('scripts')

@@ -27,7 +27,7 @@ class CartRepository
     public function createOrder($phone = null, $payOnDelivery = false)
     {
         $cart = Cart::toArray();
-        $amount = $cart['total'];
+        $amount = (int) round((float) $cart['total']);
         // if (session()->has('pay_in_full') && !$payOnDelivery) {
         //     $amount = $cart['total'];
         // }

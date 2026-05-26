@@ -14,8 +14,9 @@ class RequestMpesaPayment
      *
      * @return array
      */
-    public static function viaStkPush(int $amount, $orderNo, $orderId = null, $phone = null): array
+    public static function viaStkPush($amount, $orderNo, $orderId = null, $phone = null): array
     {
+        $amount = (int) round((float) $amount);
         $phone = '254'.($phone ? substr($phone, -9) : substr(auth()->user()->phone, -9));
 
         $response = STK::request($amount)

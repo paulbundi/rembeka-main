@@ -44,12 +44,13 @@ import ProductItem from './ProductItem.vue';
       <service-item :service="product" :loading-type="index >lazyLoadLimit ? 'lazy':'eager'" />
     </div>
     
-    <div v-if="product.type == 1" v-for="pricing in product.supplier_price" class="col-md-4 col-sm-6 px-2 mb-4" :key="`item${pricing.id}`">
-      <product-item v-if="pricing.amount > 0" :product="product" :pricing="pricing"  :loading-type="index >lazyLoadLimit ? 'lazy':'eager'"/>
-    </div>
+    <template v-if="product.type == 1" v-for="pricing in product.supplier_price">
+      <div class="col-md-4 col-sm-6 px-2 mb-4" :key="`item${pricing.id}`">
+        <product-item v-if="pricing.amount > 0" :product="product" :pricing="pricing" :loading-type="index > lazyLoadLimit ? 'lazy' : 'eager'"/>
+      </div>
+    </template>
 
-    
-    <hr class="d-sm-none">
+    <hr class="d-sm-none" :key="`hr-${index}`">
   </template>
 
   <div v-if="loadingData" class="w-100 h-100 d-flex mt-4 align-items-center justify-content-center">

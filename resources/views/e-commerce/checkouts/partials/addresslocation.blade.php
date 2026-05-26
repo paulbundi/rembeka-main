@@ -10,20 +10,20 @@
       <span class="text-white">The delivery location is required.</span>
     </div>
   @enderror
+
   <div class="col-12">
-    <div id="pac-container">
+    <div class="mb-3">
       <label class="fw-bolder">Add a new Address</label>
       <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control" />
       <input type="hidden" name="lat_long" id="lat_long" />
     </div>
-    <div class="position-relative mt-2" style="height: 250px;">
-      <div id="map" class="w-100 h-100"></div>
+    <div class="position-relative mb-3" style="height: 250px; clear: both;">
+      <div id="map" class="w-100 h-100 rounded border"></div>
     </div>
-    <div id="infowindow-content" class="mt-2">
-      <span id="place-name" class="title fw-bold"></span><br />
-      <span id="place-address" class="text-muted small"></span>
+    <div id="infowindow-content" class="mb-3">
+      <span id="place-name" class="title fw-bold d-block"></span>
+      <span id="place-address" class="text-muted small d-block"></span>
     </div>
-
   </div>
   <div class="col-sm-6">
     <label class="form-label" for="account-ln">Apartment/Building/Estate<small>(required)</small></label>
@@ -61,6 +61,10 @@
 
   <script>
     function initMap() {
+      // Ensure map container exists
+      const mapContainer = document.getElementById('map');
+      if (!mapContainer) return;
+
       // Leaflet implementation
       const map = L.map('map').setView([1.2921, 36.8219], 10); // Nairobi default
 
@@ -76,13 +80,19 @@
       const placeName = document.getElementById('place-name');
       const placeAddress = document.getElementById('place-address');
 
-      let timeout;
-      input.addEventListener('input', function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(searchAddress, 400);
-      });
+      // Fix map rendering in hidden/containers
+      setTimeout(() => map.invalidateSize(), 200);
+
+      if (input) {
+        let timeout;
+        input.addEventListener('input', function () {
+          clearTimeout(timeout);
+          timeout = setTimeout(searchAddress, 400);
+        });
+      }
 
       function searchAddress() {
+        if (!input) return;
         const query = input.value.trim();
         if (query.length < 3) return;
 
@@ -103,9 +113,6 @@
 
               placeName.textContent = place.display_name.split(',')[0] || place.display_name;
               placeAddress.textContent = place.display_name;
-
-              // Invalidate map size to fix rendering issues
-              setTimeout(() => map.invalidateSize(), 100);
             }
           })
           .catch(err => console.log('Search error:', err));

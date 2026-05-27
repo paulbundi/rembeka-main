@@ -46,7 +46,7 @@ import ProductItem from './ProductItem.vue';
     
     <template v-if="product.type == 1" v-for="pricing in product.supplier_price">
       <div class="col-md-4 col-sm-6 px-2 mb-4" :key="`item${pricing.id}`">
-        <product-item v-if="pricing.amount > 0" :product="product" :pricing="pricing" :loading-type="index > lazyLoadLimit ? 'lazy' : 'eager'"/>
+        <product-item v-if="pricing.amount > 0" :product="product" :pricing="pricing" loading-type="eager"/>
       </div>
     </template>
 

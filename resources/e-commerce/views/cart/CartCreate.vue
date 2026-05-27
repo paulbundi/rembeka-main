@@ -7,7 +7,7 @@
       }
     },
     created() {
-      this.cart  = window.store.cart;
+      this.cart = window.store && window.store.cart ? window.store.cart : { items: {}, total: 0 };
     },
     methods: {
       handleRemove(item) {

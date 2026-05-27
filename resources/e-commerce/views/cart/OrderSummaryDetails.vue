@@ -3,7 +3,7 @@
     name: 'OrderSummaryDetails',
     data() {
       return {
-        cart: window.store.cart,
+        cart: window.store && window.store.cart ? window.store.cart : { items: {}, total: 0 },
       };
     },
   }

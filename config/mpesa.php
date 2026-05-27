@@ -22,7 +22,7 @@ return [
     */
     'accounts' => [
         'staging' => [
-            'sandbox' => false,
+            'sandbox' => true,
             'key' => '4v2pGUsZ41B0wFdEpCgzxsrB0OEfRUsa',
             'secret' => 'YW8RXCvq4LHAkQkL',
             'initiator' => 'apitest363',
@@ -35,7 +35,7 @@ return [
         ],
 
         'production' => [
-            'sandbox' => true,
+            'sandbox' => false,
             'key' => 'lUYboXH4GOHJLUWLl2BYGpGmTsSB5HiG',
             'secret' => 'lbInArJoXa8jV2TY',
             'initiator' => 'rembekaapi',

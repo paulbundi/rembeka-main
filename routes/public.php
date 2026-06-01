@@ -52,6 +52,9 @@ Route::match(['get', 'post'], '/payment/method', [CartController::class, 'paymen
 Route::get('validate-payment', [CartController::class, 'validateStkPayment'])
     ->name('validate.stk');
 
+Route::post('manual-payment/submit', [CartController::class, 'manualPaymentSubmit'])
+    ->name('manual.payment.submit');
+
 Route::match(['get', 'post'], 'complete/order', [CartController::class, 'completeOrder'])
     ->name('complete.order');
 

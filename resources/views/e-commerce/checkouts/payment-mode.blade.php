@@ -36,6 +36,16 @@
               <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
                 <div class="accordion-body">
                   <div class="credit-card-wrapper text-center p-3"></div>
+
+                  {{--
+                  |--------------------------------------------------------------------------
+                  | MANUAL PAYMENT FLOW
+                  |--------------------------------------------------------------------------
+                  | Switched from STK Push to manual C2B payments to phone number 0708887933.
+                  | Customers send money via M-Pesa manually and submit transaction details.
+                  | Old STK Push logic is preserved below as comments for reference/rollback.
+                  |--------------------------------------------------------------------------
+                  --}}
                   @if(isset($response['type']) && $response['type'] == 'success')
                     <img src="https://www.tiaro.net/site/assets/files/11317/mpesa.png" alt="M-Pesa Payment" height="60">
                     <p class="small text-muted mt-2">Pay with M-Pesa</p>
@@ -46,7 +56,6 @@
                         payment</a>
                     </div>
                   @else
-
                     <form method="POST" action="{{ route('complete.order') }}" class="credit-card-form row">
                       @csrf
                       <div class="row">
@@ -73,7 +82,75 @@
                       </div>
                     </form>
                   @endif
-                </div>
+                  {{-- /MANUAL PAYMENT FLOW: Old STK Push logic --}}
+
+                  {{--
+                  |--------------------------------------------------------------------------
+                  | MANUAL PAYMENT INSTRUCTIONS
+                  |--------------------------------------------------------------------------
+                  | Send payment via M-Pesa to the dedicated phone number and submit the
+                  | transaction details below so we can verify and confirm your order.
+                  |--------------------------------------------------------------------------
+                  --}}
+                  <div class="alert alert-info mt-3" role="alert">
+                    <h5 class="alert-heading">Pay manually via M-Pesa</h5>
+                    <p class="mb-2">
+                      Send <strong>Ksh {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : '--' }}</strong>
+                      to phone number <strong>0708887933</strong> using M-Pesa.
+                    </p>
+                    <hr>
+                    <p class="mb-2 small text-muted">
+                      After sending, enter your M-Pesa transaction details below.
+                      Use your <strong>Order No. #{{ isset($response['order']) && $response['order'] ? $response['order']->order_no : '--' }}</strong>
+                      as the M-Pesa account reference if prompted.
+                    </p>
+                  </div>
+
+                  <form method="POST" action="{{ route('manual.payment.submit') }}" class="credit-card-form row">
+                    @csrf
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="mb-3 w-100">
+                          <label class="form-label" for="manual-mpesa-code">M-Pesa Transaction ID / Code</label>
+                          <input class="form-control" name="mpesa_transaction_id" type="text"
+                            id="manual-mpesa-code" placeholder="e.g. SGH123456" required>
+                          @error('mpesa_transaction_id')
+                            <small class="text-danger">{{ $message }}</small>
+                          @enderror
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <div class="mb-3 w-100">
+                          <label class="form-label" for="manual-phone">Phone Number Used</label>
+                          <input class="form-control" name="phone" value="{{auth()->user()->phone}}" type="tel"
+                            id="manual-phone" required>
+                          @error('phone')
+                            <small class="text-danger">{{ $message }}</small>
+                          @enderror
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <div class="mb-3 w-100">
+                          <label class="form-label" for="manual-amount">Amount Sent (Ksh)</label>
+                          <input class="form-control" name="amount" type="number" step="0.01" min="1"
+                            id="manual-amount" placeholder="e.g. 1500" required>
+                          @error('amount')
+                            <small class="text-danger">{{ $message }}</small>
+                          @enderror
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-success d-block w-100 mt-1" type="submit">
+                          <span class="fw-bolder">I Have Sent The Payment</span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  {{-- /MANUAL PAYMENT INSTRUCTIONS --}}
               </div>
             </div>
 

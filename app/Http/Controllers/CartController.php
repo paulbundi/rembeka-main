@@ -232,6 +232,38 @@ class CartController extends Controller
     }
 
     /**
+     * Handle manual C2B payment submission.
+     *
+     * @param Request                   $request
+     * @param MpesaValidationRepository $mpesaValidationRepository
+     *
+     * @return void
+     */
+    public function manualPaymentSubmit(Request $request, MpesaValidationRepository $mpesaValidationRepository)
+    {
+        $validated = $request->validate([
+            'mpesa_transaction_id' => 'required|string',
+            'phone' => 'required|string',
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        $response = $mpesaValidationRepository->verifyManualPayment($validated);
+
+        if (isset($response['type']) && $response['type'] == 'success') {
+            return view('e-commerce.checkouts.payment-complete', [
+                'order' => $response['order']
+            ]);
+        }
+
+        return redirect()->back()->withInput()->with([
+            'message' => [
+                'type' => 'error',
+                'message' => $response['notice'] ?? 'Payment verification failed. Please contact support.',
+            ],
+        ]);
+    }
+
+    /**
      * Additional order-notes.
      *
      * @param Request $request

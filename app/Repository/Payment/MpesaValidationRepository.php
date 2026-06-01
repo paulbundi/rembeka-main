@@ -617,4 +617,159 @@ class MpesaValidationRepository
 
         return $response->access_token;
     }
+
+    /**
+     * Verify manual M-Pesa payment submitted by customer.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function verifyManualPayment(array $data): array
+    {
+        $phone = '254'.substr($data['phone'], -9);
+        $transId = $data['mpesa_transaction_id'];
+        $amount = (int) round((float) $data['amount']);
+
+        if (MpesaTopUpTransaction::where('checkout_request_id', 'MANUAL-'.$transId)
+            ->where('status', MpesaTopUpTransaction::CONFIRMED)
+            ->exists()) {
+            return [
+                'type' => 'error',
+                'notice' => 'This transaction has already been applied to an order.',
+            ];
+        }
+
+        $queryResponse = $this->queryTransactionStatus($transId);
+
+        if (! $this->isTransactionValid($queryResponse, $phone, $amount)) {
+            return [
+                'type' => 'error',
+                'notice' => 'We could not verify this transaction with Safaricom. Please confirm the Transaction ID and try again.',
+            ];
+        }
+
+        $order = Order::where('user_id', auth()->id())
+            ->where('status', Order::STATUS_PENDING_PAYMENT)
+            ->latest()
+            ->first();
+
+        if (! $order) {
+            return [
+                'type' => 'error',
+                'notice' => 'No pending order found to apply this payment.',
+            ];
+        }
+
+        $order->paid = $order->paid + $amount;
+        $order->balance = max(0, $order->balance - $amount);
+        $order->status = $order->balance <= 0 ? Order::STATUS_ORDER_CONFIRMED : $order->status;
+        $order->save();
+
+        MpesaTopUpTransaction::create([
+            'user_id' => auth()->id(),
+            'amount' => $amount,
+            'merchant_request_id' => 'MANUAL-'.time(),
+            'checkout_request_id' => 'MANUAL-'.$transId,
+            'response_code' => '0',
+            'response_description' => 'Manual payment verified',
+            'customer_message' => 'Manual payment verified',
+            'reference_id' => $order->order_no,
+            'trans_id' => $order->order_no,
+            'active_phone_number' => $phone,
+            'order_id' => $order->id,
+            'status' => MpesaTopUpTransaction::CONFIRMED,
+        ]);
+
+        return [
+            'type' => 'success',
+            'notice' => 'Payment verified successfully.',
+            'order' => $order,
+        ];
+    }
+
+    /**
+     * Call Safaricom TransactionStatusQuery for a given transaction ID.
+     *
+     * @param string $transId
+     *
+     * @return object|null
+     */
+    private function queryTransactionStatus(string $transId): ?object
+    {
+        $payload = [
+            "Initiator" => config('mpesa.accounts.production.initiator'),
+            "SecurityCredential" => $this->setSecurityCredentials(),
+            "CommandID" => "TransactionStatusQuery",
+            "TransactionID" => $transId,
+            "PartyA" => config('mpesa.accounts.production.lnmo.shortcode'),
+            "IdentifierType" => 4,
+            "ResultURL" => config('app.url')."/status/callback",
+            "QueueTimeOutURL" => config('app.url')."/status/callback",
+            "Remarks" => "OK",
+            "Occasion" => "OK",
+        ];
+
+        $curl = curl_init('https://api.safaricom.co.ke/mpesa/transactionstatus/v1/query');
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $this->getDefaultHeader());
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return json_decode($response);
+    }
+
+    /**
+     * Check if the transaction is valid and matches the expected phone/amount.
+     *
+     * @param object|null $response
+     * @param string      $phone
+     * @param int         $amount
+     *
+     * @return bool
+     */
+    private function isTransactionValid(?object $response, string $phone, int $amount): bool
+    {
+        if (! $response || isset($response->errorCode)) {
+            return false;
+        }
+
+        if (isset($response->ResultCode) && $response->ResultCode !== 0) {
+            return false;
+        }
+
+        if (isset($response->ResultParameters)) {
+            $params = collect($response->ResultParameters->ResultParameter ?? [])
+                ->pluck('Value', 'Key');
+
+            $actualAmount = (int) ($params['Amount'] ?? 0);
+            $actualPhone = (string) ($params['ReceiverPartyPublicName'] ?? '');
+
+            if ($actualAmount !== $amount) {
+                return false;
+            }
+
+            if (str_contains($actualPhone, $phone) === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Default headers.
+     *
+     * @return array
+     */
+    public function getDefaultHeader():array
+    {
+        return [
+            'Content-Type: application/json',
+            'Authorization: Bearer '.$this->generateToken(),
+        ];
+    }
 }

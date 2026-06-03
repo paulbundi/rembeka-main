@@ -36,9 +36,11 @@
                 <a class="accordion-button text-primary" href="#mpesa" data-bs-toggle="collapse">
                   <i class="ci-card fs-lg me-2 align-middle text-success"></i>Pay with Mpesa.</a>
               </h3>
-              <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
-                <div class="accordion-body">
-                  <div class="credit-card-wrapper text-center p-3"></div>
+                 <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
+                   <div class="accordion-body">
+                     <div class="text-center p-3">
+                       <img src="{{ asset('img/mpesa.png') }}" alt="M-Pesa" height="60">
+                     </div>
 
                   {{--
                   |--------------------------------------------------------------------------

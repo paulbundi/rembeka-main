@@ -38,9 +38,9 @@
               </h3>
                  <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
                    <div class="accordion-body">
-                     <div class="text-center p-3">
-                       <img src="{{ asset('img/mpesa.png') }}" alt="M-Pesa" height="60">
-                     </div>
+                      <div class="text-center p-3">
+                        <img src="{{ asset('mpesa.png') }}" alt="M-Pesa" height="60">
+                      </div>
 
                   {{--
                   |--------------------------------------------------------------------------
@@ -99,7 +99,7 @@
                     <div class="col-12 d-flex flex-column justify-content-center">
                       <h4>Payment Request Made successfully.</h4>
                       <p>Please send <strong>Ksh
-                          {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format(Cart::total(), 2) }}</strong>
+                          {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
                         to <strong>0708887933</strong> via M-Pesa and submit the Transaction ID below.</p>
                     </div>
                   @endif
@@ -108,7 +108,7 @@
                     <h5 class="alert-heading">Pay manually via M-Pesa</h5>
                     <p class="mb-2">
                       Send <strong>Ksh
-                        {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format(Cart::total(), 2) }}</strong>
+                        {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
                       to phone number <strong>0708887933</strong> using M-Pesa.
                     </p>
                     <hr>
@@ -146,7 +146,7 @@
                         <div class="mb-3 w-100">
                           <label class="form-label" for="manual-amount">Amount Sent (Ksh)</label>
                           <input class="form-control" name="amount" type="number" step="0.01" min="1" id="manual-amount"
-                            value="{{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format(Cart::total(), 2) }}"
+                            value="{{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}"
                             required>
                           @error('amount')
                             <small class="text-danger">{{ $message }}</small>

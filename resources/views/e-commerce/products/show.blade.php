@@ -37,12 +37,12 @@
                 <img class="card-img-top" src="{{$product->advert->attachments->first()->media->url}}" />
                 <div class="card-body">
                   @php
-                    $cta = $product->advert->call_to_action;
+                    $cta = trim($product->advert->call_to_action);
                     if (empty($cta)) {
                       $cta = 'Order On WhatsApp';
                     } else {
-                      $cta = str_replace('Book On WhatsApp', 'Order On WhatsApp', $cta);
-                      $cta = str_replace('Book', 'Order', $cta);
+                      $cta = str_ireplace('Book On WhatsApp', 'Order On WhatsApp', $cta);
+                      $cta = str_ireplace('Book', 'Order', $cta);
                     }
                   @endphp
                   <a href="https://wa.me/254789311440?text={{$product->advert->name}}"

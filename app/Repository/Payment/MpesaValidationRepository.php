@@ -3,6 +3,7 @@
 namespace  App\Repository\Payment;
 
 use App\Jobs\PaymentValidated;
+use App\Facades\Cart;
 use App\Models\MpesaBalance;
 use App\Models\MpesactobDeposit;
 use App\Models\MpesaTopUpTransaction;
@@ -625,7 +626,7 @@ class MpesaValidationRepository
      *
      * @return array
      */
-    public function verifyManualPayment(array $data): array
+     public function verifyManualPayment(array $data): array
     {
         $phone = '254'.substr($data['phone'], -9);
         $transId = $data['mpesa_transaction_id'];
@@ -655,9 +656,13 @@ class MpesaValidationRepository
             ->first();
 
         if (! $order) {
+            $order = $this->createOrderFromCart($amount);
+        }
+
+        if (! $order) {
             return [
                 'type' => 'error',
-                'notice' => 'No pending order found to apply this payment.',
+                'notice' => 'No pending order found and could not create one from the cart.',
             ];
         }
 
@@ -686,6 +691,77 @@ class MpesaValidationRepository
             'notice' => 'Payment verified successfully.',
             'order' => $order,
         ];
+    }
+
+    /**
+     * Create a pending order from the current cart contents.
+     *
+     * @param int $paidAmount
+     *
+     * @return Order|null
+     */
+    private function createOrderFromCart(int $paidAmount): ?Order
+    {
+        $cart = Cart::toArray();
+
+        if (empty($cart['items'])) {
+            return null;
+        }
+
+        $total = $cart['total'] ?? 0;
+
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'amount' => $total,
+            'paid' => $paidAmount,
+            'balance' => max(0, $total - $paidAmount),
+            'notes' => session()->get('notes'),
+            'location_id' => session()->get('checkout_address'),
+            'paying_no' => null,
+            'status' => $paidAmount >= $total ? Order::STATUS_ORDER_CONFIRMED : Order::STATUS_PENDING_PAYMENT,
+            'channel_id' => 1,
+        ]);
+
+        $order->order_no = generateOrderNumber($order);
+        $order->stk_order_no = generateOrderNumber($order, true);
+        $order->address_id = session()->get('address_id');
+        $order->save();
+
+        foreach ($cart['items'] as $item) {
+            $product = (object) $item->product;
+
+            if ($item->type == \App\Models\Product::TYPE_PRODUCT) {
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->product_id,
+                    'category_id' => 1,
+                    'provider_id' => $product->supplier_id,
+                    'quantity' => $item->qty,
+                    'amount' => $item->qty * $product->amount,
+                    'provider_amount' => $item->qty * $product->supplier_price,
+                    'percentage_commission' => $product->mark_up_percentage,
+                    'type' => \App\Models\Product::TYPE_PRODUCT,
+                    'status' => \App\Models\OrderItem::STATUS_PENDING,
+                ]);
+            } else {
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'category_id' => 1,
+                    'provider_id' => $item->provider,
+                    'quantity' => $item->qty,
+                    'appointment_date' => $item->appointmentDate,
+                    'appointment_time' => $item->appointmentTime,
+                    'amount' => $item->qty * $product->final_price,
+                    'provider_amount' => $item->qty * $product->provider_cost,
+                    'percentage_commission' => $product->commission,
+                    'type' => \App\Models\Product::TYPE_SERVICE,
+                    'status' => \App\Models\OrderItem::STATUS_PENDING,
+                ]);
+            }
+        }
+
+        return $order;
     }
 
     /**

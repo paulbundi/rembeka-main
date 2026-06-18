@@ -43,11 +43,14 @@ class WelcomeToRembeka extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hi '.$notifiable->first_name)
-                    ->line('Welcome to rembeka, where conveniently beautiful matters, we value you as a customer and we guarantee quality service from the very best stylists.')
-                    ->line('Feel good look good with Rembeka. Sign Up to our newsletter, be a repeat customer and get loyalties.')
-                    ->line('Rembeka is conveniently beautiful.')
-                    ->line('Trust.Flexibility.Efficiency.');
+            ->subject('Welcome to Rembeka!')
+            ->greeting('Hi ' . $notifiable->first_name)
+            ->line('Welcome to Rembeka, where conveniently beautiful matters.')
+            ->line('We value you as a customer and we guarantee quality service from the very best stylists.')
+            ->action('Start Shopping', url('/'))
+            ->line('Feel good, look good with Rembeka. Sign up to our newsletter, be a repeat customer and get loyalties.')
+            ->line('Rembeka is conveniently beautiful.')
+            ->line('Trust. Flexibility. Efficiency.');
     }
 
     /**

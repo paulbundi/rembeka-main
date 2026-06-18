@@ -4,14 +4,12 @@ namespace App\Repository\Orders;
 
 use App\Mail\OrderPlaced;
 use App\Models\Order;
+use App\Notifications\OrderConfirmation;
 use App\Notifications\SmsNotification;
 use Illuminate\Support\Facades\Mail;
 
 class ClientOrderProcessing
 {
-    /**
-     * @var Order
-     */
     protected $order;
 
     public function __construct(Order $order)
@@ -23,9 +21,6 @@ class ClientOrderProcessing
         $this->notifyClient();
     }
 
-    /**
-     * @return void
-     */
     public function notifyClient(): void
     {
         $message = 'Hi '.$this->order->customer->first_name. ', Thank you for shopping with Rembeka. Your order number '.
@@ -34,17 +29,11 @@ class ClientOrderProcessing
 
         $this->order->customer->notify(new SmsNotification($message));
 
-        $this->orderInvoiceMail();
+        $this->orderConfirmationMail();
     }
 
-    /**
-     * send Email notification for payment.
-     *
-     * @return void
-     */
-    public function orderInvoiceMail()
+    public function orderConfirmationMail()
     {
-        Mail::to($this->order->customer)
-            ->queue(new OrderPlaced($this->order));
+        $this->order->customer->notify(new OrderConfirmation($this->order));
     }
 }

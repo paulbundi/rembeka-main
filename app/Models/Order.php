@@ -141,6 +141,22 @@ class Order extends Model
         return $this->belongsTo(Address::class, 'address_id');
     }
 
+    public function getStatusLabel(): string
+    {
+        return [
+            self::STATUS_PENDING_PAYMENT => 'Pending Payment',
+            self::STATUS_PAYMENT_FAILED => 'Payment Failed',
+            self::STATUS_CANCELED => 'Canceled',
+            self::STATUS_ORDER_CONFIRMED => 'Order Confirmed',
+            self::STATUS_PENDING_SERVICE => 'Pending Service',
+            self::STATUS_PARTIAL_DELIVERY => 'Partial Delivery',
+            self::STATUS_FULFILLED => 'Fulfilled',
+            self::STATUS_PARTIAL_RATING => 'Partial Rating',
+            self::STATUS_COMPLETED => 'Completed',
+            self::STATUS_WAITING_CONFIRMATION => 'Waiting Confirmation',
+        ][$this->status] ?? 'Unknown';
+    }
+
     /**
      *
      * @return BelongsTo

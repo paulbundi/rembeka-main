@@ -16,6 +16,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordReset;
 
 class User extends Authenticatable
 {
@@ -213,5 +215,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Referralcode::class, 'user_id');
 
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        Mail::to($this->email)->queue(new PasswordReset($token, $this->email));
     }
 }

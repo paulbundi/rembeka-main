@@ -4,16 +4,17 @@
    @include('layouts.common-seo')
 @endSection
 @section('content')
-<main class="offcanvas-enabled" style="padding-top: 5rem;">
-    <section class="ps-lg-4 pe-lg-3">
+<main style="padding-top: 3.5rem;">
+    <section class="px-md-4">
         <div class="px-3 pt-2">
             @include('e-commerce.sliders.welcome-slider')
-            @include('e-commerce.how-it-works')
-            @include('e-commerce.sliders.discouted-products')
+            @include('e-commerce.categories-grid')
+            @include('e-commerce.trust-badges')
             @include('e-commerce.sliders.best-seller')
-            @include('e-commerce.sliders.meet-our-stylist')
+            @include('e-commerce.special-offers')
+            @include('e-commerce.sliders.discouted-products')
             @include('e-commerce.sliders.our-partners')
-            <!-- @include('e-commerce.sliders.customer-review') -->
+            @include('e-commerce.footer-pink-bar')
             @include('layouts.e-commerce-footer')
         </div>
     </section>

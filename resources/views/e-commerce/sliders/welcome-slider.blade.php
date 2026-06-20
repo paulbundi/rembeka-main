@@ -1,54 +1,39 @@
-<section class="tns-carousel mb-3 mb-md-5">
-    <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 1, &quot;mode&quot;: &quot;gallery&quot;, &quot;nav&quot;: false, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 3000, &quot;responsive&quot;: {&quot;0&quot;: {&quot;nav&quot;: true, &quot;controls&quot;: false}, &quot;576&quot;: {&quot;nav&quot;: false, &quot;controls&quot;: true}}}">
-        <!-- Slide 1-->
-        <div>
-        <div class="rounded-3 px-md-5 text-center text-xl-start" style="background-color: #c12c5d;">
-            <div class="d-xl-flex justify-content-between align-items-center px-4 px-sm-5 mx-auto" style="max-width: 1226px;">
-            <div class="py-5 me-xl-4 mx-auto mx-xl-0" style="max-width: 490px;">
-                <h2 class="h1 text-light">Tired of long queues at salons!</h2>
-                <h4 class="text-light pb-4 h-4">Do you need beauty services, Nails, Hair done?</h4>
-                 <div class="d-flex align-items-center">
-                    <a href="https://wa.me/{{config('services.whatsapp.rembeka_whatsapp_no')}}?text={{ urlencode(url()->current()) }}" target="_blank">
-                        <img src="{{ asset('img/whatsapp.png') }}" width="50px" height="50px" alt="talk to us on whatsapp" />
-                    </a>
+<section class="hero-section mb-4 mb-md-5 py-5 rounded-3 overflow-hidden text-center text-md-start" style="background: linear-gradient(135deg, #c12c5d 0%, #a0204c 100%);">
+  <div class="container px-4 px-sm-5 mx-auto">
+    <div class="row align-items-center">
+      <!-- Left Content -->
+      <div class="col-12 col-md-6 col-lg-5 text-white mb-4 mb-md-0">
+        <h1 class="display-4 fw-bold text-white mb-2 lh-1" style="font-family: 'Outfit', sans-serif;">
+          Beauty made<br><span class="italic-title" style="font-style: italic; font-weight: 300;">simple.</span>
+        </h1>
+        <p class="fs-5 opacity-90 mb-4 fw-light">
+          Premium products. Professional services.<br>All in one place.
+        </p>
+        <a href="{{ route('filter.index') }}" class="btn btn-dark btn-lg px-4 py-2 border-0 shadow-sm hover-lift" style="background-color: #0f172a; border-radius: 8px; font-size: 0.95rem; font-weight: 600;">
+          Shop Now
+        </a>
+      </div>
 
-                    <a class="btn text-light pb-4 h-5 ps-0" href="tel:+{{config('services.whatsapp.rembeka_whatsapp_no')}}">
-                        <i class="bi bi-telephone fs-4 me-1"></i>
-                        +{{config('services.whatsapp.rembeka_whatsapp_no')}}
-                    </a>
-                </div>
-                <div class="">
-                    <a href="/search/" class="btn btn-sm text-white bg-dark">Book Now</a>
-                </div>
-            </div>
-            <div><img src="img/landingpage.png" alt="Image" style="max-height: 490px;"></div>
-            </div>
+      <!-- Right Content - Overlapping Circles -->
+      <div class="col-12 col-md-6 col-lg-7 d-flex justify-content-center justify-content-md-end position-relative py-3">
+        <div class="hero-circles-wrapper">
+          <!-- Circle 1: Hair -->
+          <div class="hero-circle circle-hair">
+            <div class="circle-img-holder" style="background-image: url('{{ asset('img/hero_hair.png') }}');"></div>
+            <div class="circle-badge">Hair</div>
+          </div>
+          <!-- Circle 2: Makeup -->
+          <div class="hero-circle circle-makeup">
+            <div class="circle-img-holder" style="background-image: url('{{ asset('img/hero_makeup.png') }}');"></div>
+            <div class="circle-badge">Makeup</div>
+          </div>
+          <!-- Circle 3: Nails -->
+          <div class="hero-circle circle-nails">
+            <div class="circle-img-holder" style="background-image: url('{{ asset('img/hero_nails.png') }}');"></div>
+            <div class="circle-badge">Nails</div>
+          </div>
         </div>
-        </div>
-        <!-- Slide 2-->
-        <div>
-        <div class="rounded-3 px-md-5 text-center text-xl-start" style="background-color: #c12c5d;">
-            <div class="d-xl-flex justify-content-between align-items-center px-4 px-sm-5 mx-auto" style="max-width: 1226px;">
-            <div class="py-5 me-xl-4 mx-auto mx-xl-0" style="max-width: 490px;">
-                <h2 class="h1 text-light">Rembeka</h2>
-                <h4 class="text-light pb-4">Treat yourself to unique Hair styles and nail designs at affordable rates.</h4>
-                <div class="d-flex align-items-center">
-                    <a href="https://wa.me/{{config('services.whatsapp.rembeka_whatsapp_no')}}?text={{ urlencode(url()->current()) }}" target="_blank">
-                        <img src="{{ asset('img/whatsapp.png') }}" width="50px" height="50px" alt="talk to us on whatsapp" />
-                    </a>
-
-                    <a class="btn text-light pb-4 h-5 ps-0" href="tel:+{{config('services.whatsapp.rembeka_whatsapp_no')}}">
-                        <i class="bi bi-telephone fs-4 me-1"></i>
-                        +{{config('services.whatsapp.rembeka_whatsapp_no')}}
-                    </a>
-                </div>
-                <div class="">
-                    <a href="/search/" class="btn btn-sm text-white bg-dark">Book Now</a>
-                </div>
-            </div>
-            <div><img src="img/hair.png" alt="Image"></div>
-            </div>
-        </div>
-        </div>
+      </div>
     </div>
+  </div>
 </section>

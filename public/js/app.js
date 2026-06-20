@@ -5230,7 +5230,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.cart = window.store.cart;
+    this.cart = window.store && window.store.cart ? window.store.cart : {
+      items: {},
+      total: 0
+    };
   },
   methods: {
     handleRemove: function handleRemove(item) {
@@ -5295,7 +5298,10 @@ __webpack_require__.r(__webpack_exports__);
   name: 'OrderSummaryDetails',
   data: function data() {
     return {
-      cart: window.store.cart
+      cart: window.store && window.store.cart ? window.store.cart : {
+        items: {},
+        total: 0
+      }
     };
   }
 });
@@ -7238,7 +7244,7 @@ var render = function render() {
       "data-placement": "top",
       title: _vm.names
     }
-  }, [_vm._v(_vm._s(_vm.names.substring(0, 1)) + "\n  ")])]) : _vm._e();
+  }, [_vm._v(_vm._s(_vm.names.substring(0, 1)) + "\r\n  ")])]) : _vm._e();
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -7845,17 +7851,18 @@ var render = function render() {
         "loading-type": index > _vm.lazyLoadLimit ? "lazy" : "eager"
       }
     })], 1) : _vm._e(), _vm._v(" "), _vm._l(product.supplier_price, function (pricing) {
-      return product.type == 1 ? _c("div", {
+      return product.type == 1 ? [_c("div", {
         key: "item".concat(pricing.id),
         staticClass: "col-md-4 col-sm-6 px-2 mb-4"
       }, [pricing.amount > 0 ? _c("product-item", {
         attrs: {
           product: product,
           pricing: pricing,
-          "loading-type": index > _vm.lazyLoadLimit ? "lazy" : "eager"
+          "loading-type": "eager"
         }
-      }) : _vm._e()], 1) : _vm._e();
+      }) : _vm._e()], 1)] : _vm._e();
     }), _vm._v(" "), _c("hr", {
+      key: "hr-".concat(index),
       staticClass: "d-sm-none"
     })];
   }), _vm._v(" "), _vm.loadingData ? _c("div", {
@@ -8044,7 +8051,7 @@ var render = function render() {
       }
     }, [_c("span", [_vm._v("View all")]), _c("span", {
       staticClass: "fs-xs text-muted ms-3"
-    }, [_vm._v("1,842")])])]), _vm._v(" "), _vm._l(menu.children, function (levelOne) {
+    }, [_vm._v(_vm._s(menu.product_count))])])]), _vm._v(" "), _vm._l(menu.children, function (levelOne) {
       return _c("li", {
         staticClass: "widget-list-item"
       }, [_c("a", {
@@ -8114,7 +8121,7 @@ var render = function render() {
       }
     }, [_c("span", [_vm._v("View all")]), _c("span", {
       staticClass: "fs-xs text-muted ms-3"
-    }, [_vm._v("1,842")])])]), _vm._v(" "), _vm._l(pmenu.children, function (level_one) {
+    }, [_vm._v(_vm._s(pmenu.product_count))])])]), _vm._v(" "), _vm._l(pmenu.children, function (level_one) {
       return _c("li", {
         staticClass: "widget-list-item"
       }, [_c("a", {
@@ -8316,11 +8323,9 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "w-100"
+    staticClass: "w-100 search-bar-wrapper"
   }, [_c("div", {
-    staticClass: "input-group"
-  }, [_c("div", {
-    staticClass: "input-group mb-3"
+    staticClass: "input-group rounded-pill overflow-hidden border border-muted bg-white"
   }, [_c("input", {
     directives: [{
       name: "model",
@@ -8328,10 +8333,10 @@ var render = function render() {
       value: _vm.query,
       expression: "query"
     }],
-    staticClass: "form-control",
+    staticClass: "form-control border-0 px-3 py-2 fs-sm shadow-none",
     attrs: {
       type: "text",
-      placeholder: "search products",
+      placeholder: "search products, brands or services...",
       "aria-label": "search products",
       "aria-describedby": "basic-addon2"
     },
@@ -8351,7 +8356,7 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c("span", {
-    staticClass: "input-group-text cursor-pointer",
+    staticClass: "input-group-text cursor-pointer border-0 bg-white pe-3",
     attrs: {
       id: "basic-addon2"
     },
@@ -8359,8 +8364,11 @@ var render = function render() {
       click: _vm.handleSearch
     }
   }, [_c("i", {
-    staticClass: "bi bi-search text-danger"
-  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "bi bi-search",
+    staticStyle: {
+      color: "#c12c5d"
+    }
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "position-relative"
   }, [_vm.query.length > 1 && _vm.results.length > 0 && _vm.useBus == false ? _c("div", {
     staticClass: "results position-absolute"
@@ -21245,7 +21253,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.avatar[data-v-55f67ae0] {\n  width: 52px;\n  height: 52px;\n  background-color: #fff;\n  border-radius: 50%;\n  color: #fff;\n  font-weight: bold;\n  font-size: 16px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  text-transform: uppercase;\n}\n.avatar-xs[data-v-55f67ae0] {\n  width: 29px;\n  height: 29px;\n}\n.avatar-sm[data-v-55f67ae0] {\n  width: 38px;\n  height: 38px;\n}\n.avatar-md[data-v-55f67ae0] {\n  width: 50px;\n  height: 50px;\n}\n.avatar-lg[data-v-55f67ae0] {\n  width: 80px;\n  height: 80px;\n}\n.avatar-xl[data-v-55f67ae0] {\n  width: 100px;\n  height: 100px;\n}\n  /* Tooltip text */\n.avatar .tooltiptext[data-v-55f67ae0], .avatar-sm .tooltiptext[data-v-55f67ae0] {\nvisibility: hidden;\nwidth: 120px;\nbackground-color: black;\ncolor: #fff;\ntext-align: center;\npadding: 5px 0;\nborder-radius: 6px;\n\n/* Position the tooltip text - see examples below! */\nposition: absolute;\nz-index: 1;\n}\n\n/* Show the tooltip text when you mouse over the tooltip container */\n.avatar:hover .tooltiptext[data-v-55f67ae0], .avatar-sm:hover .tooltiptext[data-v-55f67ae0]  {\nvisibility: visible;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.avatar[data-v-55f67ae0] {\r\n  width: 52px;\r\n  height: 52px;\r\n  background-color: #fff;\r\n  border-radius: 50%;\r\n  color: #fff;\r\n  font-weight: bold;\r\n  font-size: 16px;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  text-transform: uppercase;\n}\n.avatar-xs[data-v-55f67ae0] {\r\n  width: 29px;\r\n  height: 29px;\n}\n.avatar-sm[data-v-55f67ae0] {\r\n  width: 38px;\r\n  height: 38px;\n}\n.avatar-md[data-v-55f67ae0] {\r\n  width: 50px;\r\n  height: 50px;\n}\n.avatar-lg[data-v-55f67ae0] {\r\n  width: 80px;\r\n  height: 80px;\n}\n.avatar-xl[data-v-55f67ae0] {\r\n  width: 100px;\r\n  height: 100px;\n}\r\n  /* Tooltip text */\n.avatar .tooltiptext[data-v-55f67ae0], .avatar-sm .tooltiptext[data-v-55f67ae0] {\r\nvisibility: hidden;\r\nwidth: 120px;\r\nbackground-color: black;\r\ncolor: #fff;\r\ntext-align: center;\r\npadding: 5px 0;\r\nborder-radius: 6px;\r\n\r\n/* Position the tooltip text - see examples below! */\r\nposition: absolute;\r\nz-index: 1;\n}\r\n\r\n/* Show the tooltip text when you mouse over the tooltip container */\n.avatar:hover .tooltiptext[data-v-55f67ae0], .avatar-sm:hover .tooltiptext[data-v-55f67ae0]  {\r\nvisibility: visible;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

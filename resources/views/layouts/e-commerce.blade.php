@@ -56,13 +56,11 @@
       @include('e-commerce.nav-bars.header-with-search-bar')
     </header>
 
-    @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'home')
-      @include('e-commerce.nav-bars.main-page-side-menu')
-    @endif
-    <div class="d-sm-none">
+    {{-- Include sidebar menu only for mobile and tablet screens as an offcanvas drawer --}}
+    <div class="d-lg-none">
       @include('e-commerce.nav-bars.main-page-side-menu')
     </div>
-    <div class="w-100" style="margin-top:30px !important;">
+    <div class="w-100" style="margin-top:120px !important;">
       @yield('content')
     </div>
     <div class="handheld-toolbar">

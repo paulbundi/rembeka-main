@@ -1,1 +1,6 @@
-{"/js/app.js":"/js/app.c468a29adfc6c20c.js","/admin-dashboard/js/app.js":"/admin-dashboard/js/app.deb72ba1ec44b286.js","/css/app.css":"/css/app.[chunkhash].css","/admin-dashboard/css/app.css":"/admin-dashboard/css/app.[chunkhash].css"}
+{
+    "/js/app.js": "/js/app.js",
+    "/admin-dashboard/js/app.js": "/admin-dashboard/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/admin-dashboard/css/app.css": "/admin-dashboard/css/app.css"
+}

@@ -42,21 +42,19 @@
   };
 </script>
 <template>
-  <div class="w-100">
-    <div class="input-group">
-      <div class="input-group mb-3">
-        <input type="text"
-          v-model="query"
-          @input="(e) => handleInput(e.target.value)"
-          @keyup.enter="handleSearch"
-          class="form-control" 
-          placeholder="search products" 
-          aria-label="search products"
-          aria-describedby="basic-addon2">
-        <span class="input-group-text cursor-pointer" id="basic-addon2" @click="handleSearch">
-          <i class="bi bi-search text-danger"></i>
-        </span>
-      </div>
+  <div class="w-100 search-bar-wrapper">
+    <div class="input-group rounded-pill overflow-hidden border border-muted bg-white">
+      <input type="text"
+        v-model="query"
+        @input="(e) => handleInput(e.target.value)"
+        @keyup.enter="handleSearch"
+        class="form-control border-0 px-3 py-2 fs-sm shadow-none" 
+        placeholder="search products, brands or services..." 
+        aria-label="search products"
+        aria-describedby="basic-addon2">
+      <span class="input-group-text cursor-pointer border-0 bg-white pe-3" id="basic-addon2" @click="handleSearch">
+        <i class="bi bi-search" style="color: #c12c5d;"></i>
+      </span>
     </div>
     <div class="position-relative">
       <div v-if="(query.length > 1 && results.length > 0) && useBus == false" class="results position-absolute">

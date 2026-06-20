@@ -6,9 +6,12 @@
   
   <div class="d-flex flex-wrap align-items-center justify-content-center gap-5 py-3">
     @foreach($partners as $partner) 
-      @if($partner->logo)
+      @php
+        $logo = $partner->logo;
+      @endphp
+      @if($logo && $logo->url)
         <div class="partner-logo-wrapper" style="max-width: 150px; transition: transform 0.2s ease;">
-          <img class="img-fluid" src="{{ asset($partner->logo->url) }}" alt="{{ $partner->name }}" style="max-height: 45px; filter: grayscale(100%); opacity: 0.65; transition: all 0.3s ease; object-fit: contain;" onmouseover="this.style.filter='none'; this.style.opacity='1'; this.parentNode.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.65'; this.parentNode.style.transform='scale(1)';">
+          <img class="img-fluid" src="{{ asset($logo->url) }}" alt="{{ $partner->name }}" style="max-height: 45px; filter: grayscale(100%); opacity: 0.65; transition: all 0.3s ease; object-fit: contain;" onmouseover="this.style.filter='none'; this.style.opacity='1'; this.parentNode.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.65'; this.parentNode.style.transform='scale(1)';">
         </div>
       @endif
     @endforeach

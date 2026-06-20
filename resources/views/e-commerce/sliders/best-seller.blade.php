@@ -16,7 +16,7 @@
       <!-- Product-->
       @foreach($bestSellers as $bestseller)
         @php
-          $product = $bestseller->product;
+          $product = optional($bestseller->providerPricing)->product;
           $media = optional(optional(optional($product)->attachments)->first())->media;
         @endphp
         @if($product && $media)

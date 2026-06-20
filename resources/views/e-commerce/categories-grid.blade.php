@@ -1,4 +1,5 @@
 @php
+  $menus = $menus ?? collect();
   $makeupMenu = $menus->first(fn($m) => stripos($m->name, 'makeup') !== false);
   $haircareMenu = $menus->first(fn($m) => stripos($m->name, 'hair') !== false);
   $nailsMenu = $menus->first(fn($m) => stripos($m->name, 'nail') !== false || stripos($m->name, 'beauty') !== false);

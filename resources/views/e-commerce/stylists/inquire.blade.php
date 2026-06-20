@@ -1,5 +1,8 @@
 @extends('layouts.e-commerce')
 @section('content')
+@php
+  $menus = $menus ?? collect();
+@endphp
 <main class="profile-padding">
     <section>
       <div class="container">

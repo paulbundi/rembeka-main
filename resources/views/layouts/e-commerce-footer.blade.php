@@ -1,4 +1,7 @@
       <!-- Footer-->
+      @php
+        $menus = $menus ?? collect();
+      @endphp
       <footer class="footer bg-dark pt-5">
         <div class="px-lg-3 pt-2 pb-4">
           <div class="mx-auto px-3" style="max-width: 80rem;">

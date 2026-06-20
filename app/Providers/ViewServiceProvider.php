@@ -36,7 +36,12 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('store', json_encode($store));
         });
 
-        View::composer(['layouts.e-commerce', 'layouts.e-commerce-footer'], function ($view) {
+        View::composer([
+            'layouts.e-commerce',
+            'layouts.e-commerce-footer',
+            'e-commerce.categories-grid',
+            'e-commerce.stylists.inquire',
+        ], function ($view) {
             $menus = Menu::active()
             ->with(['children.children.children.children'])
             ->whereNull('parent_id')

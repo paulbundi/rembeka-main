@@ -101,7 +101,7 @@
           <a class="d-table-cell handheld-toolbar-item" href="{{ route('service-requests.index') }}">
             <span class="handheld-toolbar-icon">
               <i class="bi bi-truck"></i>
-              <span class="badge bg-primary rounded-pill ms-1">{{ $orderItems }}</span>
+              {{ $orderItems ?? 0 }}
             </span>
             <span class="handheld-toolbar-label">Orders</span>
           </a>

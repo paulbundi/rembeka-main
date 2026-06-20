@@ -49,8 +49,10 @@
 
         let isModalVisible = localStorage.getItem("adModalIsVisible");
 
-        if (!isModalVisible) {
-            const myModal = new bootstrap.Modal(document.getElementById('advertModal'), {})
+        const advertModal = document.getElementById('advertModal');
+
+        if (!isModalVisible && advertModal) {
+            const myModal = new bootstrap.Modal(advertModal, {})
             myModal.show();
         }
 

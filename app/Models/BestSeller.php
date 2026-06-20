@@ -7,6 +7,7 @@ use App\Http\Resources\BaseResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class BestSeller extends Model
 {
@@ -36,19 +37,26 @@ class BestSeller extends Model
         return BestSellerFormRequest::class;
     }
 
-    // /**
-    //  * @return BelongsTo
-    //  */
-    // public function providerPricing(): BelongsTo
-    // {
-    //     return $this->belongsTo(ProviderPricing::class);
-    // }
-
     /**
      * @return BelongsTo
      */
-    public function product(): BelongsTo
+    public function providerPricing(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'provider_pricing_id');
+        return $this->belongsTo(ProviderPricing::class);
+    }
+
+    /**
+     * @return HasOneThrough
+     */
+    public function product(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Product::class,
+            ProviderPricing::class,
+            'id',
+            'id',
+            'provider_pricing_id',
+            'product_id'
+        );
     }
 }

@@ -17,6 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         $bestSellers = BestSeller::inRandomOrder()
+            ->whereHas('product.attachments.media')
             ->with([
                 'product.attachments.media',
                 'product.category'
@@ -24,6 +25,7 @@ class HomeController extends Controller
             ->limit(15)->get();
 
         $discounted = Discounted::inRandomOrder()
+            ->whereHas('product.attachments.media')
             ->with([
                 'product.attachments.media',
                 'product.category',

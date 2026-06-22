@@ -1,16 +1,17 @@
 <!-- Sidebar menu-->
-<aside class="offcanvas offcanvas-expand w-100 border-end zindex-lg-5 pt-lg-5 mt-4" id="sideNav"
-  style="max-width: 19.875rem;">
-  <div class="pt-2 d-none d-lg-block"></div>
-  <ul class="nav nav-tabs nav-justified mt-4 mt-lg-5 mb-0" role="tablist" style="min-height: 3rem;">
+<aside class="offcanvas offcanvas-start border-end zindex-lg-5" id="sideNav" tabindex="-1" aria-labelledby="sideNavLabel"
+  style="max-width: 19.875rem; width: 85vw;">
+  <div class="offcanvas-header border-bottom py-3 px-3">
+    <a href="{{ url('/') }}">
+      <img src="{{ asset('img/logo-large.png') }}" height="36" alt="Rembeka">
+    </a>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <ul class="nav nav-tabs nav-justified mt-0 mb-0" role="tablist" style="min-height: 3rem;">
     <li class="nav-item"><a class="nav-link fw-medium services-list preference-menu" id="services" href="#services"
         data-bs-toggle="tab" role="tab">Services</a></li>
     <li class="nav-item"><a class="nav-link fw-medium products-list preference-menu" href="#products" id="products"
         data-bs-toggle="tab" role="tab">Products</a></li>
-    <li class="d-block d-sm-none nav-item d-flex justify-content-between">
-      <span class="d-lg-none"><a class="nav-link fs-sm" href="#" data-bs-dismiss="offcanvas" role="tab"><i
-            class="ci-close fs-xs me-2"></i></a></span>
-    </li>
   </ul>
   <div class="offcanvas-body px-0 pt-3 pb-0" data-simplebar>
     <div class="tab-content">

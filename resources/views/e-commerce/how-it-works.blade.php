@@ -1,5 +1,5 @@
     <!-- How it works-->
-<section class="pt-4 mb-4 mb-md-5">
+<section class="pt-3 pt-md-4 mb-4 mb-md-5">
     <h2 class="h3 text-center mb-grid-gutter pt-2 d-none d-sm-block">
         <img class="" src="{{ asset('/img/svgs/how_rembeka_works.svg') }}" width="60%" alt="How it works">
     </h2>

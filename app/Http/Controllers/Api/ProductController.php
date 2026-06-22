@@ -39,7 +39,8 @@ class ProductController extends AbstractApiController
     protected function getAllowedIncludes(): array
     {
         return [
-            'users', 'attachments', 'attachments.media', 'menu', 'ageGroups', 'brand'
+            'users', 'attachments', 'attachments.media', 'menu', 'ageGroups', 'brand',
+            'category', 'supplierPrice', 'supplierPrice.unit', 'supplierPrice.supplier',
         ];
     }
 

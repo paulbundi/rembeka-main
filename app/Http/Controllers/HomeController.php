@@ -6,6 +6,7 @@ use App\Models\BestSeller;
 use App\Models\Discounted;
 use App\Models\NewsLetterSubscription;
 use App\Models\Partner;
+use App\Models\Provider;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -32,15 +33,23 @@ class HomeController extends Controller
             ])
             ->limit(15)->get();
 
-        $partners =  Partner::whereHas('logo')
+        $partners = Partner::whereHas('logo')
             ->with(['logo'])
             ->where('status', Partner::STATUS_ACTIVE)
             ->get();
 
+        $stylists = Provider::whereHas('profile.attachments.media')
+            ->with(['profile.attachments.media'])
+            ->where('status', Provider::STATUS_ACTIVE)
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+
         return view('e-commerce.welcome', [
             'bestSellers' => $bestSellers,
-            'discounted' => $discounted,
-            'partners' => $partners,
+            'discounted'  => $discounted,
+            'partners'    => $partners,
+            'stylists'    => $stylists,
         ]);
     }
 

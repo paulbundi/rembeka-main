@@ -58,7 +58,7 @@
                   @foreach($product->attachments as $key => $attachment)
                     @if($attachment->media)
                       <div class="product-gallery-preview-item @if($key == 0) active @endif" id="first{{$attachment->id}}">
-                        <img src="{{ asset($attachment->media->url)}}" alt="Product image">
+                        <img src="{{ $attachment->media->url }}" alt="Product image">
                       </div>
                     @endif
                   @endforeach
@@ -67,7 +67,7 @@
                   @foreach($product->attachments as $attachment)
                     @if($attachment->media)
                       <a class="product-gallery-thumblist-item @if($key == 0) active @endif" href="#first{{$attachment->id}}">
-                        <img src="{{ asset($attachment->media->url)}}" alt="Product thumb">
+                        <img src="{{ $attachment->media->url }}" alt="Product thumb">
                       </a>
                     @endif
                   @endforeach

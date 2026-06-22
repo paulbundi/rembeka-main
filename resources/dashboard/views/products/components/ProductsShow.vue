@@ -28,7 +28,7 @@ export default {
     fetchItems() {
       this.setProperty({
         property: 'relations',
-        value: ['user','attachmnets.media']
+value: ['user','attachments.media']
       });
       this.fetchOne({ id: this.id });
     },

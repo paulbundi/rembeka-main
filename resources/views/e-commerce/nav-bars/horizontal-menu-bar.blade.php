@@ -21,23 +21,39 @@
           Products
         </a>
         <ul class="dropdown-menu dropdown-menu-animated mt-2 p-3 border-0 shadow-lg rounded-3"
-          aria-labelledby="productsDropdown" style="min-width: 250px;">
+          aria-labelledby="productsDropdown" style="min-width: 250px; max-height: 420px; overflow-y: auto;">
           @foreach(($menus ?? collect())->where('type', App\Models\Menu::TYPE_PRODUCT) as $pMenu)
-            <li class="mb-2">
-              <a class="dropdown-item fw-bold text-dark py-1 px-2 rounded-2"
-                href="{{ route('browse-by-menu.index', $pMenu->id) }}"
-                style="color: #c12c5d !important; background: transparent;">
-                {{ $pMenu->name }}
-              </a>
-              @if($pMenu->children && $pMenu->children->count() > 0)
+          <li class="mb-2">
+            @if($pMenu->children && $pMenu->children->count() > 0)
+            @php($productsCollapseId = 'productsMenu' . $pMenu->id)
+              <button
+                class="dropdown-item fw-bold text-dark py-1 px-2 rounded-2 d-flex align-items-center justify-content-between"
+                type="button" data-bs-toggle="collapse" data-bs-target="#{{ $productsCollapseId }}" aria-expanded="false"
+                aria-controls="{{ $productsCollapseId }}" style="color: #c12c5d !important; background: transparent;">
+                <span>{{ $pMenu->name }}</span>
+                <span class="ms-2" aria-hidden="true">
+                  <i class="ci-chevron-down"></i>
+                </span>
+              </button>
+
+              <div class="collapse" id="{{ $productsCollapseId }}">
                 <ul class="list-unstyled ps-3 mt-1 pb-1 fs-sm">
                   @foreach($pMenu->children as $child)
-                    <li><a class="text-muted d-block py-1 px-2 rounded hover-pink-bg"
-                        href="{{ route('browse-by-menu.index', $child->id) }}">{{ $child->name }}</a></li>
+                    <li>
+                      <a class="text-muted d-block py-1 px-2 rounded hover-pink-bg"
+                        href="{{ route('browse-by-menu.index', $child->id) }}">{{ $child->name }}</a>
+                    </li>
                   @endforeach
                 </ul>
-              @endif
-            </li>
+              </div>
+            @else
+            <a class="dropdown-item fw-bold text-dark py-1 px-2 rounded-2"
+              href="{{ route('browse-by-menu.index', $pMenu->id) }}"
+              style="color: #c12c5d !important; background: transparent;">
+              {{ $pMenu->name }}
+            </a>
+            @endif
+          </li>
           @endforeach
         </ul>
       </li>

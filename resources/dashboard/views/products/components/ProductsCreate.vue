@@ -5,6 +5,7 @@ import CreateTab from './product-tabs/createTab.vue';
 import Attachments from './product-tabs/attachments.vue';
 import catchValidationErrors from '../../../utils/catchValidationErrors'
 import ProductPricing from './product-tabs/ProductPricing.vue';
+import ProductsCreateGuideModal from './ProductsCreateGuideModal.vue';
 
 export default {
 name: 'ProductsCreate',
@@ -18,7 +19,8 @@ components: {
     RemoteSelector,
     CreateTab,
     Attachments,
-    ProductPricing
+    ProductPricing,
+    ProductsCreateGuideModal,
 },
 
 data() {
@@ -91,7 +93,11 @@ methods: {
   <div class="card">
 		<div class="card-body">
 			<h4 class="text-primary text-bold">Product Details</h4>
+			<products-create-guide-modal />
 			<form>
+				<button type="button" class="btn btn-sm btn-outline-info mb-3" data-bs-toggle="modal" data-bs-target="#productCreateGuideModal">
+					<i class="bi bi-info-circle"></i> Product Setup Guide
+				</button>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
   				<li class="nav-item" role="presentation">
 						<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true"

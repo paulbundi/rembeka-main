@@ -55,6 +55,10 @@ class HomeController extends Controller
             ->where('status', Partner::STATUS_ACTIVE)
             ->get();
 
+        $brands = Brand::whereHas('attachments.media')
+            ->with(['attachments.media'])
+            ->get();
+
         $stylists = Provider::whereHas('profile.attachments.media')
             ->with(['profile.attachments.media'])
             ->where('status', Provider::STATUS_ACTIVE)
@@ -63,11 +67,12 @@ class HomeController extends Controller
             ->get();
 
         return view('e-commerce.welcome', [
-            'bestSellers' => $bestSellers,
+            'bestSellers'   => $bestSellers,
             'adornProducts' => $adornProducts,
-            'discounted'  => $discounted,
-            'partners'    => $partners,
-            'stylists'    => $stylists,
+            'discounted'    => $discounted,
+            'partners'      => $partners,
+            'brands'        => $brands,
+            'stylists'      => $stylists,
         ]);
     }
 

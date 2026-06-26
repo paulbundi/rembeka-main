@@ -6,6 +6,7 @@ use App\Http\Requests\BrandFormRequest;
 use App\Http\Resources\BaseResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Brand extends Model
 {
@@ -33,5 +34,13 @@ class Brand extends Model
     protected static function getFormRequestClass(): string
     {
         return BrandFormRequest::class;
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

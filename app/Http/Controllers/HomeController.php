@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BestSeller;
+use App\Models\Brand;
 use App\Models\Discounted;
 use App\Models\NewsLetterSubscription;
 use App\Models\Partner;
+use App\Models\Product;
 use App\Models\Provider;
+use App\Models\ProviderPricing;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +26,20 @@ class HomeController extends Controller
                 'providerPricing.product.category'
             ])
             ->limit(15)->get();
+
+        $adornBrand = Brand::whereRaw('UPPER(name) = ?', ['ADORN'])->first();
+        $adornProducts = $adornBrand
+            ? ProviderPricing::whereHas('product', function ($q) use ($adornBrand) {
+                $q->where('brand_id', $adornBrand->id)
+                  ->where('status', Product::STATUS_ACTIVE)
+                  ->where('is_published', Product::IS_PUBLISHED);
+            })
+            ->whereHas('product.attachments.media')
+            ->with(['product.attachments.media', 'product.category'])
+            ->inRandomOrder()
+            ->limit(10)
+            ->get()
+            : collect();
 
         $discounted = Discounted::inRandomOrder()
             ->whereHas('product.attachments.media')
@@ -47,6 +64,7 @@ class HomeController extends Controller
 
         return view('e-commerce.welcome', [
             'bestSellers' => $bestSellers,
+            'adornProducts' => $adornProducts,
             'discounted'  => $discounted,
             'partners'    => $partners,
             'stylists'    => $stylists,

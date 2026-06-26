@@ -40,6 +40,7 @@ class ViewServiceProvider extends ServiceProvider
             'layouts.e-commerce',
             'layouts.e-commerce-footer',
             'e-commerce.categories-grid',
+            'e-commerce.platform-services',
             'e-commerce.stylists.inquire',
         ], function ($view) {
             $menus = Menu::active()

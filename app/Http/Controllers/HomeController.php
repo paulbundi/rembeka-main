@@ -128,4 +128,14 @@ class HomeController extends Controller
 
         return view('e-commerce.brands', ['brands' => $brands]);
     }
+
+    /**
+     * Beauty services page.
+     *
+     * @return void
+     */
+    public function beautyServices()
+    {
+        return view('e-commerce.beauty-services');
+    }
 }

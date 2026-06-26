@@ -27,6 +27,9 @@ Route::get('/', [HomeController::class, 'index'])
 Route::get('/brands', [HomeController::class, 'brands'])
     ->name('brands.index');
 
+Route::get('/beauty-services', [HomeController::class, 'beautyServices'])
+    ->name('beauty-services.index');
+
 Route::get('/nail-services', [ProductController::class, 'hiddenTreasure'])
     ->name('nail-services');
 /*8

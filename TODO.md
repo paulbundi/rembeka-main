@@ -1,26 +1,31 @@
-# Leaflet Migration Plan for Google Maps (Awaiting API Key)
+# TODO - Home page fixes (separate commits per item)
 
-**Current Issue**: InvalidKeyMapError from `key={key}` placeholder.
+## Item 1: ADORN products in Best Sellers
 
-**Files to Update**:
-1. `config/services.php` - Add Google Maps API key config
-2. `resources/views/e-commerce/checkouts/partials/addresslocation.blade.php` - Replace Google with Leaflet, comment Google
-3. `resources/views/e-commerce/account/addresses/create.blade.php` - Leaflet + comment Google
-4. `resources/views/e-commerce/checkouts/checkout-details.blade.php` - Update @include
+-   [x] Update/confirm carousel section shows products whose brand name = 'ADORN'
+-   [ ] Ensure ADORN products render correctly (pricing -> product -> attachments.media)
+-   [ ] Commit: `feat(home): show ADORN products in best sellers`
 
-**Plan**:
-- Leaflet + Nominatim (free geocoding) active
-- Google Maps code commented (ready for key)
-- Test checkout/details map/search
+## Item 2: Beauty equipment links to correct equipment page
 
-**Steps**:
-- [ ] 1. Update config/services.php ✅
-- [ ] 2. Update addresslocation.blade.php
-- [ ] 3. Update addresses/create.blade.php 
-- [ ] 4. Update checkout-details.blade.php
-- [ ] 5. php artisan config:clear view:clear
-- [ ] 6. Test https://rembekaonline.com/checkout/details
-- [ ] 7. Commit to blackboxai/maps-leaflet branch
+-   [ ] Identify the wrong routing for equipment (e.g. menu id 10)
+-   [ ] Update link generation so equipment routes to the correct page
+-   [ ] Commit: `fix(menu): correct beauty equipment links`
 
-**Future**: Add `GOOGLE_MAPS_API_KEY` to .env, uncomment Google scripts
+## Item 3: Partner Salons -> Partner brands + logos
 
+-   [ ] Rename section text to “Partner brands”
+-   [ ] Ensure brands shown with their logos from Brand attachments media
+-   [ ] Commit: `feat(home): partner brands section uses brand logos`
+
+## Item 4: Clicking Brands link goes to /filter
+
+-   [ ] Find where Brands link/button is generated/intercepted
+-   [ ] Fix link to route('brands.index')
+-   [ ] Commit: `fix(nav): brands link routes to /brands`
+
+## Item 5: Beauty services link points to blank page
+
+-   [ ] Update beauty-services blade to be blank/minimal
+-   [ ] Ensure service links route to that blank page
+-   [ ] Commit: `fix(services): beauty services link to blank page`

@@ -25,8 +25,7 @@
               title="Add to wishlist"><i class="ci-heart"></i></button>
             <a class="card-img-top d-block overflow-hidden text-center"
               href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id])}}">
-              <img class="product-image"
-                src="{{ asset($media->url) }}" alt="{{ $media->name ?? $product->name }}" />
+              <img class="product-image" src="{{ asset($media->url) }}" alt="{{ $media->name ?? $product->name }}" />
             </a>
             <div class="card-body py-2">
               @if($product->category)
@@ -44,7 +43,7 @@
           </div>
         @endif
       @endforeach
-      <!-- ADORN Brand Products -->
+      <!-- ADORN Products -->
       @foreach($adornProducts ?? [] as $pricing)
         @php
           $product = $pricing->product;

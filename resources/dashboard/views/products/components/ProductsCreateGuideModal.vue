@@ -45,9 +45,8 @@ export default {
             </div>
 
             <div class="col-12">
-              <h6 class="text-dark fw-bold">3) Make sure the Categories (Age Groups) exist</h6>
+              <h6 class="text-dark fw-bold">3) Make sure the Categories exist</h6>
               <ol class="mb-0 ps-3">
-                <li>In the UI, select the correct <b>Age Groups</b> / categories.</li>
                 <li>If they are missing, create them from <b>Categories</b> in the admin.</li>
               </ol>
             </div>

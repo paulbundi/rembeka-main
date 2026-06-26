@@ -116,4 +116,16 @@ class HomeController extends Controller
     {
         return view('e-commerce.terms.data-privacy');
     }
+
+    /**
+     * Brands listing page.
+     *
+     * @return void
+     */
+    public function brands()
+    {
+        $brands = Brand::with(['attachments.media'])->get();
+
+        return view('e-commerce.brands', ['brands' => $brands]);
+    }
 }

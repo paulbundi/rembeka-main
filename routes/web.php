@@ -80,8 +80,3 @@ Route::resources([
     'service-requests' => ServiceRequestController::class,
     'delivery-requests' => DeliveryRequestController::class,
 ]);
-
-Route::view('/company/about-us', 'e-commerce.company.about-us')->name('company.about-us');
-Route::view('/company/store-locator', 'e-commerce.company.store-locator')->name('company.store-locator');
-Route::view('/company/careers', 'e-commerce.company.careers')->name('company.careers');
-Route::view('/company/contacts', 'e-commerce.company.contacts')->name('company.contacts');

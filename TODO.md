@@ -1,31 +1,11 @@
-# TODO - Home page fixes (separate commits per item)
+# TODO
 
-## Item 1: ADORN products in Best Sellers
+## Completed / In Progress
 
--   [x] Update/confirm carousel section shows products whose brand name = 'ADORN'
--   [ ] Ensure ADORN products render correctly (pricing -> product -> attachments.media)
--   [ ] Commit: `feat(home): show ADORN products in best sellers`
+-   [x] 1. Pivot `How rembeka works` to product workflow steps (Search → Cart → Checkout → Phone call delivery)
 
-## Item 2: Beauty equipment links to correct equipment page
-
--   [ ] Identify the wrong routing for equipment (e.g. menu id 10)
--   [ ] Update link generation so equipment routes to the correct page
--   [ ] Commit: `fix(menu): correct beauty equipment links`
-
-## Item 3: Partner Salons -> Partner brands + logos
-
--   [ ] Rename section text to “Partner brands”
--   [ ] Ensure brands shown with their logos from Brand attachments media
--   [ ] Commit: `feat(home): partner brands section uses brand logos`
-
-## Item 4: Clicking Brands link goes to /filter
-
--   [ ] Find where Brands link/button is generated/intercepted
--   [ ] Fix link to route('brands.index')
--   [ ] Commit: `fix(nav): brands link routes to /brands`
-
-## Item 5: Beauty services link points to blank page
-
--   [ ] Update beauty-services blade to be blank/minimal
--   [ ] Ensure service links route to that blank page
--   [ ] Commit: `fix(services): beauty services link to blank page`
+-   [ ] 2. Convert homepage hero in `welcome-slider` into a slider with product images + pink styling + rembeka logo top-right on each slide
+-   [ ] 3. Fix footer "Company" links: verify target pages/views exist; create placeholder pages if missing; wire footer links to them
+-   [ ] 4. Update Best Sellers section to show **Adorn products only** with **15% discounted** presentation
+-   [ ] 5. Run basic checks (blade compile / php artisan view check if available)
+-   [ ] 6. Commit changes with appropriate messages (after each task)

@@ -4,8 +4,9 @@
     {"id": 2, "done": true, "desc": "Convert homepage hero to slider with product imagery and rembeka logo on each slide"},
     {"id": 3, "done": true, "desc": "Fix footer Company links and create placeholder company pages"},
     {"id": 4, "done": true, "desc": "Best sellers: show Adorn products only with 15% discount"},
-    {"id": 5, "done": false, "desc": "Run quick sanity checks"},
-    {"id": 6, "done": false, "desc": "Commit changes"}
+    {"id": 5, "done": true, "desc": "Run quick sanity checks"},
+    {"id": 6, "done": true, "desc": "Commit changes"}
   ]
 }
+
 

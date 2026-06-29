@@ -1,8 +1,7 @@
 @extends('layouts.e-commerce')
 
 @section('seo')
-    @php($pageTitle = 'Careers at rembeka') @endphp
-    <title>Rembeka - {{ $pageTitle }}</title>
+    <title>Rembeka - Careers at rembeka</title>
 @endsection
 
 @section('content')

@@ -1,8 +1,7 @@
 @extends('layouts.e-commerce')
 
 @section('seo')
-    @php($pageTitle = 'About us') @endphp
-    <title>Rembeka - {{ $pageTitle }}</title>
+    <title>Rembeka - About us</title>
 @endsection
 
 @section('content')

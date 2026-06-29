@@ -3,8 +3,7 @@
   <div class="container-fluid px-3 px-sm-4 px-md-5">
     <div class="tns-carousel tns-controls-static tns-controls-outside tns-dots-enabled" role="region"
       aria-label="Hero slider">
-      <div class="tns-carousel-inner" data-carousel-options="{" items": 1, "gutter" : 0, "controls" : true, "autoHeight"
-        : true, "nav" : false, "autoplay" : true, "autoplayTimeout" : 6000}">
+      <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 1, &quot;gutter&quot;: 0, &quot;controls&quot;: true, &quot;autoHeight&quot;: true, &quot;nav&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 6000}">
 
 
 

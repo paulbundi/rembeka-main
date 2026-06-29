@@ -39,10 +39,6 @@
                   rembeka</a></li>
               <li class="widget-list-item"><a class="widget-list-link"
                   href="{{ url('/company/contacts') }}">Contacts</a></li>
-              <li class="widget-list-item"><a class="widget-list-link" href="{{ url('/company/help-center') }}">Help
-                  center</a></li>
-              <li class="widget-list-item"><a class="widget-list-link"
-                  href="{{ url('/company/actions-and-news') }}">Actions and News</a></li>
             </ul>
 
           </div>

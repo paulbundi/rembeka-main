@@ -12,9 +12,7 @@
   </div>
 
   <div class="tns-carousel tns-controls-static tns-controls-outside tns-dots-enabled pt-2">
-    <div class="tns-carousel-inner" data-carousel-options="{" items": 2, "gutter" : 16, "controls" : true, "autoHeight"
-      : true, "responsive" : {"0":{"items":1}, "480" :{"items":2}, "720" :{"items":3}, "991" :{"items":2}, "1140"
-      :{"items":3}, "1300" :{"items":4}, "1500" :{"items":5}}}">
+    <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "gutter": 16, "controls": true, "autoHeight": true, "responsive": {"0":{"items":1}, "480":{"items":2}, "720":{"items":3}, "991":{"items":2}, "1140":{"items":3}, "1300":{"items":4}, "1500":{"items":5}}}'>
 
       <!-- Adorn Products only (15% discounted) -->
       @foreach($adornProducts ?? [] as $pricing)

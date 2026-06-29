@@ -17,7 +17,6 @@
             @foreach($adornProducts ?? [] as $pricing)
               @php
                 $product = optional($pricing)->product;
-                $discountPercent = 15;
                 $media = null;
                 if ($product) {
                     $firstAttachment = optional($product->attachments)->first();

@@ -18,7 +18,6 @@
       @foreach($adornProducts ?? [] as $pricing)
         @php
           $product = optional($pricing)->product;
-          $discountPercent = 15;
           $media = null;
           if ($product) {
               $firstAttachment = optional($product->attachments)->first();
@@ -28,8 +27,6 @@
 
         @if($product && $media)
           <div class="card product-card card-static pb-3">
-            <span class="badge bg-danger badge-shadow"> {{ $discountPercent }}% off</span>
-
             <button class="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="left"
               title="Add to wishlist"><i class="ci-heart"></i></button>
 

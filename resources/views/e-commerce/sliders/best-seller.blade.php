@@ -17,9 +17,13 @@
       <!-- Adorn Products only (15% discounted) -->
       @foreach($adornProducts ?? [] as $pricing)
         @php
-          $product = $pricing->product;
-          $media = optional(optional($product->attachments)->first())->media;
+          $product = optional($pricing)->product;
           $discountPercent = 15;
+          $media = null;
+          if ($product) {
+              $firstAttachment = optional($product->attachments)->first();
+              $media = optional($firstAttachment)->media;
+          }
         @endphp
 
         @if($product && $media)

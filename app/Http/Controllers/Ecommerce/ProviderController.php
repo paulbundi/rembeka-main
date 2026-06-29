@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
+use App\Models\Brand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProviderInquiryFormRequest;
 use App\Models\Menu;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\Provider;
 use App\Models\ProviderInquiry;
 use App\Models\ProviderPricing;
@@ -132,7 +134,21 @@ class ProviderController extends Controller
         ->whereNull('parent_id')
         ->get();
 
-        return view('e-commerce.stylists.inquire', ['menus' => $menus]);
+        $adornBrand = Brand::whereRaw('UPPER(name) = ?', ['ADORN'])->first();
+        $adornProducts = $adornBrand
+            ? ProviderPricing::whereHas('product', function ($q) use ($adornBrand) {
+                $q->where('brand_id', $adornBrand->id)
+                  ->where('status', Product::STATUS_ACTIVE)
+                  ->where('is_published', Product::IS_PUBLISHED);
+            })
+            ->whereHas('product.attachments.media')
+            ->with(['product.attachments.media', 'product.category'])
+            ->inRandomOrder()
+            ->limit(10)
+            ->get()
+            : collect();
+
+        return view('e-commerce.stylists.inquire', ['menus' => $menus, 'adornProducts' => $adornProducts]);
     }
 
     /**

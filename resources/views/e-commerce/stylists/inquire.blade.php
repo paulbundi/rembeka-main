@@ -6,112 +6,91 @@
 <main class="profile-padding">
     <section>
       <div class="container">
-        <div class="row align-items-center">
-            <div class="card col-12 col-sm-8 offset-sm-2">
-              <div class="card-body">
-                <h4 class="card-title text-center">I am interested in join as a Service Provider</h4>
-                @if(session()->has('success'))
-                  <div class="alert alert-success" role="alert">
-                      Thank you for your interest to join rembeka as a stylist/service provider.
-                      Your request has been received, we will review and get back shortly.
-                  </div>
-                @endif
-                <form method="POST" action="{{ route('stylist-inquiries') }}">
-                  @csrf
-                  <div class="border px-3 py-4 my-4">
-                    <div class="row">
-                      <div class="col-6 form-group">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" placeholder="First Name" name="first_name" required="true"/>
-                      </div>
-                      <div class="col-6 form-group">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" required="true"/>
-                      </div>
-                    </div>
-                    
-                    <div class="row mt-2">
-                      <div class="col-6 form-group">
-                        <label>Email</label>
-                        <input type="email" class="form-control" placeholder="First Name" name="email" required="true"/>
-                      </div>
-                      <div class="col-6 form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" class="form-control" placeholder="Phone number" name="phone" required="true"/>
-                      </div>
-                    </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-2 mb-4">
+          <h2 class="h3 mb-0 pt-3 me-3 text-uppercase fw-bold" style="color: #1e293b; letter-spacing: 0.5px;">Adorn Picks
+          </h2>
+        </div>
 
-                    <div class="row mt-2">
-                      <div class="col-12 form-group">
-                        <label>Lcation / Address </label>
-                        <input type="text" class="form-control" placeholder="address" name="address" required="true"/>
-                      </div>
+        <div class="tns-carousel tns-controls-static tns-controls-outside tns-dots-enabled pt-2">
+          <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "gutter": 16, "controls": true, "autoHeight": true, "responsive": {"0":{"items":1}, "480":{"items":2}, "720":{"items":3}, "991":{"items":2}, "1140":{"items":3}, "1300":{"items":4}, "1500":{"items":5}}}'>
+
+            @foreach($adornProducts ?? [] as $pricing)
+              @php
+                $product = optional($pricing)->product;
+                $discountPercent = 15;
+                $media = null;
+                if ($product) {
+                    $firstAttachment = optional($product->attachments)->first();
+                    $media = optional($firstAttachment)->media;
+                }
+              @endphp
+
+              @if($product && $media)
+                <div class="card product-card card-static pb-3">
+                  <a class="card-img-top d-block overflow-hidden text-center"
+                     href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}">
+                    <img class="product-image" src="{{ asset($media->url) }}" alt="{{ $media->name ?? $product->name }}" />
+                  </a>
+
+                  <div class="card-body py-2">
+                    @if($product->category)
+                      <a class="product-meta d-block fs-xs pb-1" href="#">{{ $product->category->name }}</a>
+                    @endif
+
+                    <h3 class="product-title fs-sm text-truncate">
+                      <a href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}">
+                        {{ $product->name }}
+                      </a>
+                    </h3>
+
+                    <div class="product-price">
+                      <span class="text-accent">Ksh {{ $product->final_price }}</span>
                     </div>
                   </div>
-                  <div class="border px-3 py-4 my-4">
-                    <h5>Services</h5>
-                    @foreach($menus->chunk(4) as $menuItems)
-                      <div class="row">
-                        @foreach($menuItems as $menu)
-                        <div class="col-6 col-sm-3">
-                          <input type="checkbox" name="services[]" class="mx-1" value="{{$menu->id}}">{{ $menu->name }}
-                        </div>
-                        @endforeach
-                      </div>
-                    @endforeach
-                  </div>
-                  <div class="border px-3 py-4 my-4">
-                      <div class="form-group mt-2">
-                        <label for="">Proffessional Qualifations</label>
-                        <textarea class="form-control" name="professional_qualifications" rows="3"></textarea>
-                      </div>
 
-                      <div class="form-group mt-2">
-                        <label for="">Work Experience</label>
-                        <textarea class="form-control" name="works_experience" rows="3"></textarea>
-                      </div>
+                  <div class="product-floating-btn">
+                    <a href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}"
+                       class="btn btn-primary btn-shadow btn-sm" type="button">
+                      +<i class="ci-cart fs-base ms-1"></i>
+                    </a>
                   </div>
-                <div class="form-group mt-2 float-end">
-                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+              @endif
+            @endforeach
 
-                  </div>
+          </div>
+        </div>
+      </div>
 
-                </form>
+      <div class="container py-5">
+        <div class="d-flex justify-content-center border-bottom pb-2 mb-4">
+          <h2 class="h3 mb-0 pt-3 text-uppercase fw-bold text-center" style="color: #1e293b; letter-spacing: 0.5px;">Our Partners</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+          <div class="col-6 col-md-5 col-lg-4">
+            <a href="https://www.hevafund.com/" target="_blank" rel="noopener" class="text-decoration-none">
+              <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
+                <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+                  <img src="https://rembekaonline.com/storage/media/FR3I7jDVhWxPLgA4WMPGnuD4GpMOIBV6KI6YCwwN.png" alt="Heva Fund" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
+                  <p class="fw-bold text-dark mt-3 mb-0 text-center">Heva Fund</p>
+                </div>
               </div>
-            </div>
+            </a>
+          </div>
+          <div class="col-6 col-md-5 col-lg-4">
+            <a href="https://www.afrinext.net/" target="_blank" rel="noopener" class="text-decoration-none">
+              <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
+                <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+                  <img src="https://rembekaonline.com/storage/media/b2n8yP8efXFNwUwQKuOUw84oPL3hxqnBpZ1RpypU.jpg" alt="AfriNext" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
+                  <p class="fw-bold text-dark mt-3 mb-0 text-center">AfriNext</p>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
+      </div>
 
-        <div class="container py-5">
-          <div class="d-flex justify-content-center border-bottom pb-2 mb-4">
-            <h2 class="h3 mb-0 pt-3 text-uppercase fw-bold text-center" style="color: #1e293b; letter-spacing: 0.5px;">Our Partners</h2>
-          </div>
-          <div class="row g-4 justify-content-center">
-            <div class="col-6 col-md-5 col-lg-4">
-              <a href="https://www.hevafund.com/" target="_blank" rel="noopener" class="text-decoration-none">
-                <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
-                  <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                    <img src="https://rembekaonline.com/storage/media/FR3I7jDVhWxPLgA4WMPGnuD4GpMOIBV6KI6YCwwN.png" alt="Heva Fund" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
-                    <p class="fw-bold text-dark mt-3 mb-0 text-center">Heva Fund</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-6 col-md-5 col-lg-4">
-              <a href="https://www.afrinext.net/" target="_blank" rel="noopener" class="text-decoration-none">
-                <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
-                  <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                    <img src="https://rembekaonline.com/storage/media/b2n8yP8efXFNwUwQKuOUw84oPL3hxqnBpZ1RpypU.jpg" alt="AfriNext" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
-                    <p class="fw-bold text-dark mt-3 mb-0 text-center">AfriNext</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-
-      @include('layouts.e-commerce-footer')
+    @include('layouts.e-commerce-footer')
     </section>
 </main>
 

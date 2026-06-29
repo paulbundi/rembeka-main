@@ -108,3 +108,44 @@
     </div>
   </div>
 </section>
+
+<!-- Adorn Products Section -->
+<section class="adorn-products-section mb-4 mb-md-5">
+  <div class="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-2 mb-4">
+    <h2 class="h3 mb-0 text-uppercase fw-bold" style="color: #1e293b; letter-spacing: 0.5px;">Adorn Products</h2>
+  </div>
+  <div class="row g-3">
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{{ route('search.index', ['search' => 'EYESHADOW']) }}"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center p-4 bg-white rounded-3 shadow-sm border border-light h-100 hover-lift">
+        <img src="https://rembekaonline.com/storage/media/4LuNz9zOkDWYNaPf4FplMxv7ymCn7hmOhWZsB59b.png" alt="White Shade"
+          style="max-height: 80px; max-width: 100%; object-fit: contain;" class="mb-3" />
+        <span class="fw-bold text-dark text-center" style="font-size: 0.9rem;">White Shade</span>
+      </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{{ route('search.index', ['search' => 'EYESHADOW']) }}"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center p-4 bg-white rounded-3 shadow-sm border border-light h-100 hover-lift">
+        <img src="https://rembekaonline.com/storage/media/D8fHFNoFvSii8Pucf8L14X1wQFzLCVhYL0QxrZC9.png" alt="Pink Shade"
+          style="max-height: 80px; max-width: 100%; object-fit: contain;" class="mb-3" />
+        <span class="fw-bold text-dark text-center" style="font-size: 0.9rem;">Pink Shade</span>
+      </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{{ route('search.index', ['search' => 'EYESHADOW']) }}"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center p-4 bg-white rounded-3 shadow-sm border border-light h-100 hover-lift">
+        <img src="https://rembekaonline.com/storage/media/I28AJ8psfZxaYIi9OiUJ3ZbmGJHTJJfuBQw9Npzc.png" alt="Yellow Shade"
+          style="max-height: 80px; max-width: 100%; object-fit: contain;" class="mb-3" />
+        <span class="fw-bold text-dark text-center" style="font-size: 0.9rem;">Yellow Shade</span>
+      </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{{ route('search.index', ['search' => 'EYESHADOW']) }}"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center p-4 bg-white rounded-3 shadow-sm border border-light h-100 hover-lift">
+        <img src="https://rembekaonline.com/storage/media/RIhl19epdtFkLvLRxgTM8APndElnv4B17qClihRl.png" alt="Nude Shade"
+          style="max-height: 80px; max-width: 100%; object-fit: contain;" class="mb-3" />
+        <span class="fw-bold text-dark text-center" style="font-size: 0.9rem;">Nude Shade</span>
+      </a>
+    </div>
+  </div>
+</section>

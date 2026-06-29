@@ -6,6 +6,7 @@
       <div class="tns-carousel-inner" data-carousel-options="{"
         items":1,"gutter":0,"controls":true,"autoHeight":true,"nav":false,"autoplay":true,"autoplayTimeout":6000}">
 
+
         {{-- Slide 1: Search / Products --}}
         <div class="position-relative">
           <div class="position-absolute top-0 end-0 p-3" style="z-index: 2;">

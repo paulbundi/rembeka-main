@@ -4,20 +4,26 @@
     <h2 class="h3 mb-0 pt-3 text-uppercase fw-bold text-center" style="color: #1e293b; letter-spacing: 0.5px;">Partner Brands</h2>
   </div>
 
-  <div class="d-flex flex-wrap align-items-center justify-content-center gap-5 py-3">
-    @foreach($brands ?? [] as $brand)
-      @php
-        $media = optional(optional($brand->attachments->first())->media);
-      @endphp
-      @if($media && $media->url)
-        <div class="partner-logo-wrapper" style="max-width: 150px; transition: transform 0.2s ease;">
-          <img class="img-fluid" src="{{ asset($media->url) }}" alt="{{ $brand->name }}" style="max-height: 45px; filter: grayscale(100%); opacity: 0.65; transition: all 0.3s ease; object-fit: contain;" onmouseover="this.style.filter='none'; this.style.opacity='1'; this.parentNode.style.transform='scale(1.05)';" onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.65'; this.parentNode.style.transform='scale(1)';">
+  <div class="row g-4 justify-content-center">
+    <div class="col-6 col-md-5 col-lg-4">
+      <a href="https://www.hevafund.com/" target="_blank" rel="noopener" class="text-decoration-none">
+        <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+            <img src="https://rembekaonline.com/storage/media/FR3I7jDVhWxPLgA4WMPGnuD4GpMOIBV6KI6YCwwN.png" alt="Heva Fund" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
+            <p class="fw-bold text-dark mt-3 mb-0 text-center">Heva Fund</p>
+          </div>
         </div>
-      @else
-        <div class="partner-logo-wrapper d-flex align-items-center justify-content-center" style="max-width: 150px;">
-          <span class="fw-bold text-muted" style="font-size: 0.85rem; letter-spacing: 0.5px;">{{ $brand->name }}</span>
+      </a>
+    </div>
+    <div class="col-6 col-md-5 col-lg-4">
+      <a href="https://www.afrinext.net/" target="_blank" rel="noopener" class="text-decoration-none">
+        <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
+          <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+            <img src="https://rembekaonline.com/storage/media/b2n8yP8efXFNwUwQKuOUw84oPL3hxqnBpZ1RpypU.jpg" alt="AfriNext" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
+            <p class="fw-bold text-dark mt-3 mb-0 text-center">AfriNext</p>
+          </div>
         </div>
-      @endif
-    @endforeach
+      </a>
+    </div>
   </div>
 </section>

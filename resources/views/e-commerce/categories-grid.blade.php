@@ -11,7 +11,7 @@
   <div class="row g-3 justify-content-center">
     <!-- Card 1: Adorn -->
     <div class="col-6 col-md-4 col-lg-2">
-      <a href="{{ route('search.index', ['search' => 'Adorn']) }}" class="category-card text-decoration-none d-flex align-items-center p-3 bg-white rounded-3 shadow-sm hover-lift border border-light">
+      <a href="https://rembekaonline.com/browse-by-menu/23" class="category-card text-decoration-none d-flex align-items-center p-3 bg-white rounded-3 shadow-sm hover-lift border border-light">
         <div class="category-icon-wrapper me-3 d-flex align-items-center justify-content-center rounded-circle" style="background-color: #fdf2f8; width: 45px; height: 45px;">
           <!-- Leaf Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#c12c5d" viewBox="0 0 16 16">

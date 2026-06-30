@@ -38,14 +38,13 @@
             <div
               class="col-12 col-md-6 col-lg-7 d-flex justify-content-center justify-content-md-end position-relative py-3">
               <div class="hero-circles-wrapper">
-                <a href="{{ route('search.index', ['search' => 'Hair']) }}" class="text-decoration-none">
-                  <div class="hero-circle circle-hair">
-                    <div class="circle-img-holder"
-                      style="background-image:url('https://rembekaonline.com/storage/media/1iTURB8EYEjc0ihYvksk56OL3z09AjTECZkMqFBQ.png');">
-                    </div>
-                    <div class="circle-badge">Hair</div>
-                  </div>
-                </a>
+<a href="{{ route('search.index', ['search' => 'Hair']) }}" class="text-decoration-none">
+                   <div class="hero-circle circle-hair">
+                     <div class="circle-img-holder" style="background-image:url('{{ asset('img/hero_hair.png') }}');">
+                     </div>
+                     <div class="circle-badge">Hair</div>
+                   </div>
+                 </a>
                 <a href="{{ route('search.index', ['search' => 'Makeup']) }}" class="text-decoration-none">
                   <div class="hero-circle circle-makeup">
                     <div class="circle-img-holder"

@@ -14,7 +14,11 @@ class PaystackService
     public function __construct()
     {
         $this->baseUrl = 'https://api.paystack.co';
-        $this->secretKey = config('services.paystack.secret');
+        $this->secretKey = trim(config('services.paystack.secret'));
+
+        if (empty($this->secretKey)) {
+            Log::error('Paystack secret key is missing. Set PAYSTACK_SECRET_KEY in .env');
+        }
     }
 
     public function initializePayment(int $amount, string $email, int $orderId, int $userId): array
@@ -23,6 +27,13 @@ class PaystackService
         $amountInKobo = $amount * 100;
 
         try {
+            if (empty($this->secretKey)) {
+                return [
+                    'type' => 'error',
+                    'notice' => 'Payment gateway is not configured. Please contact support.',
+                ];
+            }
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->secretKey,
                 'Content-Type' => 'application/json',
@@ -74,6 +85,13 @@ class PaystackService
     public function verifyPayment(string $reference): array
     {
         try {
+            if (empty($this->secretKey)) {
+                return [
+                    'type' => 'error',
+                    'notice' => 'Payment gateway is not configured. Please contact support.',
+                ];
+            }
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->secretKey,
                 'Content-Type' => 'application/json',

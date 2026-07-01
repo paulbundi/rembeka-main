@@ -95,7 +95,7 @@
                 <a href="{{ route('search.index', ['search' => 'Adorn']) }}" class="text-decoration-none">
                   <div class="hero-circle circle-hair">
                     <div class="circle-img-holder"
-                      style="background-image:url('https://rembekaonline.com/storage/media/1iTURB8EYEjc0ihYvksk56OL3z09AjTECZkMqFBQ.png');">
+                      style="background-image:url('https://rembekaonline.com/storage/media/arvn8WcrrmJpWHy0kmbhPHnpEYeoU42xr9UEOxFa.png');">
                     </div>
                     <div class="circle-badge">Adorn</div>
                   </div>
@@ -103,7 +103,7 @@
                 <a href="{{ route('search.index', ['search' => 'Adorn Glow']) }}" class="text-decoration-none">
                   <div class="hero-circle circle-makeup">
                     <div class="circle-img-holder"
-                      style="background-image:url('https://rembekaonline.com/storage/media/KtYKAaxW3afTRJU5epK9sJUXYBXwrZQK8KIHK1XH.png');">
+                      style="background-image:url('https://rembekaonline.com/storage/media/wi9ZrKFdoUjUuC6x2OYOA9HBry3Y94dgd8lD0iml.jpg');">
                     </div>
                     <div class="circle-badge">Glow</div>
                   </div>

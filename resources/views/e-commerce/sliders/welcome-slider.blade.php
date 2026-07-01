@@ -3,7 +3,8 @@
   <div class="container-fluid px-3 px-sm-4 px-md-5">
     <div class="tns-carousel tns-controls-static tns-controls-outside tns-dots-enabled" role="region"
       aria-label="Hero slider">
-      <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 1, &quot;gutter&quot;: 0, &quot;controls&quot;: true, &quot;autoHeight&quot;: true, &quot;nav&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000}">
+      <div class="tns-carousel-inner"
+        data-carousel-options="{&quot;items&quot;: 1, &quot;gutter&quot;: 0, &quot;controls&quot;: true, &quot;autoHeight&quot;: true, &quot;nav&quot;: true, &quot;autoplay&quot;: true, &quot;autoplayTimeout&quot;: 7000}">
 
 
 
@@ -38,13 +39,13 @@
             <div
               class="col-12 col-md-6 col-lg-7 d-flex justify-content-center justify-content-md-end position-relative py-3">
               <div class="hero-circles-wrapper">
-<a href="{{ route('search.index', ['search' => 'Hair']) }}" class="text-decoration-none">
-                   <div class="hero-circle circle-hair">
-                     <div class="circle-img-holder" style="background-image:url('{{ asset('img/hero_hair.png') }}');">
-                     </div>
-                     <div class="circle-badge">Hair</div>
-                   </div>
-                 </a>
+                <a href="{{ route('search.index', ['search' => 'Hair']) }}" class="text-decoration-none">
+                  <div class="hero-circle circle-hair">
+                    <div class="circle-img-holder" style="background-image:url('{{ asset('img/hero_hair.png') }}');">
+                    </div>
+                    <div class="circle-badge">Hair</div>
+                  </div>
+                </a>
                 <a href="{{ route('search.index', ['search' => 'Makeup']) }}" class="text-decoration-none">
                   <div class="hero-circle circle-makeup">
                     <div class="circle-img-holder"
@@ -55,7 +56,7 @@
                 </a>
                 <a href="{{ route('search.index', ['search' => 'Nails']) }}" class="text-decoration-none">
                   <div class="hero-circle circle-nails">
-                    <div class="circle-img-holder" style="background-image:url('{{ asset('img/hero_nails.png') }}');">
+                    <div class="circle-img-holder" style="background-image:url('{{ asset('img/pure_nails.jpg') }}');">
                     </div>
                     <div class="circle-badge">Nails</div>
                   </div>

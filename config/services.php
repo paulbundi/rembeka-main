@@ -74,5 +74,20 @@ return [
     'aws_bucket' => env('AWS_BUCKET'),
 
     'mpesa_secret' => env('MPESA_CALLBACK_SECRET', '22rembeka20'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paystack Payment Gateway
+    |--------------------------------------------------------------------------
+    |
+    | Paystack API credentials for processing payments in Kenya and other African
+    | countries. Get your keys from https://paystack.com
+    |
+    */
+    'paystack' => [
+        'public_key' => env('PAYSTACK_PUBLIC_KEY'),
+        'secret' => env('PAYSTACK_SECRET_KEY'),
+        'webhook_secret' => env('PAYSTACK_WEBHOOK_SECRET'),
+    ],
 ];
 

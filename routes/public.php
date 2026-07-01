@@ -67,6 +67,16 @@ Route::match(['get', 'post'], 'complete/order', [CartController::class, 'complet
 Route::post('pay-on-delivery', [CartController::class, 'PayOnDelivery'])
     ->name('pay-on.delivery');
 
+/*
+ * Paystack payment endpoints
+ */
+Route::post('paystack/initialize', [\App\Http\Controllers\Api\PaystackController::class, 'initialize'])
+    ->name('paystack.initialize');
+Route::get('paystack/callback', [\App\Http\Controllers\Api\PaystackController::class, 'callback'])
+    ->name('paystack.callback');
+Route::post('paystack/webhook', [\App\Http\Controllers\Api\PaystackController::class, 'webhook'])
+    ->name('paystack.webhook');
+
 //search routes
 Route::get('/product/{slug}/{productId}', [ProductController::class, 'show'])
     ->name('product.show');

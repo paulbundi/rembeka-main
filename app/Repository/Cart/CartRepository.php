@@ -19,11 +19,6 @@ class CartRepository
         $this->requestPayment = $requestPayment;
     }
 
-    /**
-     * Create Order
-     *
-     * @return void
-     */
     public function createOrder($phone = null, $payOnDelivery = false)
     {
         $cart = Cart::toArray();
@@ -86,13 +81,59 @@ class CartRepository
         return $response;
     }
 
-    /**
-     * Create order Items
-     *
-     * @param Order $order
-     *
-     * @return void
-     */
+    public function createPaystackOrder($phone = null)
+    {
+        $cart = Cart::toArray();
+        
+        $referralCode = DB::table('referralcode_user')
+            ->where('user_id', auth()->id())
+            ->first();
+
+        $notes = session()->get('notes');
+
+        $data = [
+            'user_id' => auth()->id(),
+            'amount' => $cart['total'],
+            'paid' => 0,
+            'balance' => $cart['total'],
+            'notes' => $notes,
+            'location_id' => session()->get('checkout_address'),
+            'paying_no' => $phone,
+            'status' => Order::STATUS_PENDING_PAYMENT,
+            'channel_id' => 1,
+        ];
+
+        if ($referralCode && $referralCode->referralcode_id){
+            $data = array_merge($data,[
+                'referral_code_id' => $referralCode->referralcode_id,
+            ]);
+        }
+
+        $order = Order::create($data);
+
+        $addressId = session()->get('address_id');
+
+        $order->order_no = generateOrderNumber($order);
+        $order->address_id = $addressId;
+        $order->save();
+
+
+        $this->createOrderItem($order);
+
+        Cart::clear();
+        session()->forget(['notes', 'address_id' ]);
+
+        $message =  "A new Order {$order->order_no} has been made.";
+
+        try {
+            (new SmsChannel)->notify(config('services.sms-line'), $message);
+        } catch (\Exception $e) {
+            \Log::warning('Order SMS notification failed: ' . $e->getMessage());
+        }
+
+        return ['order' => $order];
+    }
+
     public function createOrderItem(Order $order)
     {
         $cart = Cart::toArray();
@@ -108,14 +149,6 @@ class CartRepository
 
     }
 
-    /**
-     * Create Order product Item
-     *
-     * @param Order  $order
-     * @param [type] $item
-     *
-     * @return void
-     */
     public function createProductOrderItem(Order $order, $item)
     {
         $product = (object) $item->product;
@@ -134,11 +167,6 @@ class CartRepository
             ]);
     }
 
-    /**
-     * Create Service OrderItems.
-     *
-     * @return void
-     */
     public function createServiceOrderItem(Order $order, $item)
     {
         $product =  (object) $item->product;

@@ -23,7 +23,8 @@
         "njenga55/service-provider": "^1.1",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "smodav/mpesa": "^6.0",
-        "spatie/laravel-sitemap": "^6.3"
+        "spatie/laravel-sitemap": "^6.3",
+        "paystack/paystack-php": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -73,7 +74,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

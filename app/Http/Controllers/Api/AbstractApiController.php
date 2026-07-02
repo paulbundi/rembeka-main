@@ -28,34 +28,24 @@ abstract class AbstractApiController extends Controller
      */
     protected $resource;
     /**
-     * Generate Model.
-     *
-     * @var Model
-     */
+      * Generate Model.
+      *
+      * @var Model
+      */
     protected $model;
 
     /**
-     * get current model.
+     * Ensure the model instance is initialized.
      *
-     * @return string
+     * @return void
      */
-    abstract protected function getModel(): string;
-
-    /**
-     * Get the allowed includes.
-     *
-     * @return array
-     */
-    abstract protected function getAllowedIncludes(): array;
-
-    /**
-     * Create new instance.
-     */
-    public function __construct()
+    protected function resolveModel(): void
     {
-        $model = $this->getModel();
-        $this->model = new $model;
-        $this->resource = $this->model::getApiResourceClass();
+        if (!$this->model instanceof Model) {
+            $class = $this->getModel();
+            $this->model = new $class;
+            $this->resource = $this->model::getApiResourceClass();
+        }
     }
 
     /**
@@ -65,12 +55,7 @@ abstract class AbstractApiController extends Controller
      */
     protected function newQuery(): Builder
     {
-        // Defensive: when $this->model is not initialized, return a safe new query builder.
-        if (!$this->model instanceof Model) {
-            $class = $this->getModel();
-            $this->model = new $class;
-            $this->resource = $this->model::getApiResourceClass();
-        }
+        $this->resolveModel();
 
         return $this->model->newQuery();
     }
@@ -112,6 +97,8 @@ abstract class AbstractApiController extends Controller
      */
     public function store(Request $request)
     {
+        $this->resolveModel();
+
         $request = $this->getRequest();
         $this->preStore($request);
         $this->model->fill($request->only(array_keys($request->rules())));
@@ -132,6 +119,8 @@ abstract class AbstractApiController extends Controller
      */
     public function update($modelId)
     {
+        $this->resolveModel();
+
         $request = $this->getRequest();
 
         $this->model = $this->model->findOrFail($modelId);
@@ -157,6 +146,8 @@ abstract class AbstractApiController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $this->resolveModel();
+
         $this->preDestroy($request, $id);
 
         $model = $this->model->findOrFail($id);
@@ -286,6 +277,8 @@ abstract class AbstractApiController extends Controller
      */
     public function attachRelations(Request $request, $id, $relationName)
     {
+        $this->resolveModel();
+
         $this->model = $this->model->findOrFail($id);
         if (!method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);
@@ -311,6 +304,8 @@ abstract class AbstractApiController extends Controller
      */
     public function detachRelations(Request $request, $id, $relationName)
     {
+        $this->resolveModel();
+
         $this->model = $this->model->findOrFail($id);
         if (!method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);

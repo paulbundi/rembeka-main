@@ -30,7 +30,13 @@ class Menu extends Model
     const TYPE_SERVICE = 2;
 
     protected $fillable = [
-        'name', 'description', 'type', 'parent_id', 'status', 'position', 'icon'
+        'name',
+        'description',
+        'type',
+        'parent_id',
+        'status',
+        'position',
+        'icon'
     ];
 
     /**
@@ -70,4 +76,22 @@ class Menu extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * Delete the menu and any dependent products.
+     *
+     * Prevents foreign key constraint failures when removing a menu
+     * that still has products.
+     */
+    public function delete()
+    {
+        // Ensure dependent records are removed before deleting the menu.
+        $this->products()->each(function ($product) {
+            $product->delete();
+        });
+
+        // Delete child menus (already handled in boot deleting hook) then self.
+        return parent::delete();
+    }
+
 }

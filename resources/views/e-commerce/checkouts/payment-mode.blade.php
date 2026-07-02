@@ -157,16 +157,16 @@
                       <h4>Payment Request Made successfully.</h4>
                       <p>Please send <strong>Ksh
                           {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
-                        to <strong>0708887933</strong> via M-Pesa and submit the Transaction ID below.</p>
+                        via <strong>M-Pesa Paybill 522522, Account No: 1294456423</strong> and submit the Transaction ID below.</p>
                     </div>
                   @endif
 
                   <div class="alert alert-info mt-3" role="alert">
-                    <h5 class="alert-heading">Pay manually via M-Pesa</h5>
+                    <h5 class="alert-heading">Pay using paybill</h5>
                     <p class="mb-2">
                       Send <strong>Ksh
                         {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
-                      to phone number <strong>0708887933</strong> using M-Pesa.
+                      via <strong>M-Pesa Paybill 522522, Account No: 1294456423</strong>.
                     </p>
                     <hr>
                     <p class="mb-2 small text-muted">
@@ -235,7 +235,7 @@
             <div class="accordion-item">
               <h3 class="accordion-header">
                 <a class="accordion-button collapsed" href="#cod" data-bs-toggle="collapse">
-                  <i class="ci-card fs-lg me-2 align-middle"></i>Cash on Delivery</a>
+                  <img src="{{ asset('img/cash_on_delivery.png') }}" alt="Cash on Delivery" height="24" class="me-2">Cash on Delivery</a>
               </h3>
               <div class="accordion-collapse collapse" id="cod" data-bs-parent="#payment-method">
                 <div class="accordion-body">

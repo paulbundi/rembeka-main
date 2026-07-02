@@ -124,7 +124,9 @@ class ApiQueryBuilder
 
         $boolean = isset($filter[3]) && $filter[3] == 'or' ? 'or' : 'and';
 
-        if ($filter[2] === 'null' &&  $filter[1] === '=') {
+        $value = is_string($filter[2]) ? strtolower(trim($filter[2])) : $filter[2];
+
+        if ($value === 'null' && $filter[1] === '=') {
             $query->whereNull($filter[0], $boolean);
         } elseif ($filter[1] === 'In') {
             $query->whereIn($filter[0], explode('|', $filter[2]), $boolean);

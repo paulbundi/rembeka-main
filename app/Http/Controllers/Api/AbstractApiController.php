@@ -150,7 +150,10 @@ abstract class AbstractApiController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $this->model->destroy($id);
+        $this->preDestroy($request, $id);
+
+        $model = $this->model->findOrFail($id);
+        $model->delete();
 
         return response()->json();
     }

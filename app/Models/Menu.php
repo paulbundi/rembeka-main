@@ -12,6 +12,18 @@ class Menu extends Model
 {
     use HasFactory, ScopedFilter;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($menu) {
+            $menu->children()->get()->each(function ($child) {
+                $child->delete();
+            });
+            $menu->products()->delete();
+        });
+    }
+
     const STATUS_ACTIVE = 1;
 
     const TYPE_PRODUCT = 1;

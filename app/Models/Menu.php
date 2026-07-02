@@ -20,7 +20,10 @@ class Menu extends Model
             $menu->children()->get()->each(function ($child) {
                 $child->delete();
             });
-            $menu->products()->delete();
+            // Force delete products to avoid FK constraint violation,
+            // since Product uses SoftDeletes and a soft delete would
+            // leave the rows in the database referencing this menu.
+            $menu->products()->forceDelete();
         });
     }
 
@@ -76,27 +79,5 @@ class Menu extends Model
     {
         return $this->hasMany(Product::class);
     }
-
-    /**
-     * Delete the menu and any dependent products.
-     *
-     * Prevents foreign key constraint failures when removing a menu
-     * that still has products.
-     */
-    public function delete()
-    {
-        // Ensure dependent records are removed before deleting the menu.
-        // Use a direct FK delete to guarantee all products are removed
-        // before the menus row is deleted (avoids FK 1451).
-
-        $menuId = $this->id;
-        if (!empty($menuId)) {
-            Product::where('menu_id', $menuId)->delete();
-        }
-
-        // Delete child menus (already handled in boot deleting hook) then self.
-        return parent::delete();
-    }
-
 
 }

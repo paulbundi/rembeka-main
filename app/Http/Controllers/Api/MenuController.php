@@ -6,6 +6,11 @@ use App\Models\Menu;
 
 class MenuController extends AbstractApiController
 {
+    public function __construct()
+    {
+        $this->middleware('can-access:menus.delete')->only('destroy');
+    }
+
     /**
      * get current model.
      *

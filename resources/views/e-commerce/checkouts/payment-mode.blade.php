@@ -1,6 +1,6 @@
 @extends('layouts.e-commerce')
 @php
-    use App\Facades\Cart;
+  use App\Facades\Cart;
 @endphp
 @section('content')
   <main class="page-wrapper">
@@ -31,7 +31,7 @@
           <!-- Payment methods accordion-->
           <h2 class="h6 pb-3 mb-2">Choose payment method</h2>
           <div class="accordion mb-2" id="payment-method">
-            
+
             <!-- Paystack Payment (Default) -->
             <div class="accordion-item">
               <h3 class="accordion-header">
@@ -49,14 +49,15 @@
                     <b class="text-danger text-center">{{$response['notice'] ?? $response['message'] ?? ''}}</b>
                   @endif
 
-                  <form method="POST" action="{{ route('paystack.initialize') }}" class="credit-card-form row" id="paystack-form">
+                  <form method="POST" action="{{ route('paystack.initialize') }}" class="credit-card-form row"
+                    id="paystack-form">
                     @csrf
                     <div class="row">
                       <div class="col-sm-6">
                         <div class="mb-3 w-100">
                           <label class="form-label" for="paystack-email">Email Address</label>
-                          <input class="form-control" name="email" value="{{auth()->user()->email ?? old('email')}}" type="email"
-                            id="paystack-email" required>
+                          <input class="form-control" name="email" value="{{auth()->user()->email ?? old('email')}}"
+                            type="email" id="paystack-email" required>
                           @error('email')
                             <small class="text-danger">{{ $message }}</small>
                           @enderror
@@ -92,11 +93,11 @@
                 <a class="accordion-button text-primary" href="#mpesa" data-bs-toggle="collapse">
                   <i class="ci-card fs-lg me-2 align-middle text-success"></i>Pay with Mpesa.</a>
               </h3>
-                 <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
-                    <div class="accordion-body">
-                       <div class="text-center p-3">
-                         <img src="{{ asset('mpesa.png') }}" alt="M-Pesa" height="60">
-                       </div>
+              <div class="accordion-collapse collapse show" id="mpesa" data-bs-parent="#payment-method">
+                <div class="accordion-body">
+                  <div class="text-center p-3">
+                    <img src="{{ asset('mpesa.png') }}" alt="M-Pesa" height="60">
+                  </div>
 
                   {{--
                   |--------------------------------------------------------------------------
@@ -108,41 +109,41 @@
                   |--------------------------------------------------------------------------
                   --}}
                   <!-- @if(isset($response['type']) && $response['type'] == 'success')
-                              <img src="https://www.tiaro.net/site/assets/files/11317/mpesa.png" alt="M-Pesa Payment" height="60">
-                              <p class="small text-muted mt-2">Pay with M-Pesa</p>
-                              <div class="col-12 d-flex flex-column justify-content-center">
-                                <h4>Payment Request Made successfully.</h4>
-                                <p>Check your phone and enter your mpesa pin to complete the transaction.</p>
-                                <a class="btn btn-sm btn-primary" href="{{ route('validate.stk') }}">Kindly click here to validate
-                                  payment</a>
-                              </div>
-                            @else
-                              <form method="POST" action="{{ route('complete.order') }}" class="credit-card-form row">
-                                @csrf
-                                <div class="row">
-                                  <div class="col-sm-6">
-                                    @if(isset($response['type']) && $response['type'] == 'error')
-                                      <b class="text-danger text-center">{{$response['notice'] ?? $response['message'] ?? ''}}</b>
-                                    @endif
-                                    <div class="mb-3 w-100">
-                                      <label class="form-label" for="checkout-fn">Phone number to pay with</label>
-                                      <input class="form-control" name="phone" value="{{auth()->user()->phone}}" type="tel"
-                                        id="checkout-fn" required>
-                                      @error('phone')
-                                        <small class="text-danger">{{ $message  }}</small>
-                                      @enderror
-                                    </div>
+                                  <img src="https://www.tiaro.net/site/assets/files/11317/mpesa.png" alt="M-Pesa Payment" height="60">
+                                  <p class="small text-muted mt-2">Pay with M-Pesa</p>
+                                  <div class="col-12 d-flex flex-column justify-content-center">
+                                    <h4>Payment Request Made successfully.</h4>
+                                    <p>Check your phone and enter your mpesa pin to complete the transaction.</p>
+                                    <a class="btn btn-sm btn-primary" href="{{ route('validate.stk') }}">Kindly click here to validate
+                                      payment</a>
                                   </div>
+                                @else
+                                  <form method="POST" action="{{ route('complete.order') }}" class="credit-card-form row">
+                                    @csrf
+                                    <div class="row">
+                                      <div class="col-sm-6">
+                                        @if(isset($response['type']) && $response['type'] == 'error')
+                                          <b class="text-danger text-center">{{$response['notice'] ?? $response['message'] ?? ''}}</b>
+                                        @endif
+                                        <div class="mb-3 w-100">
+                                          <label class="form-label" for="checkout-fn">Phone number to pay with</label>
+                                          <input class="form-control" name="phone" value="{{auth()->user()->phone}}" type="tel"
+                                            id="checkout-fn" required>
+                                          @error('phone')
+                                            <small class="text-danger">{{ $message  }}</small>
+                                          @enderror
+                                        </div>
+                                      </div>
 
-                                  <div class="col-sm-6">
-                                    <label>&nbsp;</label>
-                                    <button class="btn btn-primary d-block w-100 mt-1" type="submit">
-                                      <span class="fw-bolder">Make Payment</span>
-                                    </button>
-                                  </div>
-                                </div>
-                              </form>
-                            @endif -->
+                                      <div class="col-sm-6">
+                                        <label>&nbsp;</label>
+                                        <button class="btn btn-primary d-block w-100 mt-1" type="submit">
+                                          <span class="fw-bolder">Make Payment</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                @endif -->
                   {{-- /MANUAL PAYMENT FLOW: Old STK Push logic --}}
 
                   {{--
@@ -270,11 +271,11 @@
         <div class="col-lg-8">
           <div class="d-flex pt-4 mt-3">
             <div class="w-50 pe-3"><a class="btn btn-secondary d-block w-100" href="checkout-shipping.html"><i
-                class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping</span><span
-                class="d-inline d-sm-none">Back</span></a></div>
+                  class="ci-arrow-left mt-sm-0 me-1"></i><span class="d-none d-sm-inline">Back to Shipping</span><span
+                  class="d-inline d-sm-none">Back</span></a></div>
             <div class="w-50 ps-2"><a class="btn btn-primary d-block w-100" href="{{route('checkout.cart')}}"><span
-                class="d-none d-sm-inline">Review your order</span><span class="d-inline d-sm-none">Review
-                order</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
+                  class="d-none d-sm-inline">Review your order</span><span class="d-inline d-sm-none">Review
+                  order</span><i class="ci-arrow-right mt-sm-0 ms-1"></i></a></div>
           </div>
         </div>
       </div>
@@ -283,38 +284,37 @@
 @endsection
 
 @push('scripts')
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('paystack-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('paystack-email').value;
-            
-            fetch('{{ route('paystack.initialize') }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('paystack-form');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const email = document.getElementById('paystack-email').value;
+
+          fetch('{{ route('paystack.initialize') }}', {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              'Accept': 'application/json'
+            },
+            body: new URLSearchParams({ email: email })
+          })
             .then(response => response.json())
             .then(data => {
-                if (data.type === 'success' && data.authorization_url) {
-                    window.location.href = data.authorization_url;
-                } else {
-                    alert(data.notice || 'Failed to initialize payment');
-                }
+              if (data.type === 'success' && data.authorization_url) {
+                window.location.href = data.authorization_url;
+              } else {
+                alert(data.notice || 'Failed to initialize payment');
+              }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+              console.error('Error:', error);
+              alert('An error occurred. Please try again.');
             });
         });
-    }
-});
-</script>
+      }
+    });
+  </script>
 @endpush

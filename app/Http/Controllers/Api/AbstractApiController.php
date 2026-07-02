@@ -66,7 +66,7 @@ abstract class AbstractApiController extends Controller
     protected function newQuery(): Builder
     {
         // Defensive: when $this->model is not initialized, return a safe new query builder.
-        if (! $this->model instanceof Model) {
+        if (!$this->model instanceof Model) {
             $class = $this->getModel();
             $this->model = new $class;
             $this->resource = $this->model::getApiResourceClass();
@@ -183,7 +183,7 @@ abstract class AbstractApiController extends Controller
 
         $query = app(ApiQueryBuilder::class)->buildFilteredQuery($query, $requestFilter);
 
-        if (! empty($requestFilter->getCounts())) {
+        if (!empty($requestFilter->getCounts())) {
             $query->withCount($requestFilter->getCounts());
         }
         if ($collection) {
@@ -202,7 +202,7 @@ abstract class AbstractApiController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    protected function getModelResource() : JsonResource
+    protected function getModelResource(): JsonResource
     {
         // $this->loadRelations($entity);
         return new $this->resource($this->model);
@@ -260,9 +260,10 @@ abstract class AbstractApiController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param string                   $id
      */
-    public function preDestroy(FormRequest $request, $id)
+    public function preDestroy(Request $request, $id)
     {
     }
+
 
     /**
      * @param \Illuminate\Http\Request $request
@@ -286,7 +287,7 @@ abstract class AbstractApiController extends Controller
     public function attachRelations(Request $request, $id, $relationName)
     {
         $this->model = $this->model->findOrFail($id);
-        if (! method_exists($this->model, $relationName)) {
+        if (!method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);
         }
 
@@ -311,11 +312,11 @@ abstract class AbstractApiController extends Controller
     public function detachRelations(Request $request, $id, $relationName)
     {
         $this->model = $this->model->findOrFail($id);
-        if (! method_exists($this->model, $relationName)) {
+        if (!method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);
         }
         $ids = $request->input('data', []);
-        if (! empty($ids)) {
+        if (!empty($ids)) {
             $this->model->{$relationName}()->detach($ids);
         }
 

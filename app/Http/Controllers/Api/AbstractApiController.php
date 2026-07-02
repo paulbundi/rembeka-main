@@ -65,6 +65,13 @@ abstract class AbstractApiController extends Controller
      */
     protected function newQuery(): Builder
     {
+        // Defensive: when $this->model is not initialized, return a safe new query builder.
+        if (! $this->model instanceof Model) {
+            $class = $this->getModel();
+            $this->model = new $class;
+            $this->resource = $this->model::getApiResourceClass();
+        }
+
         return $this->model->newQuery();
     }
 

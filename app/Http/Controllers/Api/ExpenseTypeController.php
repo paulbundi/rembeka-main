@@ -24,6 +24,8 @@ class ExpenseTypeController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery();
     }
 

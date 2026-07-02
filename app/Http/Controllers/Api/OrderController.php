@@ -42,6 +42,8 @@ class OrderController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         $query = $this->model->newQuery()
             ->whereHas('items', function ($query) {
                 return $query->where('type', Product::TYPE_SERVICE);

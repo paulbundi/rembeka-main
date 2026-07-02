@@ -24,6 +24,8 @@ class LocationController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()->whereNull('parent_id');
     }
 

@@ -25,6 +25,8 @@ class ReferralCodeController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()
             ->where('status', Referralcode::STATUS_ACTIVE);
     }

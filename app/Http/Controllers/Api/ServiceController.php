@@ -30,6 +30,8 @@ class ServiceController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()
             ->where('type', Product::TYPE_SERVICE);
     }

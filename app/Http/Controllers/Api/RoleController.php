@@ -15,6 +15,8 @@ class RoleController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         if (auth()->user() && auth()->user()->organization_id) {
             return $this->model->newQuery()
                 ->where('organization_id', auth()->user()->organization_id);

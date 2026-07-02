@@ -26,6 +26,8 @@ class ProviderPricingController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()
             ->whereHas('provider', function ($query) {
                 $query->where('status', Provider::STATUS_ACTIVE);

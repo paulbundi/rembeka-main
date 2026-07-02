@@ -28,6 +28,8 @@ class OrderItemController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()->whereHas('order');
     }
 

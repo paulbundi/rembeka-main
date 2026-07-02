@@ -25,6 +25,8 @@ class SaleController extends AbstractApiController
      */
     protected function newQuery(): Builder
     {
+        $this->resolveModel();
+
         return $this->model->newQuery()
             ->whereHas('items', function ($query) {
                 return $query->where('type', Product::TYPE_PRODUCT);

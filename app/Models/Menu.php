@@ -86,12 +86,17 @@ class Menu extends Model
     public function delete()
     {
         // Ensure dependent records are removed before deleting the menu.
-        $this->products()->each(function ($product) {
-            $product->delete();
-        });
+        // Use a direct FK delete to guarantee all products are removed
+        // before the menus row is deleted (avoids FK 1451).
+
+        $menuId = $this->id;
+        if (!empty($menuId)) {
+            Product::where('menu_id', $menuId)->delete();
+        }
 
         // Delete child menus (already handled in boot deleting hook) then self.
         return parent::delete();
     }
+
 
 }

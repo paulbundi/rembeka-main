@@ -70,6 +70,7 @@ class ProductController extends AbstractApiController
      */
     public function attachMorphRelations(Request $request, $id, $relationName)
     {
+        $this->resolveModel();
         $this->model = $this->model->findOrFail($id);
         if (! method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);
@@ -99,6 +100,7 @@ class ProductController extends AbstractApiController
      */
     public function dettachMorphRelations(Request $request, $id, $relationName)
     {
+        $this->resolveModel();
         $this->model = $this->model->findOrFail($id);
         if (! method_exists($this->model, $relationName)) {
             throw new BadRequestHttpException('relation doesnt exist', null, 400);

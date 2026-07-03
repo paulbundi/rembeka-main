@@ -39,19 +39,22 @@ class SupplierPricingController extends AbstractApiController
      */
     public function store(Request $request)
     {
-        $data =  $request->validate([
+        $data = $request->validate([
             'product_id' => 'required',
             'supplier_id' => 'required',
             'productPricing' => 'required',
         ]);
 
+        $createdRecords = [];
         foreach ($data['productPricing'] as $pricing) {
             $pricing['product_id'] = $data['product_id'];
             $pricing['supplier_id'] = $data['supplier_id'];
-            ProductPricing::create($pricing);
+            $createdRecords[] = ProductPricing::create($pricing);
         }
 
-        return $this->getModelResource()
+        $this->resolveModel();
+
+        return $this->resource::collection($createdRecords)
             ->toResponse($request)
             ->setStatusCode(201);
     }

@@ -25,11 +25,35 @@ class OrderItem extends Model
     const DISCOUNTED = 0;
 
     protected $fillable = [
-        'order_id', 'product_id', 'category_id', 'provider_id', 'quantity', 'provider_amount',
-        'provider_discount', 'percentage_commission', 'amount', 'discounted', 'discount_amount',
-        'appointment_date', 'appointment_time', 'provider_paid', 'beneficiary', 'type', 'status',
-        'pricing_id','service_pricing','provider_cost','provider_discount_amount','rembeka_discount_amount',
-        'rembeka_discount', 'un_discounted_commission', 'total_discount','shared_commission','assisting_provider_id',
+        'order_id',
+        'product_id',
+        'color_id',
+        'category_id',
+        'provider_id',
+        'quantity',
+        'provider_amount',
+
+        'provider_discount',
+        'percentage_commission',
+        'amount',
+        'discounted',
+        'discount_amount',
+        'appointment_date',
+        'appointment_time',
+        'provider_paid',
+        'beneficiary',
+        'type',
+        'status',
+        'pricing_id',
+        'service_pricing',
+        'provider_cost',
+        'provider_discount_amount',
+        'rembeka_discount_amount',
+        'rembeka_discount',
+        'un_discounted_commission',
+        'total_discount',
+        'shared_commission',
+        'assisting_provider_id',
     ];
 
     protected $casts = [

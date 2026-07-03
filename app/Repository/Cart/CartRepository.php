@@ -14,6 +14,24 @@ class CartRepository
 {
     protected $requestPayment;
 
+    private function resolveColorId(?string $colorName): ?int
+    {
+        if (!$colorName) {
+            return null;
+        }
+
+        $colorName = trim($colorName);
+        if ($colorName === '') {
+            return null;
+        }
+
+        return \App\Models\Color::firstOrCreate(
+            ['name' => $colorName],
+            ['slug' => null]
+        )->id;
+    }
+
+
     public function __construct(RequestMpesaPayment $requestPayment)
     {
         $this->requestPayment = $requestPayment;
@@ -43,8 +61,8 @@ class CartRepository
             'payment_on_delivery' => $payOnDelivery ? 1 : null,
         ];
 
-        if ($referralCode && $referralCode->referralcode_id){
-            $data = array_merge($data,[
+        if ($referralCode && $referralCode->referralcode_id) {
+            $data = array_merge($data, [
                 'referral_code_id' => $referralCode->referralcode_id,
             ]);
         }
@@ -53,19 +71,19 @@ class CartRepository
 
         $addressId = session()->get('address_id');
 
-        $order->order_no    = generateOrderNumber($order);
+        $order->order_no = generateOrderNumber($order);
         $order->stk_order_no = generateOrderNumber($order, true);
-        $order->address_id  = $addressId;
+        $order->address_id = $addressId;
         $order->save();
 
 
         $this->createOrderItem($order);
 
         Cart::clear();
-        session()->forget(['notes', 'address_id' ]);
+        session()->forget(['notes', 'address_id']);
         $response = [];
 
-        $message =  "A new Order {$order->order_no} has been made.";
+        $message = "A new Order {$order->order_no} has been made.";
 
         try {
             (new SmsChannel)->notify(config('services.sms-line'), $message);
@@ -73,7 +91,7 @@ class CartRepository
             \Log::warning('Order SMS notification failed: ' . $e->getMessage());
         }
 
-        if($phone && !$payOnDelivery) {
+        if ($phone && !$payOnDelivery) {
             $response = $this->requestPayment->viaStkPush($amount, $order->stk_order_no, $order->id, $phone);
         }
         $response['order'] = $order;
@@ -84,7 +102,7 @@ class CartRepository
     public function createPaystackOrder($phone = null)
     {
         $cart = Cart::toArray();
-        
+
         $referralCode = DB::table('referralcode_user')
             ->where('user_id', auth()->id())
             ->first();
@@ -103,8 +121,8 @@ class CartRepository
             'channel_id' => 1,
         ];
 
-        if ($referralCode && $referralCode->referralcode_id){
-            $data = array_merge($data,[
+        if ($referralCode && $referralCode->referralcode_id) {
+            $data = array_merge($data, [
                 'referral_code_id' => $referralCode->referralcode_id,
             ]);
         }
@@ -121,9 +139,9 @@ class CartRepository
         $this->createOrderItem($order);
 
         Cart::clear();
-        session()->forget(['notes', 'address_id' ]);
+        session()->forget(['notes', 'address_id']);
 
-        $message =  "A new Order {$order->order_no} has been made.";
+        $message = "A new Order {$order->order_no} has been made.";
 
         try {
             (new SmsChannel)->notify(config('services.sms-line'), $message);
@@ -154,35 +172,37 @@ class CartRepository
         $product = (object) $item->product;
 
         OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->product_id,
-                'category_id' => 1,
-                'provider_id' => $product->supplier_id,
-                'quantity' => $item->qty,
-                'amount' =>  $item->qty * $product->amount,
-                'provider_amount' => $item->qty * $product->supplier_price,
-                'percentage_commission' => $product->mark_up_percentage,
-                'type' => Product::TYPE_PRODUCT,
-                'status' => OrderItem::STATUS_PENDING,
-            ]);
+            'order_id' => $order->id,
+            'product_id' => $product->product_id,
+            'color_id' => $this->resolveColorId($item->attributes['color'] ?? null),
+            'category_id' => 1,
+            'provider_id' => $product->supplier_id,
+
+            'quantity' => $item->qty,
+            'amount' => $item->qty * $product->amount,
+            'provider_amount' => $item->qty * $product->supplier_price,
+            'percentage_commission' => $product->mark_up_percentage,
+            'type' => Product::TYPE_PRODUCT,
+            'status' => OrderItem::STATUS_PENDING,
+        ]);
     }
 
     public function createServiceOrderItem(Order $order, $item)
     {
-        $product =  (object) $item->product;
+        $product = (object) $item->product;
         OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'category_id' => 1,
-                'provider_id' => $item->provider,
-                'quantity' => $item->qty,
-                'appointment_date' => $item->appointmentDate,
-                'appointment_time' => $item->appointmentTime,
-                'amount' =>  $item->qty * $product->final_price,
-                'provider_amount' => $item->qty * $product->provider_cost,
-                'percentage_commission' => $product->commission,
-                'type' => Product::TYPE_SERVICE,
-                'status' => OrderItem::STATUS_PENDING,
-            ]);
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'category_id' => 1,
+            'provider_id' => $item->provider,
+            'quantity' => $item->qty,
+            'appointment_date' => $item->appointmentDate,
+            'appointment_time' => $item->appointmentTime,
+            'amount' => $item->qty * $product->final_price,
+            'provider_amount' => $item->qty * $product->provider_cost,
+            'percentage_commission' => $product->commission,
+            'type' => Product::TYPE_SERVICE,
+            'status' => OrderItem::STATUS_PENDING,
+        ]);
     }
 }

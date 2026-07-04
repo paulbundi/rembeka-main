@@ -14,6 +14,7 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
         currentUrl: null,
         errors: [],
         activeItem: {},
+        selectedColor: null,
         formOrder: {
           pricing_id: null,
           color: null,
@@ -24,6 +25,10 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
     },
     created() {
      this.activeItem = this.product.supplier_price[0];
+     if (this.product.colors && this.product.colors.length > 0) {
+       this.selectedColor = this.product.colors[0];
+       this.formOrder.color = this.product.colors[0].name;
+     }
     },
     mounted() {
       this.currentUrl = encodeURI(window.location.href);      
@@ -43,6 +48,10 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
       },
       handleSizeChange(selectedIndex) {
         this.activeItem = this.product.supplier_price[selectedIndex];
+      },
+      handleColorSelect(color) {
+        this.selectedColor = color;
+        this.formOrder.color = color.name;
       }
     },
   };
@@ -67,28 +76,22 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
       </div>
     </div>
 
-     <span class="text-danger fw-bold">Ksh {{activeItem.amount}}</span>
+<span class="text-danger fw-bold">Ksh {{activeItem.amount}}</span>
 
-    <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
+     <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
 
-      <div class="fs-sm mb-4"><span class="text-heading fw-medium me-1">Color:</span><span class="text-muted" id="colorOption">Red/Dark blue/White</span></div>
-      <div class="position-relative me-n4 mb-3">
-        <!-- <div class="product-badge product-available mt-n1 mb-2"><i class="ci-security-check"></i>Product available</div> -->
-        <template v-if="activeItem.config && activeItem.config.color">
-          <div class="form-check form-option form-check-inline mb-3">
-            <input class="form-check-input" type="radio" name="color"  v-model="formOrder.color" id="color1" data-bs-label="colorOption" value="Red/Dark blue/White" checked>
-            <label class="form-option-label rounded-circle" for="color1"><span class="form-option-color rounded-circle" style="background-image: url(img/shop/single/color-opt-1.png)"></span></label>
-          </div>
-          <div class="form-check form-option form-check-inline mb-2">
-            <input class="form-check-input" type="radio" name="color"  v-model="formOrder.color" id="color2" data-bs-label="colorOption" value="Beige/White/Dark grey">
-            <label class="form-option-label rounded-circle" for="color2"><span class="form-option-color rounded-circle" style="background-image: url(img/shop/single/color-opt-2.png)"></span></label>
-          </div>
-          <div class="form-check form-option form-check-inline mb-2">
-            <input class="form-check-input" type="radio" name="color"  v-model="formOrder.color" id="color3" data-bs-label="colorOption" value="Dark grey/White/Orange">
-            <label class="form-option-label rounded-circle" for="color3"><span class="form-option-color rounded-circle" style="background-image: url(img/shop/single/color-opt-3.png)"></span></label>
-          </div>
-      </template>
-      </div>
+       <div v-if="product.colors && product.colors.length > 0" class="fs-sm mb-4">
+         <span class="text-heading fw-medium me-1">Color:</span>
+         <span class="text-muted" id="colorOption">{{ selectedColor ? selectedColor.name : '' }}</span>
+       </div>
+       <div v-if="product.colors && product.colors.length > 0" class="position-relative me-n4 mb-3">
+           <div v-for="(color, index) in product.colors" :key="color.id" class="form-check form-option form-check-inline mb-2">
+             <input class="form-check-input" type="radio" name="color" :id="`color-${color.id}`" :value="color.name" v-model="formOrder.color">
+             <label class="form-option-label rounded-circle" :for="`color-${color.id}`" @click="handleColorSelect(color)">
+               <span class="form-option-color rounded-circle" :style="color.hex_code ? `background-color: ${color.hex_code}` : 'background-color: #ccc'"></span>
+             </label>
+           </div>
+       </div>
 
       <div class="row mb-4">
         <div class="col-12 col-sm-6">

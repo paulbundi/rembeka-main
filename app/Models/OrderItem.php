@@ -121,11 +121,19 @@ class OrderItem extends Model
         return $this->belongsTo(Supplier::class, 'provider_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
+/**
+      * @return BelongsTo
+      */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+      * @return BelongsTo
+      */
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(Color::class);
     }
 }

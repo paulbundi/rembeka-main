@@ -43,6 +43,7 @@ class ProductController extends AbstractApiController
         return [
             'users', 'attachments', 'attachments.media', 'menu', 'ageGroups', 'brand',
             'category', 'supplierPrice', 'supplierPrice.unit', 'supplierPrice.supplier',
+            'colors',
         ];
     }
 

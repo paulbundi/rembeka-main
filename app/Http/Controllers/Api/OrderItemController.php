@@ -42,7 +42,7 @@ class OrderItemController extends AbstractApiController
     {
         return [
             'order', 'order.customer', 'items.provider', 'items.product', 'items.category', 'items', 'provider',
-            'product',
+            'product', 'color',
         ];
     }
 

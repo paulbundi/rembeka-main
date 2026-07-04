@@ -175,12 +175,20 @@ class Product extends Model
         return $this->hasOne(Discounted::class);
     }
 
-    /**
-     * @return BelongsTo
-     */
+/**
+      * @return BelongsTo
+      */
     public function brand(): BelongsTo
     {
         return $this->BelongsTo(Brand::class);
+    }
+
+    /**
+      * @return BelongsToMany
+      */
+    public function colors(): BelongsToMany
+    {
+        return $this->belongsToMany(Color::class, 'product_color', 'product_id', 'color_id');
     }
 
     /**

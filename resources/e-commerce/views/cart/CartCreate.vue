@@ -32,6 +32,7 @@
 
           <div class="pt-2">
             <h3 class="product-title fs-base mb-2"><a :href="`/product/${item.product.slug}/${item.product.id}`">{{ item.product.name }}</a></h3>
+            <div v-if="item.color" class="fs-sm mb-1"><span class="text-muted me-2">Color: {{ item.color }}</span></div>
             <div v-if="item.type == 2">
               <div class="fs-sm" v-if="item.providerDetails"><span class="text-muted me-2">By: {{ item.providerDetails }}</span></div>
               <div class="fs-sm"><span class="text-muted me-2">Date: {{ item.fullAppointmentDate }}</span></div>

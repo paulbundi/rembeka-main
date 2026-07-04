@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class ColorFormRequest extends FormRequest
+{
+    public function authorize()
+    {
+        return auth()->check();
+    }
+
+    public function rules()
+    {
+        return [
+            'name' => 'required|unique:colors,name,' . $this->route('color')?->id,
+            'slug' => 'nullable',
+            'hex_code' => 'nullable',
+        ];
+    }
+}

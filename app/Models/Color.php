@@ -17,7 +17,17 @@ class Color extends Model
         'hex_code',
     ];
 
-/**
+    protected static function getApiResourceClass(): string
+    {
+        return \App\Http\Resources\BaseResource::class;
+    }
+
+    protected static function getFormRequestClass(): string
+    {
+        return \App\Http\Requests\ColorFormRequest::class;
+    }
+
+    /**
       * @return HasMany
       */
     public function orderItems(): HasMany
@@ -33,7 +43,7 @@ class Color extends Model
         return $this->belongsToMany(Product::class, 'product_color', 'color_id', 'product_id');
     }
 
-public function getBackgroundColorAttribute(): string
+    public function getBackgroundColorAttribute(): string
     {
         return $this->hex_code ?? '#ccc';
     }

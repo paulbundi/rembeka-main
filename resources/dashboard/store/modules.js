@@ -1,3 +1,4 @@
+import Colors from '../views/colors/store';
 import AgeGroups from '../views/age-groups/store';
 import BestSellers from '../views/best-sellers/store';
 import Btoc from '../views/btoc/store';
@@ -62,6 +63,7 @@ export default {
   Brands,
   Bookings,
   Categories,
+  Colors,
   CustomerOrders,
   CustomerReviews,
   Channels,

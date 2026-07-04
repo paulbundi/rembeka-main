@@ -84,6 +84,15 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
         />
     </div>
 
+    <div class="form-group">
+      <label>Available Colors</label>
+        <remote-selector 
+          module="Colors"
+          @change="(value) => updateProperty('colors', value)"
+          :value="selected.colors"
+        />
+    </div>
+
   </div>
 
   <div class="col-6">

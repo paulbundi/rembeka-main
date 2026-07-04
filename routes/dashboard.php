@@ -4,6 +4,7 @@ use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AgeGroupController;
 use App\Http\Controllers\BestSellerController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BtoCController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CategoryController;
@@ -188,6 +189,7 @@ Route::resources([
     'wallet-audit' => WalletAuditController::class,
     'best-sellers' => BestSellerController::class,
     'brands' => BrandController::class,
+    'colors' => ColorController::class,
     'btoc' => BtoCController::class,
     'categories' => CategoryController::class,
     'channels' => ChannelController::class,

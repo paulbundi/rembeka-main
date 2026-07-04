@@ -122,7 +122,7 @@ class SearchController extends Controller
                 ->where('description', 'like', '%' . $searchStr . '%')
                 ->where('keywords', 'like', '%' . $searchStr . '%');
         })
-            ->with(['product.attachments.media', 'product.discount'])
+            ->with(['product.attachments.media', 'product.discount', 'product.colors'])
             ->groupBy('product_id')
             ->paginate(20);
 

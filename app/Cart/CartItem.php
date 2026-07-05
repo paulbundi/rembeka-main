@@ -19,6 +19,7 @@ class CartItem implements JsonSerializable
     public $type;
     public $providerDetails;
     public $color;
+    public $variantId;
 
     public function __construct($item)
     {
@@ -32,6 +33,7 @@ class CartItem implements JsonSerializable
         $this->providerDetails = $item->attributes['providerDetails'] ?? null;
         $this->type = $item->attributes['type'];
         $this->color = $item->attributes['color'] ?? null;
+        $this->variantId = $item->attributes['variant_id'] ?? null;
     }
 
     public function unitPrice()
@@ -134,6 +136,7 @@ class CartItem implements JsonSerializable
             'fullAppointmentDate' => Carbon::parse($this->appointmentDate)->isoFormat('Do MMMM YYYY, h:mm a'),
             'total' => $this->total(),
             'color' => $this->color,
+            'variantId' => $this->variantId,
         ];
 
         if ($this->type == PRODUCT::TYPE_SERVICE) {

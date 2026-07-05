@@ -183,12 +183,20 @@ class Product extends Model
         return $this->BelongsTo(Brand::class);
     }
 
-    /**
-      * @return BelongsToMany
-      */
+/**
+       * @return BelongsToMany
+       */
     public function colors(): BelongsToMany
     {
         return $this->belongsToMany(Color::class, 'product_color', 'product_id', 'color_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
     }
 
     /**

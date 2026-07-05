@@ -77,6 +77,7 @@ class Cart extends DarryldecodeCart implements JsonSerializable
                 'product' => $productPricing,
                 'provider' => $productPricing['supplier_id'],
                 'color' => $data['color'] ?? null,
+                'variant_id' => $data['variant_id'] ?? null,
             ],
             'conditions' => [],
             'associatedModel' => null,

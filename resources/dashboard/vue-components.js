@@ -50,7 +50,6 @@ import Adverts from './views/adverts/RegisterComponents';
 import Stores from './views/stores/RegisterComponents';
 import CustomerReview from './views/customer-reviews/RegisterComponents';
 import Drivers from './views/drivers/RegisterComponents';
-import Colors from './views/colors/RegisterComponents';
 import DeliveryRequests from './views/delivery-requests/RegisterComponents';
 
 export default (Vue) => {
@@ -95,7 +94,6 @@ export default (Vue) => {
 Stores(Vue);
    SupplierInvoices(Vue);
    SupplierPricings(Vue);
-   Colors(Vue);
    Suppliers(Vue);
   TransportRequests(Vue);
   UnitMeasures(Vue);

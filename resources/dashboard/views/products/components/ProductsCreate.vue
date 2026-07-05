@@ -45,7 +45,7 @@ methods: {
 	fetchItems() {
 		this.setProperty({
 			property: 'relations',
-			value:['attachments.media', 'category', 'menu', 'ageGroups', 'brand', 'supplierPrice.unit', 'colors']
+			value:['attachments.media', 'category', 'menu', 'ageGroups', 'brand', 'supplierPrice.unit']
 		});
 
 		if(this.id) {

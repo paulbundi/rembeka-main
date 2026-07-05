@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
 
         $product = Product::where('id', $productId)
-            ->with(['attachments.media', 'menu', 'discount', 'supplierPrice.unit', 'advert', 'colors'])
+            ->with(['attachments.media', 'menu', 'discount', 'supplierPrice.unit', 'advert', 'colors', 'variants.attributes'])
             ->first();
 
 
@@ -38,7 +38,7 @@ class ProductController extends Controller
                 $query->where('menu_id', $product->menu_id);
             })->when($product->type == Product::TYPE_PRODUCT, function ($query) {
                 $query->with('supplierPrice');
-            })->with(['attachments.media', 'discount', 'colors'])
+            })->with(['attachments.media', 'discount', 'colors', 'variants.attributes'])
             ->limit(20)
             ->get();
 

@@ -43,7 +43,7 @@ class ProductController extends AbstractApiController
         return [
             'users', 'attachments', 'attachments.media', 'menu', 'ageGroups', 'brand',
             'category', 'supplierPrice', 'supplierPrice.unit', 'supplierPrice.supplier',
-            'colors',
+            'colors', 'variants', 'variants.attributes'
         ];
     }
 
@@ -57,18 +57,6 @@ class ProductController extends AbstractApiController
         $data = $request->all();
         if (isset($data['age_groups']) && count($data['age_groups']) > 0) {
             $this->model->ageGroups()->attach($data['age_groups']);
-        }
-
-        if (isset($data['colors']) && count($data['colors']) > 0) {
-            $this->model->colors()->attach($data['colors']);
-        }
-    }
-
-    public function postUpdate(Request $request, $modelId)
-    {
-        $data = $request->all();
-        if (isset($data['colors'])) {
-            $this->model->colors()->sync($data['colors']);
         }
     }
 

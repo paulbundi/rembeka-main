@@ -174,6 +174,7 @@ class CartRepository
         OrderItem::create([
             'order_id' => $order->id,
             'product_id' => $product->product_id,
+            'variant_id' => $item->attributes['variant_id'] ?? null,
             'color_id' => $this->resolveColorId($item->attributes['color'] ?? null),
             'category_id' => 1,
             'provider_id' => $product->supplier_id,

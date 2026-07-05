@@ -65,7 +65,7 @@ class ProductSearchRepository
         // dd($products->with(['category', 'attachments.media',  'discount'])
         // ->paginate(50));
 
-return $products->with(['category', 'attachments.media', 'discount', 'supplierPrice.unit', 'colors'])
+return $products->with(['category', 'attachments.media', 'discount', 'supplierPrice.unit', 'colors', 'variants.attributes'])
              ->paginate(50);
     }
 

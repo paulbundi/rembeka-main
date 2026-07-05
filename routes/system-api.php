@@ -4,8 +4,6 @@ use App\Http\Controllers\Api\AdvertController;
 use App\Http\Controllers\Api\AgeGroupController;
 use App\Http\Controllers\Api\BestSellerController;
 use App\Http\Controllers\Api\BrandController;
-use App\Http\Controllers\Api\ColorController;
-use App\Http\Controllers\Api\BtocController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChannelController;
 use App\Http\Controllers\Api\CorporateController;
@@ -149,7 +147,6 @@ Route::resources([
     'age-groups' => AgeGroupController::class,
     'best-sellers' => BestSellerController::class,
     'brands' => BrandController::class,
-    'colors' => ColorController::class,
     'btoc' => BtocController::class,
     'bookings' => BookingController::class,
     'categories' => CategoryController::class,

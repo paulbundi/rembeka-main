@@ -27,6 +27,7 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'variant_id',
         'color_id',
         'category_id',
         'provider_id',
@@ -129,11 +130,19 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    /**
-      * @return BelongsTo
-      */
+/**
+       * @return BelongsTo
+       */
     public function color(): BelongsTo
     {
         return $this->belongsTo(Color::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function variant(): BelongsTo
+    {
+        return $this->belongsTo(ProductVariant::class);
     }
 }

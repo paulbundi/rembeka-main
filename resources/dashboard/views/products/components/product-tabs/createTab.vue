@@ -47,11 +47,20 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
 </script>
 <template>
 <div class="row">
-  <div class="col-6">
+<div class="col-6">
     <div class="form-group">
-      <label>Product Name</label>
-      <input class="form-control" type="text" :value="selected.name" @input="(e) => updateProperty('name', e.target.value)">
+      <label>Variant Type</label>
+      <select class="form-select" @change="(e) => updateProperty('variant_type', e.target.value)">
+        <option :selected="selected.variant_type === 'none'" value="none">None - No Variants</option>
+        <option :selected="selected.variant_type === 'color'" value="color">Color Variants</option>
+      </select>
     </div>
+    <div class="form-group">
+      <input type="checkbox" :checked="selected.is_published == 1" name="is_published" @input="(e)=>updateProperty('is_published', e.target.checked)">
+      <label>Publish Service On the e-commerce side.</label>
+    </div>
+
+  </div>
 
     <div class="form-group">
       <label>Descriprion</label>

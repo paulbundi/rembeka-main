@@ -24,13 +24,13 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
         },
       };
     },
-    created() {
-     this.activeItem = this.product.supplier_price[0];
-     if (this.product.variants && this.product.variants.length > 0) {
-       this.selectedVariant = this.product.variants[0];
-       this.formOrder.variant_id = this.product.variants[0].id;
-       this.formOrder.color = this.product.variants[0].color;
-     }
+created() {
+      this.activeItem = this.product.supplier_price[0];
+      if (this.product.variant_type === 'color' && this.product.variants && this.product.variants.length > 0) {
+        this.selectedVariant = this.product.variants[0];
+        this.formOrder.variant_id = this.product.variants[0].id;
+        this.formOrder.color = this.product.variants[0].color;
+      }
     },
     mounted() {
       this.currentUrl = encodeURI(window.location.href);      
@@ -55,6 +55,12 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
         this.selectedVariant = variant;
         this.formOrder.variant_id = variant.id;
         this.formOrder.color = variant.color;
+      },
+      getVariantDisplayType(variant) {
+        return variant?.attributes?.find?.(attr => attr.attribute === 'color')?.display_type || 'pill';
+      },
+      getVariantHexCode(variant) {
+        return variant?.attributes?.find?.(attr => attr.attribute === 'color')?.hex_code || null;
       }
     },
   };
@@ -83,18 +89,19 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
 
      <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
 
-    <div v-if="product.variants && product.variants.length > 0" class="fs-sm mb-4">
-      <span class="text-heading fw-medium me-1">Color:</span>
-      <span class="text-muted" id="colorOption">{{ selectedVariant ? selectedVariant.color : '' }}</span>
-    </div>
-    <div v-if="product.variants && product.variants.length > 0" class="position-relative me-n4 mb-3">
-        <div v-for="(variant, index) in product.variants" :key="variant.id" class="form-check form-option form-check-inline mb-2">
-          <input class="form-check-input" type="radio" name="color" :id="`variant-${variant.id}`" :value="variant.color" v-model="formOrder.color">
-          <label class="form-option-label rounded-circle" :for="`variant-${variant.id}`" @click="handleVariantSelect(variant)">
-            <span class="form-option-color rounded-circle" :style="variant.image ? `background-image: url(${variant.image})` : 'background-color: #ccc'"></span>
-          </label>
-        </div>
-    </div>
+<div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="fs-sm mb-4">
+       <span class="text-heading fw-medium me-1">Color:</span>
+       <span class="text-muted" id="colorOption">{{ selectedVariant ? selectedVariant.color : '' }}</span>
+     </div>
+<div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="position-relative me-n4 mb-3">
+       <div v-for="(variant, index) in product.variants" :key="variant.id" class="form-check form-option form-check-inline me-2 mb-2">
+         <input class="form-check-input" type="radio" name="color" :id="`variant-${variant.id}`" :value="variant.color" v-model="formOrder.color">
+         <label v-if="getVariantDisplayType(variant) === 'swatch'" class="color-swatch" :for="`variant-${variant.id}`" @click="handleVariantSelect(variant)" :style="{ backgroundColor: getVariantHexCode(variant) }"></label>
+         <label v-else class="color-pill" :for="`variant-${variant.id}`" @click="handleVariantSelect(variant)">
+           {{ variant.color }}
+         </label>
+       </div>
+     </div>
 
     <div class="row mb-4">
       <div class="col-12 col-sm-6">
@@ -141,5 +148,41 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
 </template>
 
 <style lang="scss" scoped>
+.color-pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: #fff;
+  &:hover {
+    border-color: #c12c5d;
+  }
+  input:checked + & {
+    border-color: #c12c5d;
+    background-color: #fff1f6;
+    color: #c12c5d;
+  }
+}
 
+.color-swatch {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover {
+    border-color: #c12c5d;
+    transform: scale(1.05);
+  }
+  input:checked + & {
+    border-color: #c12c5d;
+    box-shadow: 0 0 0 2px #fff1f6;
+  }
+}
 </style>

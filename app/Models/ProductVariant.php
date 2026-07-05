@@ -14,6 +14,7 @@ class ProductVariant extends Model
     protected $fillable = [
         'product_id',
         'sku',
+        'color',
         'price',
         'stock',
         'image',
@@ -34,9 +35,8 @@ class ProductVariant extends Model
         return $this->hasMany(VariantAttribute::class);
     }
 
-    public function getColorAttribute(): ?string
+    public function getColor()
     {
-        $colorAttr = $this->attributes()->where('attribute', 'color')->first();
-        return $colorAttr ? $colorAttr->value : null;
+        return $this->attributes->where('attribute', 'color')->first()?->value;
     }
 }

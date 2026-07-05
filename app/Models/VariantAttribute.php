@@ -14,6 +14,8 @@ class VariantAttribute extends Model
         'product_variant_id',
         'attribute',
         'value',
+        'hex_code',
+        'display_type',
     ];
 
     public function variant(): BelongsTo

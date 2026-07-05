@@ -15,6 +15,7 @@ class Color extends Model
         'name',
         'slug',
         'hex_code',
+        'display_type',
     ];
 
     protected static function getApiResourceClass(): string

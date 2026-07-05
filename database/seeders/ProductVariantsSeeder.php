@@ -21,23 +21,24 @@ class ProductVariantsSeeder extends Seeder
                 // Get colors assigned to this product
                 $colors = $product->colors;
 
-                foreach ($colors as $color) {
-                    // Create variant for each color
-                    $variant = ProductVariant::create([
-                        'product_id' => $product->id,
-                        'sku' => $product->sku . '-' . strtoupper(str_replace(['#', ' '], ['', ''], $color->name)),
-                        'price' => $product->supplierPrice->first()?->amount ?? $product->final_price ?? 0,
-                        'stock' => rand(5, 50), // Default stock
-                        'image' => null, // Use product's default image
-                    ]);
+foreach ($colors as $color) {
+                     $variant = ProductVariant::create([
+                         'product_id' => $product->id,
+                         'sku' => $product->sku . '-' . strtoupper(str_replace(['#', ' '], ['', ''], $color->name)),
+                         'color' => $color->name,
+                         'price' => $product->supplierPrice->first()?->amount ?? $product->final_price ?? 0,
+                         'stock' => rand(5, 50),
+                         'image' => null,
+                     ]);
 
-                    // Add color attribute
-                    VariantAttribute::create([
-                        'product_variant_id' => $variant->id,
-                        'attribute' => 'color',
-                        'value' => $color->name,
-                    ]);
-                }
+                     VariantAttribute::create([
+                         'product_variant_id' => $variant->id,
+                         'attribute' => 'color',
+                         'value' => $color->name,
+                         'hex_code' => $color->hex_code,
+                         'display_type' => $color->display_type,
+                     ]);
+                 }
             }
         });
     }

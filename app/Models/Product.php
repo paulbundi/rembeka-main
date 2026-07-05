@@ -57,7 +57,7 @@ class Product extends Model
         'slug', 'name', 'sku', 'description', 'keywords', 'seo_title', 'seo_description',
         'status', 'menu_id', 'type', 'product_used', 'duration_of_style', 'durability',
         'cost_of_labour', 'provider_cost', 'commission', 'constant_commission', 'platform_fee',
-        'product_price', 'final_price', 'category_id', 'brand_id', 'is_published'
+        'product_price', 'final_price', 'category_id', 'brand_id', 'is_published', 'variant_type',
     ];
 
     /**

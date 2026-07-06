@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BestSellerController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChannelController;
+use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\CorporateController;
 use App\Http\Controllers\Api\CorporateUserController;
 use App\Http\Controllers\Api\CouponController;
@@ -151,6 +152,7 @@ Route::resources([
     'bookings' => BookingController::class,
     'categories' => CategoryController::class,
     'channels' => ChannelController::class,
+    'colors' => ColorController::class,
     'corporate-users' => CorporateUserController::class,
     'corporates' => CorporateController::class,
     'coupons' => CouponController::class,

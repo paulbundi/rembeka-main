@@ -48,6 +48,12 @@ class Color extends Model
     {
         return $this->hex_code ?? '#ccc';
     }
+
+    /**
+     * Check if this color has a visual swatch or is text-only.
+     */
+    public function isSwatch(): bool
+    {
+        return $this->display_type === 'swatch' && !empty($this->hex_code);
+    }
 }
-
-

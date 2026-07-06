@@ -24,7 +24,7 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
         },
       };
     },
-created() {
+    created() {
       this.activeItem = this.product.supplier_price[0];
       if (this.product.variant_type === 'color' && this.product.variants && this.product.variants.length > 0) {
         this.selectedVariant = this.product.variants[0];
@@ -61,7 +61,27 @@ created() {
       },
       getVariantHexCode(variant) {
         return variant?.attributes?.find?.(attr => attr.attribute === 'color')?.hex_code || null;
-      }
+      },
+      // Determines if a variant name is a known CSS color or a business code
+      isBusinessCode(colorName) {
+        if (!colorName) return true;
+        const cssColors = ['red', 'blue', 'green', 'purple', 'wine', 'burgundy', 'yellow', 'black', 'white', 'orange', 'pink'];
+        return !cssColors.includes(colorName.toLowerCase());
+      },
+      // Check if variant has an associated color swatch from the product_color pivot
+      getVariantSwatchColor(variant) {
+        if (!this.product.colors || !variant) return null;
+        const matchingColor = this.product.colors.find(c => c.name === variant.color);
+        if (matchingColor && matchingColor.display_type === 'swatch' && matchingColor.hex_code) {
+          return matchingColor.hex_code;
+        }
+        return null;
+      },
+      getVariantDisplayMode(variant) {
+        if (!this.product.colors || !variant) return 'pill';
+        const matchingColor = this.product.colors.find(c => c.name === variant.color);
+        return matchingColor?.display_type || 'pill';
+      },
     },
   };
 </script>
@@ -85,23 +105,38 @@ created() {
       </div>
     </div>
 
-<span class="text-danger fw-bold">Ksh {{activeItem.amount}}</span>
+    <span class="text-danger fw-bold">Ksh {{activeItem.amount}}</span>
+    <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
 
-     <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
-
-<div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="fs-sm mb-4">
-       <span class="text-heading fw-medium me-1">Color:</span>
-       <span class="text-muted" id="colorOption">{{ selectedVariant ? selectedVariant.color : '' }}</span>
-     </div>
-<div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="position-relative me-n4 mb-3">
-       <div v-for="(variant, index) in product.variants" :key="variant.id" class="form-check form-option form-check-inline me-2 mb-2">
-         <input class="form-check-input" type="radio" name="color" :id="`variant-${variant.id}`" :value="variant.color" v-model="formOrder.color">
-         <label v-if="getVariantDisplayType(variant) === 'swatch'" class="color-swatch" :for="`variant-${variant.id}`" @click="handleVariantSelect(variant)" :style="{ backgroundColor: getVariantHexCode(variant) }"></label>
-         <label v-else class="color-pill" :for="`variant-${variant.id}`" @click="handleVariantSelect(variant)">
-           {{ variant.color }}
-         </label>
-       </div>
-     </div>
+    <!-- Color Variant Selector - Pill Based UI -->
+    <div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="fs-sm mb-4">
+      <span class="text-heading fw-medium me-1">Choose Color:</span>
+      <span class="text-muted" id="colorOption">{{ selectedVariant ? selectedVariant.color : '' }}</span>
+    </div>
+    <div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="position-relative me-n4 mb-3">
+      <div class="d-flex flex-wrap gap-2">
+        <div v-for="(variant, index) in product.variants" :key="variant.id" 
+          class="color-option" 
+          :class="{ 'selected': selectedVariant && selectedVariant.id === variant.id }"
+          @click="handleVariantSelect(variant)">
+          
+          <!-- Swatch display for named CSS colors (Red, Blue, Purple, etc.) -->
+          <template v-if="getVariantDisplayMode(variant) === 'swatch' && getVariantSwatchColor(variant)">
+            <div class="color-swatch-circle" :style="{ backgroundColor: getVariantSwatchColor(variant) }">
+              <i v-if="selectedVariant && selectedVariant.id === variant.id" class="ci-check text-white"></i>
+            </div>
+          </template>
+          
+          <!-- Pill display for business codes (1B, 27, 613, etc.) -->
+          <template v-else>
+            <span class="color-pill-label" :class="{ 'selected': selectedVariant && selectedVariant.id === variant.id }">
+              <i v-if="selectedVariant && selectedVariant.id === variant.id" class="ci-check me-1"></i>
+              {{ variant.color }}
+            </span>
+          </template>
+        </div>
+      </div>
+    </div>
 
     <div class="row mb-4">
       <div class="col-12 col-sm-6">
@@ -148,41 +183,65 @@ created() {
 </template>
 
 <style lang="scss" scoped>
-.color-pill {
-  display: inline-block;
-  padding: 6px 12px;
-  border: 2px solid #ddd;
-  border-radius: 20px;
+.color-option {
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
   transition: all 0.2s ease;
-  background-color: #fff;
+  
   &:hover {
-    border-color: #c12c5d;
+    .color-pill-label {
+      border-color: #c12c5d;
+      background-color: #fff1f6;
+    }
+    .color-swatch-circle {
+      border-color: #c12c5d;
+      transform: scale(1.05);
+    }
   }
-  input:checked + & {
-    border-color: #c12c5d;
-    background-color: #fff1f6;
-    color: #c12c5d;
+  
+  &.selected {
+    .color-pill-label {
+      border-color: #c12c5d;
+      background-color: #fff1f6;
+      color: #c12c5d;
+      font-weight: 600;
+    }
+    .color-swatch-circle {
+      border-color: #c12c5d;
+      box-shadow: 0 0 0 3px #fff1f6;
+    }
   }
 }
 
-.color-swatch {
-  display: inline-block;
-  width: 36px;
-  height: 36px;
-  border: 2px solid #ddd;
-  border-radius: 50%;
-  cursor: pointer;
+.color-pill-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  background-color: #fff;
   transition: all 0.2s ease;
-  &:hover {
-    border-color: #c12c5d;
-    transform: scale(1.05);
-  }
-  input:checked + & {
-    border-color: #c12c5d;
-    box-shadow: 0 0 0 2px #fff1f6;
+  min-width: 44px;
+  justify-content: center;
+}
+
+.color-swatch-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  
+  i {
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
 }
 </style>

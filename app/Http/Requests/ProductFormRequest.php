@@ -38,6 +38,10 @@ class ProductFormRequest extends FormRequest
             'constant_commission' => 'nullable',
             'is_published' => 'nullable',
             'status' => 'nullable',
+            'variant_type' => 'nullable|in:none,color',
+            'color_variants' => 'nullable|array',
+            'color_variants.*.color_id' => 'nullable|exists:colors,id',
+            'color_variants.*.stock' => 'nullable|integer|min:0',
         ];
 
         if (request()->get('type') == Product::TYPE_SERVICE) {

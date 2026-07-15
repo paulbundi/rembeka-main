@@ -15,39 +15,18 @@ class ColorSeeder extends Seeder
     public function run(): void
     {
         $colors = [
-            // Named colors with visual swatches
-            ['name' => 'Purple', 'hex_code' => '#7E57C2', 'display_type' => 'swatch'],
-            ['name' => 'Wine', 'hex_code' => '#722F37', 'display_type' => 'swatch'],
-            ['name' => 'Burgundy', 'hex_code' => '#800020', 'display_type' => 'swatch'],
-            ['name' => 'Red', 'hex_code' => '#E53935', 'display_type' => 'swatch'],
-            ['name' => 'Blue', 'hex_code' => '#1E88E5', 'display_type' => 'swatch'],
-            ['name' => 'Green', 'hex_code' => '#43A047', 'display_type' => 'swatch'],
-
-            // Business codes - text-only pills (customers know these by code)
-            ['name' => '1', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '1B', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '2', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '4', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '27', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '30', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '33', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '350', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '613', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => '99J', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => 'T1B/30', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => 'T1B/27', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => 'BUG', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => 'C14', 'hex_code' => null, 'display_type' => 'pill'],
-            ['name' => 'C15', 'hex_code' => null, 'display_type' => 'pill'],
+            '1#', '1B', '2#', '4#', '27#', '30#', '350', '613',
+            'B29', 'BUG', 'C14', 'C15', 'D&L WINE', 'T27', 'T27-613',
+            'T30', 'T33', 'T350', 'TBURG',
         ];
 
-        foreach ($colors as $colorData) {
+        foreach ($colors as $name) {
             Color::firstOrCreate(
-                ['name' => $colorData['name']],
+                ['name' => $name],
                 [
-                    'slug' => strtolower(str_replace([' ', '/', '#'], ['-', '-', ''], $colorData['name'])),
-                    'hex_code' => $colorData['hex_code'],
-                    'display_type' => $colorData['display_type'],
+                    'slug' => strtolower(str_replace([' ', '/', '#', '&'], ['-', '-', '', ''], $name)),
+                    'hex_code' => null,
+                    'display_type' => 'pill',
                 ]
             );
         }

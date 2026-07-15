@@ -38,7 +38,7 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
       ...mapActions('Menus',{setMenuProperty: 'setProperty'}),
       async fetchAvailableColors() {
         try {
-          const { data } = await this.$axios.get('/api/colors');
+          const { data } = await this.$axios.get('/colors');
           this.availableColors = data.data || [];
         } catch (e) {
           console.warn('Could not fetch colors', e);

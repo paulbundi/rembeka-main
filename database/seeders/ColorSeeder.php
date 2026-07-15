@@ -36,6 +36,9 @@ class ColorSeeder extends Seeder
             ['name' => '99J', 'hex_code' => null, 'display_type' => 'pill'],
             ['name' => 'T1B/30', 'hex_code' => null, 'display_type' => 'pill'],
             ['name' => 'T1B/27', 'hex_code' => null, 'display_type' => 'pill'],
+            ['name' => 'BUG', 'hex_code' => null, 'display_type' => 'pill'],
+            ['name' => 'C14', 'hex_code' => null, 'display_type' => 'pill'],
+            ['name' => 'C15', 'hex_code' => null, 'display_type' => 'pill'],
         ];
 
         foreach ($colors as $colorData) {

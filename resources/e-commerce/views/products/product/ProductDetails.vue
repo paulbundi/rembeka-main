@@ -38,6 +38,12 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
     methods: {
       handleAddToCart() {
         this.formOrder.pricing_id = this.activeItem.id;
+        if (this.product.variant_type === 'color' && this.product.variants && this.product.variants.length > 0) {
+          if (!this.formOrder.color || !this.formOrder.variant_id) {
+            this.$toast.error('Please choose a color');
+            return;
+          }
+        }
         this.$axios.post('/add-to-cart', this.formOrder).then(({data}) => {
           this.$bus.$emit('cartUpdated', data.data);
           this.$toast.success('Cart updated');

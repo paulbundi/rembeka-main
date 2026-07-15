@@ -116,6 +116,14 @@
         </li>
     @endif
 
+    @if(canAccess('products.view'))
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('colors.index') }}">
+                <i class="bi bi-palette"></i><span class="align-middle">Colors / Shades</span>
+            </a>
+        </li>
+    @endif
+
     @if(canAccess('discounts.view'))
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('product-discounts.index') }}">

@@ -136,6 +136,12 @@ class Role extends Model
             'update' => true,
             'delete' => true,
         ],
+        'colors' => [
+            'view' => true,
+            'create' => true,
+            'update' => true,
+            'delete' => true,
+        ],
         'unit-measures' => [
             'view' => true,
             'create' => true,

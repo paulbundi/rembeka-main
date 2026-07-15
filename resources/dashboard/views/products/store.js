@@ -26,6 +26,8 @@ const EMPTY_ENTITY = {
   commission: null,
   product_price: null,
   is_published: 1,
+  variant_type: 'none',
+  color_variants: [],
 };
 
 const state = {

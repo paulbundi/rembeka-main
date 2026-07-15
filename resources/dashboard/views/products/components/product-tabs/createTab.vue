@@ -27,11 +27,21 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
       updateProviderPricing() {
         this.updateProperty('update_provider_pricing', this.updateProviderPricing);
       },
+      'selected.id'() {
+        this.hydrateColorVariants();
+      },
+      'selected.variants'() {
+        this.hydrateColorVariants();
+      },
+      availableColors() {
+        this.hydrateColorVariants();
+      },
     },
     mounted() {
         this.updateProperty('type', 1);// product
         this.setMenuProperty({property: 'menuType', value: 1});
         this.fetchAvailableColors();
+        this.hydrateColorVariants();
     },
     methods: {
       ...mapActions('Products', ['persist', 'setProperty', 'setSelected']),
@@ -43,6 +53,26 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
         } catch (e) {
           console.warn('Could not fetch colors', e);
         }
+      },
+      hydrateColorVariants() {
+        if (!this.selected || this.selected.variant_type !== 'color') {
+          return;
+        }
+
+        const variants = this.selected.variants || [];
+        if (!variants.length) {
+          return;
+        }
+
+        this.colorVariants = variants.map((variant) => {
+          const match = this.availableColors.find(c => c.name === variant.color)
+            || (this.selected.colors || []).find(c => c.name === variant.color);
+
+          return {
+            color_id: match ? match.id : null,
+            stock: variant.stock != null ? variant.stock : 0,
+          };
+        });
       },
       addColorVariant() {
         this.colorVariants.push({ color_id: null, stock: 0 });
@@ -164,22 +194,26 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
         <div class="card-body">
           <div v-if="colorVariants.length === 0" class="text-muted text-center py-3">
             No colors added yet. Click "Add Color" to add shade options for this product.
+            <div class="mt-2">
+              <small>Need a new shade code? Add it under <strong>Colors / Shades</strong> in the sidebar first.</small>
+            </div>
           </div>
           <div v-for="(variant, index) in colorVariants" :key="index" class="row mb-2 align-items-center border-bottom pb-2">
             <div class="col-5">
               <select class="form-select form-select-sm" v-model="variant.color_id">
-                <option value="" disabled>Select shade code...</option>
+                <option :value="null" disabled>Select shade code...</option>
                 <option v-for="color in availableColors" :key="color.id" :value="color.id">
                   {{ color.name }}
                 </option>
               </select>
             </div>
             <div class="col-3">
-              <input type="number" class="form-control form-control-sm" v-model="variant.stock" min="0" placeholder="Stock">
+              <input type="number" class="form-control form-control-sm" v-model.number="variant.stock" min="0" placeholder="Stock">
             </div>
             <div class="col-2">
-              <span v-if="getSelectedColor(variant.color_id)" class="badge" :class="getSelectedColor(variant.color_id).display_type === 'swatch' ? 'color-swatch-badge' : 'bg-secondary'">
-                {{ getSelectedColor(variant.color_id)?.name }}
+              <span v-if="getSelectedColor(variant.color_id)" class="badge" :class="getSelectedColor(variant.color_id).display_type === 'swatch' ? 'color-swatch-badge' : 'bg-secondary'"
+                :style="getSelectedColor(variant.color_id).display_type === 'swatch' ? { backgroundColor: getSelectedColor(variant.color_id).hex_code } : {}">
+                {{ getSelectedColor(variant.color_id).name }}
               </span>
             </div>
             <div class="col-2 text-end">
@@ -201,9 +235,13 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
 <style lang="scss" scoped>
 .color-swatch-badge {
   display: inline-block;
-  width: 24px;
+  min-width: 24px;
   height: 24px;
-  border-radius: 50%;
+  padding: 0 6px;
+  border-radius: 12px;
   border: 2px solid #ddd;
+  color: #fff;
+  font-size: 11px;
+  line-height: 20px;
 }
 </style>

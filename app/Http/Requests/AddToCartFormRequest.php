@@ -32,7 +32,8 @@ class AddToCartFormRequest extends FormRequest
                 'quantity' => 'required',
                 'pricing_id' => 'required',
                 'type' => 'required',
-                'color' => 'nullable',
+                'color' => 'nullable|string|max:100',
+                'variant_id' => 'nullable|integer|exists:product_variants,id',
             ];
         } else {
             $rules = [

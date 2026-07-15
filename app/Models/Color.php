@@ -18,6 +18,20 @@ class Color extends Model
         'display_type',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Color $color) {
+            if (empty($color->slug) && !empty($color->name)) {
+                $color->slug = strtolower(str_replace([' ', '/', '#'], ['-', '-', ''], $color->name));
+            }
+            if (empty($color->display_type)) {
+                $color->display_type = $color->hex_code ? 'swatch' : 'pill';
+            }
+        });
+    }
+
     protected static function getApiResourceClass(): string
     {
         return \App\Http\Resources\BaseResource::class;

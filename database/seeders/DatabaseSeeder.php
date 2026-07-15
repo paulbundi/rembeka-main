@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         // have dependency
         // $this->call(MediaTableSeeder::class);
+        $this->call(ColorSeeder::class);
         $this->call(ProductTableSeeder::class);
         $this->call(ProviderPricingTableSeeder::class);
         $this->call(OrderTableSeeder::class);

@@ -35,6 +35,7 @@ import CorporateUsers from '../views/corporate-users/store';
 import WalletAudits from '../views/wallets/store';
 import Suppliers from '../views/suppliers/store';
 import Brands from '../views/brands/store';
+import Colors from '../views/colors/store';
 import SupplierPricings from '../views/supplier-pricing/store';
 import UnitMeasures from '../views/unit-measure/store';
 import SupplierInvoices from '../views/supplier-invoices/store';
@@ -60,6 +61,7 @@ export default {
   BestSellers,
   Btoc,
   Brands,
+  Colors,
   Bookings,
   Categories,
   CustomerOrders,

@@ -37,6 +37,7 @@ import CorporateUsers from './views/corporate-users/RegisterComponents';
 import Services from './views/services/RegisterComponents';
 import Suppliers from './views/suppliers/RegisterComponents';
 import Brands from './views/brands/RegisterComponents';
+import Colors from './views/colors/RegisterComponents';
 import SupplierPricings from './views/supplier-pricing/RegisterComponents';
 import UnitMeasures from './views/unit-measure/RegisterComponents';
 import ProductDiscounts from './views/product-discounts/RegisterComponents';
@@ -57,6 +58,7 @@ export default (Vue) => {
   AgeGroups(Vue);
   BestSeller(Vue);
   Brands(Vue);
+  Colors(Vue);
   Btoc(Vue);
   Categories(Vue);
   Channels(Vue),

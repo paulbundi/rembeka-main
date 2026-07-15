@@ -67,8 +67,15 @@ class Cart extends DarryldecodeCart implements JsonSerializable
             ->with(['product.discount'])
             ->firstOrFail();
 
+        $lineKey = "supplier_id.{$productPricing->id}";
+        if (!empty($data['variant_id'])) {
+            $lineKey .= ".variant.{$data['variant_id']}";
+        } elseif (!empty($data['color'])) {
+            $lineKey .= '.color.' . $data['color'];
+        }
+
         $this->add([
-            'id' => md5("supplier_id.{$productPricing->id}"),
+            'id' => md5($lineKey),
             'name' => $productPricing->product->name,
             'price' => $productPricing->amount,
             'quantity' => $data['quantity'],

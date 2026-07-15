@@ -29,6 +29,7 @@ export default {
   app: 'App',
   adverts: 'Adverts',
   brands: 'Brands',
+  colors: 'Colors / Shades',
   btoc: 'B2C',
   categories: 'Categories',
   channels: 'Channels',

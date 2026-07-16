@@ -84,6 +84,10 @@ methods: {
 				})
 	},
 	handleRefresh(product) {
+		this.setProperty({
+			property: 'relations',
+			value: ['attachments.media', 'category', 'menu', 'ageGroups', 'brand', 'supplierPrice.unit', 'colors', 'variants']
+		});
 		this.fetchOne({id: product.id});
 	},
 	}

@@ -24,9 +24,15 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
         },
       };
     },
+    computed: {
+      hasColorVariants() {
+        return (this.product.variant_type === 'color' || (this.product.variants && this.product.variants.length > 0))
+          && this.product.variants && this.product.variants.length > 0;
+      },
+    },
     created() {
       this.activeItem = this.product.supplier_price[0];
-      if (this.product.variant_type === 'color' && this.product.variants && this.product.variants.length > 0) {
+      if (this.hasColorVariants) {
         this.selectedVariant = this.product.variants[0];
         this.formOrder.variant_id = this.product.variants[0].id;
         this.formOrder.color = this.product.variants[0].color;
@@ -38,7 +44,7 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
     methods: {
       handleAddToCart() {
         this.formOrder.pricing_id = this.activeItem.id;
-        if (this.product.variant_type === 'color' && this.product.variants && this.product.variants.length > 0) {
+        if (this.hasColorVariants) {
           if (!this.formOrder.color || !this.formOrder.variant_id) {
             this.$toast.error('Please choose a color');
             return;
@@ -115,11 +121,11 @@ import BookOnWhatsApp from '../BookOnWhatsApp.vue';
     <p> Size: {{activeItem.size}} {{activeItem.unit.name }}</p>
 
     <!-- Color Variant Selector - Pill Based UI -->
-    <div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="fs-sm mb-4">
+    <div v-if="hasColorVariants" class="fs-sm mb-4">
       <span class="text-heading fw-medium me-1">Choose Color:</span>
       <span class="text-muted" id="colorOption">{{ selectedVariant ? selectedVariant.color : '' }}</span>
     </div>
-    <div v-if="product.variant_type === 'color' && product.variants && product.variants.length > 0" class="position-relative me-n4 mb-3">
+    <div v-if="hasColorVariants" class="position-relative me-n4 mb-3">
       <div class="d-flex flex-wrap gap-2">
         <div v-for="(variant, index) in product.variants" :key="variant.id" 
           class="color-option" 

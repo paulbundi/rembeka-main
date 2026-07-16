@@ -48,7 +48,7 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
       ...mapActions('Menus',{setMenuProperty: 'setProperty'}),
       async fetchAvailableColors() {
         try {
-          const { data } = await this.$axios.get('/colors');
+          const { data } = await this.$http.get('/colors');
           this.availableColors = data.data || [];
         } catch (e) {
           console.warn('Could not fetch colors', e);
@@ -106,6 +106,10 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
 <div>
   <div class="row">
     <div class="col-6">
+      <div class="form-group">
+        <label>Product Name <span class="text-danger">*</span></label>
+        <input class="form-control" :value="selected.name" type="text" @input="(e) => updateProperty('name', e.target.value)" placeholder="Product name">
+      </div>
       <div class="form-group">
         <label class="fw-semibold">Variant Type</label>
         <div class="d-flex gap-3 mt-1">

@@ -6,6 +6,7 @@ use App\Models\Attachment;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ProductController extends AbstractApiController

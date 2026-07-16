@@ -128,9 +128,7 @@ methods: {
 					</div>
 
 					<div class="tab-pane" :class="{'fade show active': activeTab == 'attachment'}" id="attachments-tab" role="tabpanel" aria-labelledby="images">
-						<keep-alive>
-							<attachments @attach="handleAttach" @detach="handleDetach" />
-						</keep-alive>
+						<attachments @attach="handleAttach" @detach="handleDetach" />
 					</div>
 					
 					<div class="tab-pane" :class="{'fade show active': activeTab == 'provider'}" id="provider-tab" role="tabpanel" aria-labelledby="contact-tab">

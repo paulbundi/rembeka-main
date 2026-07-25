@@ -29,8 +29,12 @@ class ProviderController extends AbstractApiController
     protected function getAllowedIncludes(): array
     {
         return [
-            'products', 'productPricings.product', 'locations',
-            'profile.attachments.media', 'orders', 'user',
+            'products',
+            'productPricings.product',
+            'locations',
+            'profile.attachments.media',
+            'orders',
+            'user',
         ];
     }
 
@@ -49,9 +53,11 @@ class ProviderController extends AbstractApiController
 
         if ($request->get('provider_styles')) { // dublicate existing details for this service.
             foreach ($request->get('provider_styles') as $style) {
-                if (ProviderPricing::where('product_id', $style)
-                    ->where('provider_id', $this->model->id)
-                    ->exists()) {
+                if (
+                    ProviderPricing::where('product_id', $style)
+                        ->where('provider_id', $this->model->id)
+                        ->exists()
+                ) {
                     return;
                 }
                 $productPricing = ProviderPricing::where('product_id', $style)->first();
@@ -59,7 +65,7 @@ class ProviderController extends AbstractApiController
                 if ($productPricing) {
                     ProviderPricing::create([
                         'product_id' => $productPricing->product_id,
-                        'category_id' => $productPricing->category_id ,
+                        'category_id' => $productPricing->category_id,
                         'provider_id' => $this->model->id,
                         'location_id' => $request->get('location_id')[0], //TODO redefine zoning and pricing.
                         'amount' => $productPricing->amount,
@@ -110,6 +116,8 @@ class ProviderController extends AbstractApiController
      */
     public function update($modelId)
     {
+        $this->resolveModel();
+
         $request = $this->getRequest();
 
         $this->model = $this->model->findOrFail($modelId);
@@ -117,7 +125,7 @@ class ProviderController extends AbstractApiController
         $this->model->fill($request->only(array_keys($request->rules())));
         $this->model->save();
 
-        if (isset($request->assign_service_by) &&  $request->assign_service_by == '1') {
+        if (isset($request->assign_service_by) && $request->assign_service_by == '1') {
             $this->assignProductsByMenu($request->get('provider_styles'));
         }
 
@@ -130,7 +138,8 @@ class ProviderController extends AbstractApiController
             $this->providerImage($request, $profile);
         }
 
-        return $this->getModelResource($this->model);
+        $this->resource = \App\Http\Resources\BaseResource::class;
+        return new $this->resource($this->model);
     }
 
     /**
@@ -147,8 +156,8 @@ class ProviderController extends AbstractApiController
             'attachable_id' => $profile->id,
             'attachable_type' => 'App\Models\ProviderProfile',
         ], [
-        'user_id' => auth()->id(),
-        'media_id' => $request->get('profile_image'),
+            'user_id' => auth()->id(),
+            'media_id' => $request->get('profile_image'),
         ]);
     }
 
@@ -178,11 +187,13 @@ class ProviderController extends AbstractApiController
         }
 
         foreach ($selectedIds as $menuId) {
-            if (ProviderPricing::whereHas('product', function ($query) use ($menuId) {
-                $query->where('menu_id', $menuId);
-            })
-                ->where('provider_id', $this->model->id)
-                ->exists()) {
+            if (
+                ProviderPricing::whereHas('product', function ($query) use ($menuId) {
+                    $query->where('menu_id', $menuId);
+                })
+                    ->where('provider_id', $this->model->id)
+                    ->exists()
+            ) {
                 return;
             }
             $productPricing = ProviderPricing::whereHas('product', function ($query) use ($menuId) {
@@ -192,7 +203,7 @@ class ProviderController extends AbstractApiController
             if ($productPricing) {
                 ProviderPricing::create([
                     'product_id' => $productPricing->product_id,
-                    'category_id' => $productPricing->category_id ,
+                    'category_id' => $productPricing->category_id,
                     'provider_id' => $this->model->id,
                     'location_id' => 1,
                     'amount' => $productPricing->amount,

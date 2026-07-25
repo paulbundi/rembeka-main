@@ -25,8 +25,17 @@ class Provider extends Model
     const PROVIDER_PUBLISHED = 1;
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'status', 'rating',
-        'national_id', 'kra_pin', 'address', 'slug', 'short_description',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'status',
+        'rating',
+        'national_id',
+        'kra_pin',
+        'address',
+        'slug',
+        'short_description',
         'published',
     ];
 
@@ -39,7 +48,7 @@ class Provider extends Model
      *
      * @return string
      */
-    protected static function getApiResourceClass(): string
+    public static function getApiResourceClass(): string
     {
         return BaseResource::class;
     }
@@ -49,7 +58,7 @@ class Provider extends Model
      *
      * @return string
      */
-    protected static function getFormRequestClass(): string
+    public static function getFormRequestClass(): string
     {
         return ProviderFormRequest::class;
     }
@@ -61,7 +70,7 @@ class Provider extends Model
      */
     public function getNameAttribute()
     {
-        return $this->first_name.' '. $this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -93,7 +102,7 @@ class Provider extends Model
     /**
      * @return HasOne
      */
-    public function profile():HasOne
+    public function profile(): HasOne
     {
         return $this->hasOne(ProviderProfile::class);
     }
@@ -101,7 +110,7 @@ class Provider extends Model
     /**
      * @return HasOne
      */
-    public function user():HasOne
+    public function user(): HasOne
     {
         return $this->hasOne(User::class, 'organization_id', 'id');
     }
@@ -109,7 +118,7 @@ class Provider extends Model
     /**
      * @return HasMany
      */
-    public function works():HasMany
+    public function works(): HasMany
     {
         return $this->hasMany(ProviderWork::class);
     }
@@ -117,7 +126,7 @@ class Provider extends Model
     /**
      * @return Builder
      */
-    public function scopePublished(Builder $builder):Builder
+    public function scopePublished(Builder $builder): Builder
     {
         return $builder->where('published', self::STATUS_ACTIVE);
     }

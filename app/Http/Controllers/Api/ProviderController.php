@@ -161,12 +161,15 @@ class ProviderController extends AbstractApiController
      */
     public function assignProductsByMenu($menus)
     {
+        $selectedIds = [];
         foreach ($menus as $menu) {
-            $selectedIds = [];
             array_push($selectedIds, $menu);
-            $menus = Menu::with(['children.children'])
+            $menuModel = Menu::with(['children.children'])
                 ->where('id', $menu)->first();
-            $menus->children->each(function ($menu) use (&$selectedIds) {
+            if (!$menuModel) {
+                continue;
+            }
+            $menuModel->children->each(function ($menu) use (&$selectedIds) {
                 array_push($selectedIds, $menu->id);
                 $menu->children->each(function ($child) use (&$selectedIds) {
                     array_push($selectedIds, $child->id);

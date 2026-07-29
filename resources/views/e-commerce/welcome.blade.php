@@ -41,7 +41,7 @@
     @endif
 
     {{-- 11. Partners --}}
-    @include('e-commerce.sliders.our-partners')
+    @include('e-commerce.sliders.our-partners', ['brands' => $brands])
 
     {{-- 12. Footer Pink Bar --}}
     @include('e-commerce.footer-pink-bar')

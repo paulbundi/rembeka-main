@@ -21,6 +21,9 @@
                             @endif
                             <div class="ps-3">
                                 <h6 class="fs-base pt-1 mb-1">{{ $stylist->first_name }} {{ $stylist->last_name }}</h6>
+                                @if($stylist->short_description)
+                                <p class="mb-1 text-muted">{{ $stylist->short_description }}</p>
+                                @endif
                                 @if($stylist->profile)
                                 <small>{{ $stylist->profile->professional_qualifications }}</small><br/>
                                 @endif

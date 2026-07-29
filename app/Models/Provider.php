@@ -43,6 +43,24 @@ class Provider extends Model
         'name',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($provider) {
+            $provider->products()->detach();
+            $provider->locations()->detach();
+
+            OrderItem::where('provider_id', $provider->id)->update(['provider_id' => null]);
+
+            $provider->productPricings()->delete();
+            $provider->profile()->delete();
+            $provider->works()->delete();
+            Booking::where('provider_id', $provider->id)->delete();
+            ProductReview::where('provider_id', $provider->id)->delete();
+        });
+    }
+
     /**
      * Get the api resource.
      *

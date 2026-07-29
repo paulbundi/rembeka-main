@@ -23,7 +23,7 @@ class Menu extends Model
             // Force delete products to avoid FK constraint violation,
             // since Product uses SoftDeletes and a soft delete would
             // leave the rows in the database referencing this menu.
-            $menu->products()->forceDelete();
+            $menu->products()->get()->each->forceDelete();
         });
     }
 
@@ -81,3 +81,4 @@ class Menu extends Model
     }
 
 }
+

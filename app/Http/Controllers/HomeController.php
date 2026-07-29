@@ -35,7 +35,7 @@ class HomeController extends Controller
                   ->where('is_published', Product::IS_PUBLISHED);
             })
             ->whereHas('product.attachments.media')
-            ->with(['product.attachments.media', 'product.category'])
+            ->with(['product.attachments.media', 'product.category', 'product.supplierPrice'])
             ->inRandomOrder()
             ->limit(10)
             ->get()

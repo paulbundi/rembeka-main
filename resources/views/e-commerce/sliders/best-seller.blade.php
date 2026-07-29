@@ -46,8 +46,11 @@
                 </a>
               </h3>
 
+              @php
+                $displayPrice = optional(optional($product->supplierPrice)->first())->amount ?? $product->final_price;
+              @endphp
               <div class="product-price">
-                <span class="text-accent">Ksh {{ $product->final_price }}</span>
+                <span class="text-accent">Ksh {{ $displayPrice }}</span>
               </div>
             </div>
 

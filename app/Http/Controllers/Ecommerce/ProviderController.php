@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Provider;
 use App\Models\ProviderInquiry;
+use App\Models\ProviderPricing;
 use App\Models\Rating;
 use App\Repository\Providers\ProviderSearchRepository;
 use Illuminate\Http\Request;

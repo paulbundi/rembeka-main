@@ -67,7 +67,7 @@
                       <div class="col-sm-6">
                         <label>&nbsp;</label>
                         <button class="btn btn-success d-block w-100 mt-1" type="submit" id="paystack-btn">
-                          <span class="fw-bolder">Pay Ksh {{ number_format((float) Cart::total(), 2) }}</span>
+                          <span class="fw-bolder">Pay Ksh {{ number_format((float) Cart::total() + session('delivery_fee', 0), 2) }}</span>
                         </button>
                       </div>
                     </div>
@@ -150,13 +150,13 @@
                   Switched from STK Push to manual C2B payments to phone number 0708887933.
                   Removed old STK Push UI. Old code preserved in git history.
                   --}}
-                  @if(isset($response['type']) && $response['type'] == 'success')
+                  @if(isset($response['type']) && isset($response['order']) && $response['order'])
                     <img src="https://www.tiaro.net/site/assets/files/11317/mpesa.png" alt="M-Pesa Payment" height="60">
                     <p class="small text-muted mt-2">Pay with M-Pesa</p>
                     <div class="col-12 d-flex flex-column justify-content-center">
                       <h4>Payment Request Made successfully.</h4>
                       <p>Please send <strong>Ksh
-                          {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
+                          {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total() + session('delivery_fee', 0), 2) }}</strong>
                         via <strong>M-Pesa Paybill 522522, Account No: 1294456423</strong> and submit the Transaction ID below.</p>
                     </div>
                   @endif
@@ -165,7 +165,7 @@
                     <h5 class="alert-heading">Pay using paybill</h5>
                     <p class="mb-2">
                       Send <strong>Ksh
-                        {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}</strong>
+                        {{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total() + session('delivery_fee', 0), 2) }}</strong>
                       via <strong>M-Pesa Paybill 522522, Account No: 1294456423</strong>.
                     </p>
                     <hr>
@@ -203,7 +203,7 @@
                         <div class="mb-3 w-100">
                           <label class="form-label" for="manual-amount">Amount Sent (Ksh)</label>
                           <input class="form-control" name="amount" type="number" step="0.01" min="1" id="manual-amount"
-                            value="{{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total(), 2) }}"
+                            value="{{ isset($response['order']) && $response['order'] ? number_format($response['order']->balance, 2) : number_format((float) Cart::total() + session('delivery_fee', 0), 2) }}"
                             required>
                           @error('amount')
                             <small class="text-danger">{{ $message }}</small>
@@ -282,6 +282,13 @@
     </div>
   </main>
 @endsection
+
+<script>
+  window.checkout = {
+    deliveryFee: {{ session('delivery_fee', 0) }},
+    deliveryMethod: '{{ session('delivery_method', 'PICKUP') }}',
+  };
+</script>
 
 @push('scripts')
   <script src="https://js.paystack.co/v1/inline.js"></script>

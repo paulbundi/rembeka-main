@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\Ecommerce\ProductController;
 use App\Http\Controllers\Ecommerce\ProviderController;
 use App\Http\Controllers\HomeController;
@@ -49,6 +50,14 @@ Route::get('/checkout/details', [CartController::class, 'checkoutDetails'])
 
 Route::post('/checkout/store', [CartController::class, 'createAccount'])
     ->name('checkout.store');
+
+Route::post('/delivery/calculate', [DeliveryController::class, 'calculate'])
+    ->name('delivery.calculate');
+Route::post('/delivery/geocode', [DeliveryController::class, 'geocode'])
+    ->name('delivery.geocode');
+Route::post('/delivery/reverse-geocode', [DeliveryController::class, 'reverseGeocode'])
+    ->name('delivery.reverse-geocode');
+
 Route::post('/order-additional-info', [CartController::class, 'additionalInformation'])
     ->name('order-additional.info');
 

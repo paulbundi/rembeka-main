@@ -38,7 +38,10 @@ class CheckOutRequest extends FormRequest
             'appartment'=> ['nullable'],
             'floor'=> ['nullable'],
             'room'=> ['nullable'],
-
+            'delivery_method' => 'nullable|string|in:PICKUP,DELIVERY',
+            'delivery_fee' => 'nullable|numeric|min:0',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ];
 
         if (auth()->check()) {

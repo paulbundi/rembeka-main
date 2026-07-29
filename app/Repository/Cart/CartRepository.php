@@ -48,17 +48,20 @@ class CartRepository
 
         $notes = session()->get('notes');
 
+        $deliveryFee = (int) (session()->get('delivery_fee', 0) ?? 0);
+
         $data = [
             'user_id' => auth()->id(),
-            'amount' => $cart['total'],
+            'amount' => $cart['total'] + $deliveryFee,
             'paid' => 0,
-            'balance' => $cart['total'],
+            'balance' => $cart['total'] + $deliveryFee,
             'notes' => $notes,
             'location_id' => session()->get('checkout_address'),
             'paying_no' => $phone,
             'status' => Order::STATUS_PENDING_PAYMENT,
             'channel_id' => 1,
             'payment_on_delivery' => $payOnDelivery ? 1 : null,
+            'delivery_amount' => $deliveryFee,
         ];
 
         if ($referralCode && $referralCode->referralcode_id) {
@@ -109,16 +112,19 @@ class CartRepository
 
         $notes = session()->get('notes');
 
+        $deliveryFee = (int) (session()->get('delivery_fee', 0) ?? 0);
+
         $data = [
             'user_id' => auth()->id(),
-            'amount' => $cart['total'],
+            'amount' => $cart['total'] + $deliveryFee,
             'paid' => 0,
-            'balance' => $cart['total'],
+            'balance' => $cart['total'] + $deliveryFee,
             'notes' => $notes,
             'location_id' => session()->get('checkout_address'),
             'paying_no' => $phone,
             'status' => Order::STATUS_PENDING_PAYMENT,
             'channel_id' => 1,
+            'delivery_amount' => $deliveryFee,
         ];
 
         if ($referralCode && $referralCode->referralcode_id) {

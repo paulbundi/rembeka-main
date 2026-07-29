@@ -89,5 +89,14 @@ return [
         'secret' => env('PAYSTACK_SECRET_KEY'),
         'webhook_secret' => env('PAYSTACK_WEBHOOK_SECRET'),
     ],
+
+    'delivery' => [
+        'warehouse_lat' => env('WAREHOUSE_LATITUDE', '-1.2921'),
+        'warehouse_lng' => env('WAREHOUSE_LONGITUDE', '36.8219'),
+        'base_fee' => env('DELIVERY_BASE_FEE', '200'),
+        'per_km_rate' => env('DELIVERY_PER_KM_RATE', '50'),
+        'free_threshold_km' => env('FREE_DELIVERY_THRESHOLD_KM', '5'),
+        'free_minimum_spend' => env('FREE_DELIVERY_MINIMUM_SPEND', '3000'),
+    ],
 ];
 

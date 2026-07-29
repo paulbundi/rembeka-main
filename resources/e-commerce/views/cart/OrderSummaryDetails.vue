@@ -4,7 +4,15 @@
     data() {
       return {
         cart: window.store && window.store.cart ? window.store.cart : { items: {}, total: 0 },
+        deliveryFee: 0,
+        deliveryMethod: 'PICKUP',
       };
+    },
+    mounted() {
+      if (window.checkout) {
+        this.deliveryFee = Number(window.checkout.deliveryFee || 0);
+        this.deliveryMethod = window.checkout.deliveryMethod || 'PICKUP';
+      }
     },
   }
 </script>
@@ -37,17 +45,21 @@
     </div>
     <ul class="list-unstyled fs-sm pb-2 border-bottom">
       <li class="d-flex justify-content-between align-items-center"><span class="me-2">Subtotal:</span><span class="text-end">{{ cart.total | numberFormat }}</span></li>
+      <li v-if="deliveryMethod === 'DELIVERY'" class="d-flex justify-content-between align-items-center">
+        <span class="me-2">Delivery fee:</span>
+        <span class="text-end">{{ deliveryFee === 0 ? 'Free' : deliveryFee | numberFormat }}</span>
+      </li>
     </ul>
     <div class="d-flex justify-content-between align-items-center">
       <h5 class="">Total Amount:</h5>
-      <h5 class=""> Ksh {{ cart.total | numberFormat }} </h5>
+      <h5 class=""> Ksh {{ (cart.total + deliveryFee) | numberFormat }} </h5>
     </div>
 
     <!-- <div class="d-flex justify-content-between align-items-center">
       <h5 class="">Deposit:</h5>
       <h5 class="">Ksh {{ (cart.total * 0.50) | numberFormat }}</h5>
     </div> -->
-    
+
   </div>
 </div>
 </template>

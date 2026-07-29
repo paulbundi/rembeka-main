@@ -18,7 +18,8 @@
                 <div class="col-12">
                   <div id="pac-container">
                     <label>Enter Your Location</label>
-                    <input id="pac-input" name="name" type="text" placeholder="Enter a location" class="form-control"
+                    <input id="pac-input" name="name" type="text" placeholder="Enter a location in Kenya"
+                      class="form-control"
                       value="{{old('name', isset($address) ? $address->name : '')}}" />
                     <input type="hidden" name="lat_long" id="lat_long" />
                   </div>
@@ -69,7 +70,7 @@
   </main>
 @endsection
 
-@push('styles')
+@push('css')
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 @endpush
@@ -80,15 +81,26 @@
 
   <script>
     function initMap() {
-      // Leaflet Map
-      const map = L.map('map').setView([1.2921, 36.8219], 10);
+      const defaultLat = -1.2921;
+      const defaultLng = 36.8219;
+
+      const map = L.map('map', {
+        center: [defaultLat, defaultLng],
+        zoom: 13,
+        scrollWheelZoom: false,
+        zoomSnap: 0.5,
+        zoomDelta: 0.5,
+        doubleClickZoom: false,
+        inertia: true,
+        inertiaDeceleration: 4000,
+      }).setView([defaultLat, defaultLng], 13);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
 
-      let marker = L.marker([1.2921, 36.8219]).addTo(map);
+      let marker = L.marker([defaultLat, defaultLng]).addTo(map);
 
       const input = document.getElementById('pac-input');
       const latLongInput = document.getElementById('lat_long');
@@ -96,36 +108,72 @@
       const placeAddress = document.getElementById('place-address');
 
       let timeout;
-      input.addEventListener('input', function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(searchAddress, 400);
-      });
+      if (input) {
+        input.addEventListener('input', function () {
+          clearTimeout(timeout);
+          timeout = setTimeout(searchAddress, 400);
+        });
+      }
 
       function searchAddress() {
+        if (!input) return;
         const query = input.value.trim();
         if (query.length < 3) return;
 
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}&countrycodes=ke&addressdetails=1`, {
-          headers: { 'User-Agent': 'Rembeka/1.0' }
+        fetch('{{ route('delivery.geocode') }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ address: query }),
         })
-          .then(response => response.json())
-          .then(data => {
-            if (data && data[0]) {
-              const place = data[0];
-              const lat = parseFloat(place.lat);
-              const lng = parseFloat(place.lon);
+          .then((response) => response.json())
+          .then((data) => {
+            if (data && data.latitude) {
+              const lat = parseFloat(data.latitude);
+              const lng = parseFloat(data.longitude);
 
-              latLongInput.value = `${lat}, ${lng}`;
+              latLongInput.value = lat + ', ' + lng;
 
               map.setView([lat, lng], 16);
               marker.setLatLng([lat, lng]);
 
-              placeName.textContent = place.display_name.split(',')[0] || place.display_name;
-              placeAddress.textContent = place.display_name;
+              placeName.textContent = data.displayName ? data.displayName.split(',')[0] : data.displayName;
+              placeAddress.textContent = data.displayName;
             }
           })
           .catch(err => console.log('Search error:', err));
       }
+
+      map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        marker.setLatLng([lat, lng]);
+        map.setView([lat, lng], 16);
+
+        fetch('{{ route('delivery.reverse-geocode') }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ latitude: lat, longitude: lng }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            latLongInput.value = lat + ', ' + lng;
+            placeName.textContent = data.displayName ? data.displayName.split(',')[0] : data.displayName;
+            placeAddress.textContent = data.displayName || lat + ', ' + lng;
+          })
+          .catch(() => {
+            latLongInput.value = lat + ', ' + lng;
+            placeName.textContent = 'Selected location';
+            placeAddress.textContent = lat + ', ' + lng;
+          });
+      });
     }
     window.initMap = initMap;
 

@@ -88,19 +88,35 @@ class CartController extends Controller
             'appartment' => 'nullable',
             'floor' => 'nullable',
             'room' => 'nullable',
+            'delivery_method' => 'nullable|string|in:PICKUP,DELIVERY',
+            'delivery_fee' => 'nullable|numeric|min:0',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ]);
 
         $id = $data['address_id'] ?? null;
 
         if (!isset($data['address_id'])) {
-            $coordinates = array_map('trim', explode(',', $data['lat_long'] ?? '0,0'));
-            $data['lat'] = $coordinates[0] ?? null;
-            $data['long'] = $coordinates[1] ?? null;
+            if (isset($data['lat_long'])) {
+                $coordinates = array_map('trim', explode(',', $data['lat_long']));
+                $data['lat'] = $coordinates[0] ?? null;
+                $data['long'] = $coordinates[1] ?? null;
+            } elseif (isset($data['latitude']) && isset($data['longitude'])) {
+                $data['lat'] = $data['latitude'];
+                $data['long'] = $data['longitude'];
+            } else {
+                $data['lat'] = null;
+                $data['long'] = null;
+            }
             $data['user_id'] = auth()->id();
             $id = Address::create($data)->id;
         }
 
         session()->put('address_id', $id);
+        session()->put('delivery_method', $data['delivery_method'] ?? 'PICKUP');
+        session()->put('delivery_fee', $data['delivery_fee'] ?? 0);
+        session()->put('latitude', $data['latitude'] ?? null);
+        session()->put('longitude', $data['longitude'] ?? null);
 
         return redirect()->route('payment.mode');
     }
@@ -129,6 +145,9 @@ class CartController extends Controller
             $coordinates = array_map('trim', explode(',', $data['lat_long']));
             $data['lat'] = $coordinates[0];
             $data['long'] = $coordinates[1];
+        } elseif (isset($data['latitude']) && isset($data['longitude'])) {
+            $data['lat'] = $data['latitude'];
+            $data['long'] = $data['longitude'];
         }
 
         $address = Address::create([
@@ -140,6 +159,11 @@ class CartController extends Controller
             'floor' => $data['floor'] ?? null,
             'room' => $data['room'] ?? null,
         ]);
+
+        session()->put('delivery_method', $data['delivery_method'] ?? 'PICKUP');
+        session()->put('delivery_fee', $data['delivery_fee'] ?? 0);
+        session()->put('latitude', $data['latitude'] ?? null);
+        session()->put('longitude', $data['longitude'] ?? null);
 
         $cart = Cart::session(session()->getId());
 

@@ -55,7 +55,7 @@
 
     <!-- Partner Brands -->
     <div class="col-6 col-md-4 col-lg">
-      <a href="{{ route('stylists.inquire') }}" class="platform-service-card text-decoration-none d-flex flex-column align-items-center text-center p-3 bg-white rounded-3 shadow-sm h-100 border border-light hover-lift">
+      <a href="{{ route('partner-brands.index') }}" class="platform-service-card text-decoration-none d-flex flex-column align-items-center text-center p-3 bg-white rounded-3 shadow-sm h-100 border border-light hover-lift">
         <div class="service-icon-circle mb-2 d-flex align-items-center justify-content-center rounded-circle" style="background-color: #fdf2f8; width: 52px; height: 52px; flex-shrink: 0;">
           <i class="bi bi-shop fs-4" style="color: #c12c5d;"></i>
         </div>

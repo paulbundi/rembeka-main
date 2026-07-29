@@ -5,33 +5,18 @@
       Brands</h2>
   </div>
 
-  @if(($brands ?? collect())->isNotEmpty())
-    <div class="row g-4 justify-content-center">
-      @foreach($brands as $brand)
-        @php
-          $media = optional(optional($brand->attachments->first())->media);
-        @endphp
-        <div class="col-6 col-md-5 col-lg-4">
-          <a href="{{ route('search.index', ['search' => $brand->name]) }}"
-            class="text-decoration-none">
-            <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
-              <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                @if($media && $media->url)
-                  <img src="{{ asset($media->url) }}" alt="{{ $brand->name }}"
-                    class="img-fluid partner-card-img"
-                    style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
-                @endif
-                <p class="fw-bold text-dark mt-3 mb-0 text-center">{{ $brand->name }}</p>
-              </div>
-            </div>
-          </a>
-        </div>
-      @endforeach
+  @if(($partners ?? collect())->isNotEmpty())
+    <div class="tns-carousel tns-controls-static tns-controls-outside tns-nav-enabled pt-2">
+      <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "gutter": 16, "controls": true, "autoHeight": true, "responsive": {"0":{"items":1}, "480":{"items":2}, "720":{"items":3}, "991":{"items":2}, "1140":{"items":3}, "1300":{"items":4}, "1500":{"items":5}}}'>
+        @foreach($partners as $partner)
+          @include('e-commerce.partials.partner-card', ['partner' => $partner])
+        @endforeach
+      </div>
     </div>
 
     <div class="mt-4">
       <a href="{{ route('brands.index') }}" class="btn btn-primary btn-shadow">
-        View All Brands
+        View All Partner Brands
       </a>
     </div>
   @endif

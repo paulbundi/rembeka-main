@@ -10,7 +10,7 @@
       </li>
 
       <li class="nav-item px-3">
-        <a class="nav-link fw-bold text-dark text-uppercase py-2" href="{{ route('brands.index') }}"
+        <a class="nav-link fw-bold text-dark text-uppercase py-2" href="{{ route('partner-brands.index') }}"
           style="font-size: 0.85rem; letter-spacing: 0.5px;">
           Partner Brands <span class="badge bg-danger rounded-pill ms-1 align-middle" style="font-size: 0.6rem; padding: 2px 5px;">NEW</span>
         </a>

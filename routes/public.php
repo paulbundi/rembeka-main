@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
-Route::get('/brands', [HomeController::class, 'brands'])
-    ->name('brands.index');
+Route::get('/partner-brands', [HomeController::class, 'brands'])
+    ->name('partner-brands.index');
 
 Route::get('/beauty-services', [HomeController::class, 'beautyServices'])
     ->name('beauty-services.index');

@@ -15,7 +15,7 @@
     </div>
 
     <div class="mt-4">
-      <a href="{{ route('brands.index') }}" class="btn btn-primary btn-shadow">
+      <a href="{{ route('partner-brands.index') }}" class="btn btn-primary btn-shadow">
         View All Partner Brands
       </a>
     </div>

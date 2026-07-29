@@ -1,5 +1,3 @@
-@props(['partner'])
-
 @php
   $media = $partner->logo;
 @endphp

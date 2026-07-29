@@ -151,9 +151,6 @@ Route::get('stylists-inquire', [ProviderController::class, 'wantToJoin'])
 Route::post('create-inquiries', [ProviderController::class, 'createInquiry'])
     ->name('stylist-inquiries');
 
-Route::get('stylist-catalogue/{stylist}', [ProviderController::class, 'stylistCatalogue'])
-    ->name('stylist-catalogue.show');
-
 Route::get('stylist-rating/{stylist}', [ProviderController::class, 'stylistRatings'])
     ->name('stylist-rating.show');
 

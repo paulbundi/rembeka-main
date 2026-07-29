@@ -11,7 +11,6 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Provider;
 use App\Models\ProviderInquiry;
-use App\Models\ProviderPricing;
 use App\Models\Rating;
 use App\Repository\Providers\ProviderSearchRepository;
 use Illuminate\Http\Request;
@@ -50,23 +49,9 @@ class ProviderController extends Controller
     }
 
     /**
-     * @param int $stylist
-     *
-     * @return void
-     */
-    public function stylistCatalogue(int $stylist)
-    {
-        $services = ProviderPricing::where('provider_id', $stylist)
-            ->with(['product.attachments.media', 'product.discount'])
-            ->paginate();
-
-        return response()->json(['data' => $services]);
-    }
-
-    /**
      * Customer reviews.
      *
-     * @param int $stylist
+     * @param int $stylistId
      *
      * @return void
      */

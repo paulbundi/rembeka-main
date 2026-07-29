@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Colors', ['fetchOne', 'persist', 'resetSelected']),
+    ...mapActions('Colors', ['fetchOne', 'persist', 'setProperty', 'resetSelected']),
     fetchItems() {
       if (this.id) {
         this.fetchOne({ id: this.id });
@@ -102,3 +102,4 @@ export default {
     </div>
   </div>
 </template>
+

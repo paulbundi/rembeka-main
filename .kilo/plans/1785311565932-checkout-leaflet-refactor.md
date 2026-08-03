@@ -1,43 +1,38 @@
-# Landing Page: BRANDS nav + Partner Brands teaser
+# Fix best-sellers price display showing Ksh 0.00
 
-## Goal
-- Remove unused **OFFERS** tab from main navbar
-- Keep **BRANDS** tab pointing to `/brands`
-- Convert hardcoded "Partner Brands" footer section into a dynamic teaser using the `Brand` model, with a **View All Brands** link to `/brands`
+## Root cause
+`resources/views/e-commerce/sliders/best-seller.blade.php` renders the price from the wrong source.
 
-## Current state
-- Nav links live in `resources/views/e-commerce/nav-bars/horizontal-menu-bar.blade.php`
-- OFFERS is an anchor to `#offers` (in-page section)
-- BRANDS links to `route('brands.index')`
-- Partner Brands section is hardcoded in `resources/views/e-commerce/sliders/our-partners.blade.php`
-- `HomeController::index()` already fetches `$brands` but does **not** pass it to `welcome.blade.php`
+For ADORN products, `HomeController::index()` fetches `$adornProducts` as `ProviderPricing` records and eager-loads only `product.attachments.media` and `product.category`. The Blade view then reads `$product->final_price` directly from the `Product` model.
+
+However, the actual product page (`ProductDetails.vue`) does **not** use `product.final_price`. It uses `product.supplier_price[0].amount` (from `ProductPricing`). For this product, `products.final_price` is effectively empty/null while the real price lives in `product_pricings.amount`, which is why the card shows Ksh 0.00.
 
 ## Changes
 
-### 1. Navbar — `horizontal-menu-bar.blade.php`
-- Remove the **OFFERS** `<li>` block entirely
-- Keep BRANDS as-is (it already links to `route('brands.index')`)
+### 1. `app/Http/Controllers/HomeController.php`
+In the `$adornProducts` query inside `index()`, add `product.supplierPrice` to the eager-load list:
 
-### 2. Partner Brands teaser — `our-partners.blade.php`
-- Replace the 3 hardcoded partner cards with a loop over brands passed from the controller
-- Keep the same card styling (`hover-lift`, image constrained to `max-height: 120px`)
-- Each brand card links to `route('search.index', ['search' => $brand->name])` (same as the `/brands` page)
-- Add a **View All Brands** CTA button/link below the grid pointing to `route('brands.index')`
-- If no brands exist, show a simple fallback message or hide the section gracefully
+```php
+->with(['product.attachments.media', 'product.category', 'product.supplierPrice'])
+```
 
-### 3. HomeController — `app/Http/Controllers/HomeController.php`
-- In `index()`, add `'brands' => $brands` to the view data (the query already exists)
+### 2. `resources/views/e-commerce/sliders/best-seller.blade.php`
+Change the price display from:
+```blade
+<span class="text-accent">Ksh {{ $product->final_price }}</span>
+```
 
-### 4. Welcome page — `resources/views/e-commerce/welcome.blade.php`
-- Ensure the `@include('e-commerce.sliders.our-partners')` passes the `$brands` variable:
-  ```blade
-  @include('e-commerce.sliders.our-partners', ['brands' => $brands])
-  ```
+To:
+```blade
+@php
+  $displayPrice = optional(optional($product->supplierPrice)->first())->amount ?? $product->final_price;
+@endphp
+<span class="text-accent">Ksh {{ $displayPrice }}</span>
+```
+
+This mirrors what `ProductDetails.vue` uses (`supplier_price[0].amount`) and falls back to `final_price` if no supplier pricing exists.
 
 ## Validation
-- Navbar shows BRANDS tab, no OFFERS tab
-- `/brands` page still works
-- Footer "Partner Brands" section renders brand cards dynamically from DB
-- Clicking a brand card searches for that brand
-- "View All Brands" link goes to `/brands`
-- Works when `$brands` is empty (no errors)
+- The ADORN eyeshadow palette card in "Best Sellers" shows the same Ksh price as its product page
+- No null/0.00 fallback when `supplierPrice` is populated
+- If a product truly has no pricing, it still falls back gracefully to `final_price`

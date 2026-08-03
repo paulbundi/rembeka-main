@@ -156,13 +156,7 @@ import catchValidationErrors from '../../../../utils/catchValidationErrors'
             :value="selected.menu"
           />
       </div>
-      <div class="form-group">
-        <label>Age Groups</label>
-          <remote-selector 
-            module="AgeGroups"
-            @change="(value) => updateProperty('age_groups', value)"
-          />
-      </div>
+
     </div>
 
     <div class="col-6">

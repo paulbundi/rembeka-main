@@ -233,18 +233,6 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
         <div class="widget mb-4 pb-4 border-bottom">
         </div>
 
-        <!-- Filter by Age Group-->
-        <div class="widget widget-filter mb-2 border-bottom">
-          <h3 class="widget-title mb-0">Age Group</h3>
-          <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
-            <li v-for="group in ageGroups" :key="group.id" class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="searchParams.age_group"  id="adidas" :value="group.id">
-                <label class="form-check-label widget-filter-item-text" for="adidas">{{ group.name }}</label>
-              </div>
-            </li>
-          </ul>
-        </div>
       </div>
   </div>
 </template>

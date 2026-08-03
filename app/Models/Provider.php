@@ -53,10 +53,24 @@ class Provider extends Model
 
             OrderItem::where('provider_id', $provider->id)->update(['provider_id' => null]);
 
+            // Null out any order items referencing this provider's pricings before deleting them
+            $pricingIds = $provider->productPricings()->pluck('id');
+            if ($pricingIds->isNotEmpty()) {
+                OrderItem::whereIn('pricing_id', $pricingIds)->update(['pricing_id' => null]);
+            }
+
             $provider->productPricings()->delete();
-            $provider->profile()->delete();
+
+            if ($provider->profile) {
+                $provider->profile->delete();
+            }
+
             $provider->works()->delete();
-            Booking::where('provider_id', $provider->id)->delete();
+
+            // Force delete bookings since Booking uses SoftDeletes — a soft delete
+            // leaves provider_id in the row which blocks the provider delete on FK constrained DBs
+            Booking::where('provider_id', $provider->id)->forceDelete();
+
             ProductReview::where('provider_id', $provider->id)->delete();
         });
     }

@@ -1,96 +1,124 @@
 @extends('layouts.e-commerce')
 @section('content')
-@php
-  $menus = $menus ?? collect();
-@endphp
-<main class="profile-padding">
-    <section>
-      <div class="container">
-        <div class="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-2 mb-4">
-          <h2 class="h3 mb-0 pt-3 me-3 text-uppercase fw-bold" style="color: #1e293b; letter-spacing: 0.5px;">Adorn Picks
-          </h2>
-        </div>
+<main style="padding-top: 6rem;">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="h3 mb-1 text-uppercase fw-bold" style="color: #1e293b;">Become a Stylist / Provider</h2>
+                        <p class="text-muted mb-4">Join our network of professional stylists and service providers. Fill in the details below and our team will get back to you.</p>
 
-        <div class="tns-carousel tns-controls-static tns-controls-outside tns-dots-enabled pt-2">
-          <div class="tns-carousel-inner" data-carousel-options='{"items": 2, "gutter": 16, "controls": true, "autoHeight": true, "responsive": {"0":{"items":1}, "480":{"items":2}, "720":{"items":3}, "991":{"items":2}, "1140":{"items":3}, "1300":{"items":4}, "1500":{"items":5}}}'>
+                        @if(session()->has('success'))
+                            <div class="alert alert-success">{{ session()->get('success') }}</div>
+                        @endif
 
-            @foreach($adornProducts ?? [] as $pricing)
-              @php
-                $product = optional($pricing)->product;
-                $media = null;
-                if ($product) {
-                    $firstAttachment = optional($product->attachments)->first();
-                    $media = optional($firstAttachment)->media;
-                }
-              @endphp
+                        <form method="POST" action="{{ route('stylist-inquiries') }}" id="providerInquiryForm">
+                            @csrf
+                            <div class="row g-3 gx-4">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="first_name">First Name</label>
+                                    <input class="form-control" type="text" required id="first_name" name="first_name" value="{{ old('first_name') }}">
+                                    @error('first_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="last_name">Last Name</label>
+                                    <input class="form-control" type="text" required id="last_name" name="last_name" value="{{ old('last_name') }}">
+                                    @error('last_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-              @if($product && $media)
-                <div class="card product-card card-static pb-3">
-                  <a class="card-img-top d-block overflow-hidden text-center"
-                     href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}">
-                    <img class="product-image" src="{{ asset($media->url) }}" alt="{{ $media->name ?? $product->name }}" />
-                  </a>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="email">Email Address</label>
+                                    <input class="form-control" type="email" required id="email" name="email" value="{{ old('email') }}">
+                                    @error('email')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="phone">Phone Number</label>
+                                    <input class="form-control" type="text" required id="phone" name="phone" value="{{ old('phone') }}">
+                                    @error('phone')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                  <div class="card-body py-2">
-                    @if($product->category)
-                      <a class="product-meta d-block fs-xs pb-1" href="#">{{ $product->category->name }}</a>
-                    @endif
+                                <div class="col-12">
+                                    <label class="form-label" for="address">Address / Location</label>
+                                    <input class="form-control" type="text" required id="address" name="address" value="{{ old('address') }}">
+                                    @error('address')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                    <h3 class="product-title fs-sm text-truncate">
-                      <a href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}">
-                        {{ $product->name }}
-                      </a>
-                    </h3>
+                                <div class="col-12">
+                                    <label class="form-label" for="professional_qualifications">Professional Qualifications</label>
+                                    <textarea class="form-control" required id="professional_qualifications" name="professional_qualifications" rows="3">{{ old('professional_qualifications') }}</textarea>
+                                    @error('professional_qualifications')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                    <div class="product-price">
-                      <span class="text-accent">Ksh {{ $product->final_price }}</span>
+                                <div class="col-12">
+                                    <label class="form-label" for="works_experience">Work Experience</label>
+                                    <textarea class="form-control" required id="works_experience" name="works_experience" rows="3">{{ old('works_experience') }}</textarea>
+                                    @error('works_experience')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label d-block">Services Offered</label>
+                                    @php
+                                        $selectedServices = old('services', []);
+                                        if (!is_array($selectedServices)) {
+                                            $selectedServices = [];
+                                        }
+                                        $flatMenus = collect();
+                                        $menus = $menus ?? collect();
+                                        foreach ($menus as $menu) {
+                                            $flatMenus->push($menu);
+                                            if ($menu->children) {
+                                                foreach ($menu->children as $child) {
+                                                    $flatMenus->push($child);
+                                                    if (isset($child->children)) {
+                                                        foreach ($child->children as $grand) {
+                                                            $flatMenus->push($grand);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @foreach($flatMenus as $menu)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="services[]" value="{{ $menu->id }}" id="service_{{ $menu->id }}"
+                                                    {{ in_array($menu->id, $selectedServices) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="service_{{ $menu->id }}">
+                                                    {{ $menu->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @error('services')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-12 text-end mt-3">
+                                    <button type="submit" class="btn btn-primary btn-shadow">Submit Inquiry</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                  </div>
-
-                  <div class="product-floating-btn">
-                    <a href="{{ route('product.show', ['slug' => $product->slug, 'productId' => $product->id]) }}"
-                       class="btn btn-primary btn-shadow btn-sm" type="button">
-                      +<i class="ci-cart fs-base ms-1"></i>
-                    </a>
-                  </div>
                 </div>
-              @endif
-            @endforeach
-
-          </div>
+            </div>
         </div>
-      </div>
-
-      <div class="container py-5">
-        <div class="d-flex justify-content-center border-bottom pb-2 mb-4">
-          <h2 class="h3 mb-0 pt-3 text-uppercase fw-bold text-center" style="color: #1e293b; letter-spacing: 0.5px;">Our Partners</h2>
-        </div>
-        <div class="row g-4 justify-content-center">
-          <div class="col-6 col-md-5 col-lg-4">
-            <a href="https://www.hevafund.com/" target="_blank" rel="noopener" class="text-decoration-none">
-              <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
-                <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                  <img src="https://rembekaonline.com/storage/media/FR3I7jDVhWxPLgA4WMPGnuD4GpMOIBV6KI6YCwwN.png" alt="Heva Fund" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
-                  <p class="fw-bold text-dark mt-3 mb-0 text-center">Heva Fund</p>
-                </div>
-              </div>
-            </a>
-          </div>
-          <div class="col-6 col-md-5 col-lg-4">
-            <a href="https://www.afrinext.net/" target="_blank" rel="noopener" class="text-decoration-none">
-              <div class="card border-0 bg-white shadow-sm h-100 hover-lift">
-                <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
-                  <img src="https://rembekaonline.com/storage/media/b2n8yP8efXFNwUwQKuOUw84oPL3hxqnBpZ1RpypU.jpg" alt="AfriNext" class="img-fluid partner-card-img" style="max-height: 120px; object-fit: contain; transition: transform 0.3s ease;">
-                  <p class="fw-bold text-dark mt-3 mb-0 text-center">AfriNext</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
+    </div>
     @include('layouts.e-commerce-footer')
-    </section>
 </main>
-
 @endsection

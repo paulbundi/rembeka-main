@@ -22,11 +22,10 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
         searchLocations: null,
         ageGroups:[],
         searchParams: {
-          locations: [],
-          types: [],
-          menuId: null,
-          rating: null,
-          age_group: [],
+            locations: [],
+            menuId: null,
+            rating: null,
+            age_group: [],
         },
       };
     },
@@ -57,13 +56,6 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
         }
     },
     computed: {
-      appointmentTypes() {
-        let types = [
-          { name: "Home Visit", id: 2, },
-          { name: "Salon Visit", id: 1 },
-        ];
-        return types;
-      },
       productMenus() {
         let pMenu = [];
           pMenu = this.menus.filter((item) => item.type == 1);
@@ -180,20 +172,7 @@ import PriceRangeFilter from './PriceRangeFilter.vue';
             </div>
           </div>
         </div>
-      <!-- Filter by Service Type-->
-        <div class="widget widget-filter mb-2 border-bottom">
-          <h3 class="widget-title mb-0">Appointment Type</h3>
-          <ul class="widget-list widget-filter-list list-unstyled pt-1" style="max-height: 11rem;" data-simplebar data-simplebar-auto-hide="false">
-            <li v-for="type in appointmentTypes" :key="type.id" class="widget-filter-item d-flex justify-content-between align-items-center mb-1">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" v-model="searchParams.types"  id="adidas" :value="type.id">
-                <label class="form-check-label widget-filter-item-text" for="adidas">{{ type.name }}</label>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-         <!-- Rating-->
+      <!-- Rating-->
         <div class="widget mb-2 border-bottom">
           <h3 class="widget-title mb-0">Rating</h3>
             <div class="cursor-pointer" @click="()=>ratingFilter(5)">

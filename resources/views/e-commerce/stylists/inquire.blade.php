@@ -70,45 +70,6 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-12">
-                                    <label class="form-label d-block">Services Offered</label>
-                                    @php
-                                        $selectedServices = old('services', []);
-                                        if (!is_array($selectedServices)) {
-                                            $selectedServices = [];
-                                        }
-                                        $flatMenus = collect();
-                                        $menus = $menus ?? collect();
-                                        foreach ($menus as $menu) {
-                                            $flatMenus->push($menu);
-                                            if ($menu->children) {
-                                                foreach ($menu->children as $child) {
-                                                    $flatMenus->push($child);
-                                                    if (isset($child->children)) {
-                                                        foreach ($child->children as $grand) {
-                                                            $flatMenus->push($grand);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    @endphp
-                                    <div class="d-flex flex-wrap gap-3">
-                                        @foreach($flatMenus as $menu)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="services[]" value="{{ $menu->id }}" id="service_{{ $menu->id }}"
-                                                    {{ in_array($menu->id, $selectedServices) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="service_{{ $menu->id }}">
-                                                    {{ $menu->name }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    @error('services')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 <div class="col-12 text-end mt-3">
                                     <button type="submit" class="btn btn-primary btn-shadow">Submit Inquiry</button>
                                 </div>

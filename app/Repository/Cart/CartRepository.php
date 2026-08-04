@@ -95,7 +95,8 @@ class CartRepository
         }
 
         if ($phone && !$payOnDelivery) {
-            $response = $this->requestPayment->viaStkPush($amount, $order->stk_order_no, $order->id, $phone);
+            // STK push disabled until M-Pesa keys are configured
+            // $response = $this->requestPayment->viaStkPush($amount, $order->stk_order_no, $order->id, $phone);
         }
         $response['order'] = $order;
 

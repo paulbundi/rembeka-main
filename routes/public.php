@@ -64,14 +64,14 @@ Route::post('/order-additional-info', [CartController::class, 'additionalInforma
 Route::match(['get', 'post'], '/payment/method', [CartController::class, 'paymentMode'])
     ->name('payment.mode');
 
-Route::get('validate-payment', [CartController::class, 'validateStkPayment'])
-    ->name('validate.stk');
+// Route::get('validate-payment', [CartController::class, 'validateStkPayment'])
+//     ->name('validate.stk');
 
-Route::post('manual-payment/submit', [CartController::class, 'manualPaymentSubmit'])
-    ->name('manual.payment.submit');
+// Route::post('manual-payment/submit', [CartController::class, 'manualPaymentSubmit'])
+//     ->name('manual.payment.submit');
 
-Route::match(['get', 'post'], 'complete/order', [CartController::class, 'completeOrder'])
-    ->name('complete.order');
+// Route::match(['get', 'post'], 'complete/order', [CartController::class, 'completeOrder'])
+//     ->name('complete.order');
 
 Route::post('pay-on-delivery', [CartController::class, 'PayOnDelivery'])
     ->name('pay-on.delivery');
@@ -79,12 +79,12 @@ Route::post('pay-on-delivery', [CartController::class, 'PayOnDelivery'])
 /*
  * Paystack payment endpoints
  */
-Route::post('paystack/initialize', [\App\Http\Controllers\Api\PaystackController::class, 'initialize'])
-    ->name('paystack.initialize');
-Route::get('paystack/callback', [\App\Http\Controllers\Api\PaystackController::class, 'callback'])
-    ->name('paystack.callback');
-Route::post('paystack/webhook', [\App\Http\Controllers\Api\PaystackController::class, 'webhook'])
-    ->name('paystack.webhook');
+// Route::post('paystack/initialize', [\App\Http\Controllers\Api\PaystackController::class, 'initialize'])
+//     ->name('paystack.initialize');
+// Route::get('paystack/callback', [\App\Http\Controllers\Api\PaystackController::class, 'callback'])
+//     ->name('paystack.callback');
+// Route::post('paystack/webhook', [\App\Http\Controllers\Api\PaystackController::class, 'webhook'])
+//     ->name('paystack.webhook');
 
 //search routes
 Route::get('/product/{slug}/{productId}', [ProductController::class, 'show'])
@@ -173,14 +173,14 @@ Route::view('/company/contacts', 'e-commerce.company.contacts')->name('company.c
  * Mpesa payment endpoints
  */
 // Route::group(['middleware' => ['allowed-mpesa-ips']], function () {
-    Route::any('payment_validation', [ValidationController::class , 'paymentValidation']);
-    Route::any('payment_confirmation', [ValidationController::class, 'paymentConfirmation']);
+    // Route::any('payment_validation', [ValidationController::class , 'paymentValidation']);
+    // Route::any('payment_confirmation', [ValidationController::class, 'paymentConfirmation']);
 
-    Route::any('b2c_results', [ValidationController::class, 'paymentResult']);
-    Route::any('b2c_timeout', [ValidationController::class, 'transactionTimeout']);
-    Route::any('invalid-stk', [ValidationController::class, 'invalidStK']);
-    Route::any('status/callback', [ValidationController::class, 'statusCallback']);
-    Route::post('sms/callback', [SmsController::class, 'smsCallback']);
+    // Route::any('b2c_results', [ValidationController::class, 'paymentResult']);
+    // Route::any('b2c_timeout', [ValidationController::class, 'transactionTimeout']);
+    // Route::any('invalid-stk', [ValidationController::class, 'invalidStK']);
+    // Route::any('status/callback', [ValidationController::class, 'statusCallback']);
+    // Route::post('sms/callback', [SmsController::class, 'smsCallback']);
 
 // });
 

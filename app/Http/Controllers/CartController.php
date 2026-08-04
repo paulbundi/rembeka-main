@@ -196,12 +196,12 @@ class CartController extends Controller
      *
      * @return void
      */
-    public function completeOrder(PaymentFormRequest $request, CartRepository $cartRepository)
-    {
-        $response = $cartRepository->createOrder($request->phone);
-
-        return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
-    }
+    // public function completeOrder(PaymentFormRequest $request, CartRepository $cartRepository)
+    // {
+    //     $response = $cartRepository->createOrder($request->phone);
+    //
+    //     return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
+    // }
 
 
 
@@ -229,31 +229,31 @@ class CartController extends Controller
      *
      * @return void
      */
-    public function validateStkPayment(MpesaValidationRepository $validatePayment)
-    {
-        $response = $validatePayment->validateTopUp(false);
-
-        if (isset($response['transaction'])) {
-            $order = Order::with('items')
-                ->where('order_no', $response['transaction']->reference_id)
-                ->first();
-
-            if (isset($response['type']) && $response['type'] == 'success') {
-                return view('e-commerce.checkouts.payment-complete', [
-                    'order' => $order
-                ]);
-            } else {
-                return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
-            }
-        }
-
-        return redirect()->route('home')->with([
-            'message' => [
-                'type' => 'error',
-                'message' => 'Failed to make payment, we will contact you shortly to help out',
-            ],
-        ]);
-    }
+    // public function validateStkPayment(MpesaValidationRepository $validatePayment)
+    // {
+    //     $response = $validatePayment->validateTopUp(false);
+    //
+    //     if (isset($response['transaction'])) {
+    //         $order = Order::with('items')
+    //             ->where('order_no', $response['transaction']->reference_id)
+    //             ->first();
+    //
+    //         if (isset($response['type']) && $response['type'] == 'success') {
+    //             return view('e-commerce.checkouts.payment-complete', [
+    //                 'order' => $order
+    //             ]);
+    //         } else {
+    //             return view('e-commerce.checkouts.payment-mode', ['response' => $response]);
+    //         }
+    //     }
+    //
+    //     return redirect()->route('home')->with([
+    //         'message' => [
+    //             'type' => 'error',
+    //             'message' => 'Failed to make payment, we will contact you shortly to help out',
+    //         ],
+    //     ]);
+    // }
 
     /**
      * Handle manual C2B payment submission.
@@ -263,29 +263,29 @@ class CartController extends Controller
      *
      * @return void
      */
-    public function manualPaymentSubmit(Request $request, MpesaValidationRepository $mpesaValidationRepository)
-    {
-        $validated = $request->validate([
-            'mpesa_transaction_id' => 'required|string',
-            'phone' => 'required|string',
-            'amount' => 'required|numeric|min:1',
-        ]);
-
-        $response = $mpesaValidationRepository->verifyManualPayment($validated);
-
-        if (isset($response['type']) && $response['type'] == 'success') {
-            return view('e-commerce.checkouts.payment-complete', [
-                'order' => $response['order']
-            ]);
-        }
-
-        return redirect()->back()->withInput()->with([
-            'message' => [
-                'type' => 'error',
-                'message' => $response['notice'] ?? 'Payment verification failed. Please contact support.',
-            ],
-        ]);
-    }
+    // public function manualPaymentSubmit(Request $request, MpesaValidationRepository $mpesaValidationRepository)
+    // {
+    //     $validated = $request->validate([
+    //         'mpesa_transaction_id' => 'required|string',
+    //         'phone' => 'required|string',
+    //         'amount' => 'required|numeric|min:1',
+    //     ]);
+    //
+    //     $response = $mpesaValidationRepository->verifyManualPayment($validated);
+    //
+    //     if (isset($response['type']) && $response['type'] == 'success') {
+    //         return view('e-commerce.checkouts.payment-complete', [
+    //             'order' => $response['order']
+    //         ]);
+    //     }
+    //
+    //     return redirect()->back()->withInput()->with([
+    //         'message' => [
+    //             'type' => 'error',
+    //             'message' => $response['notice'] ?? 'Payment verification failed. Please contact support.',
+    //         ],
+    //     ]);
+    // }
 
     /**
      * Additional order-notes.

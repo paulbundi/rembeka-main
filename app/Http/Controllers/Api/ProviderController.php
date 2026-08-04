@@ -110,7 +110,7 @@ class ProviderController extends AbstractApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param int $id
+     * @param int $modelId
      *
      * @return \Illuminate\Http\Response
      */

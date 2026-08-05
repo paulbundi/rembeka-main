@@ -6,8 +6,8 @@
             <div class="col-lg-10">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-4 p-md-5">
-                        <h2 class="h3 mb-1 text-uppercase fw-bold" style="color: #1e293b;">Become a Stylist / Provider</h2>
-                        <p class="text-muted mb-4">Join our network of professional stylists and service providers. Fill in the details below and our team will get back to you.</p>
+                        <h2 class="h3 mb-1 text-uppercase fw-bold" style="color: #1e293b;">Inquiries</h2>
+                        <p class="text-muted mb-4">Fill in the details below and our team will get back to you.</p>
 
                         @if(session()->has('success'))
                             <div class="alert alert-success">{{ session()->get('success') }}</div>

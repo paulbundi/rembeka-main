@@ -31,7 +31,7 @@ class ProviderInquiryFormRequest extends FormRequest
             'address' => 'required',
             'professional_qualifications' => 'required',
             'works_experience' => 'required',
-            'services' => 'required',
+            'services' => 'nullable|array',
         ];
     }
 }

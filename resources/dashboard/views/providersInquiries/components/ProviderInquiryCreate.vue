@@ -2,9 +2,13 @@
 import { mapActions, mapState } from 'vuex'
 import updateProperty from '../../../mixins/updateProperty'
 import catchValidationErrors from '../../../utils/catchValidationErrors'
+import RemoteSelector from '../../generals/RemoteSelector.vue'
 
 export default {
   name: 'ProviderInquiryCreate',
+  components: {
+    RemoteSelector,
+  },
   props: {
     id: {
       type: Number,
@@ -105,6 +109,18 @@ export default {
             <div class="form-group">
               <label>Work Experience</label>
               <textarea class="form-control" rows="4" @input="(e) => updateProperty('works_experience', e.target.value)">{{ selected.works_experience }}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Services</label>
+              <remote-selector
+                module="Menus"
+                :value="selected.services || []"
+                :multiple="true"
+                label="name"
+                @change="(value) => updateProperty('services', value)"
+              />
+              <small class="text-muted">Select the services this provider-offer applicant is interested in.</small>
             </div>
 
             <div class="form-group">

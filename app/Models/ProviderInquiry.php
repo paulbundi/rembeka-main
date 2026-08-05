@@ -3,16 +3,25 @@
 namespace App\Models;
 
 use App\Http\Resources\BaseResource;
+use App\Http\Requests\ProviderInquiryFormRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Menu;
 
 class ProviderInquiry extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'address',
-         'services', 'professional_qualifications', 'works_experience', 'status',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'address',
+        'services',
+        'professional_qualifications',
+        'works_experience',
+        'status',
     ];
 
     protected $casts = [
@@ -38,7 +47,7 @@ class ProviderInquiry extends Model
      *
      * @return string
      */
-    protected static function getFormRequestClass(): string
+    public static function getFormRequestClass(): string
     {
         return ProviderInquiryFormRequest::class;
     }
@@ -54,7 +63,7 @@ class ProviderInquiry extends Model
             $menu = Menu::whereIn('id', $this->services)->get('name');
             if ($menu) {
                 $menu->each(function ($item) use (&$servicesList) {
-                    $servicesList = $servicesList .' '.$item->name.', ';
+                    $servicesList = $servicesList . ' ' . $item->name . ', ';
                 });
             }
         }

@@ -61,6 +61,8 @@ export default {
                 <th>Details</th>
                 <th>Professional Qualifications</th>
                 <th>Work Experience</th>
+                <th>Services</th>
+                <th>Status</th>
                 <th>Inquiry Date</th>
                 <th>Actions</th>
               </tr>
@@ -76,6 +78,12 @@ export default {
                 </td>
                 <td>{{ inquiry.professional_qualifications }}</td>
                 <td>{{ inquiry.works_experience }}</td>
+                <td>{{ inquiry.serviceOffered }}</td>
+                <td>
+                  <span v-if="inquiry.status == 1" class="badge bg-success">Active</span>
+                  <span v-else-if="inquiry.status == 0" class="badge bg-warning">Inactive</span>
+                  <span v-else class="badge bg-primary">Pending</span>
+                </td>
                 <td>{{ inquiry.created_at | formatDate('LLL') }}</td>
                 <td>
                   <div class="dropdown show">

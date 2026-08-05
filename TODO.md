@@ -1,41 +1,24 @@
-# Provider 500 Error Fix
+# Provider Inquiries - CRUD Actions Fix
 
-## Changes Made
+## Goal
 
-### 1. `app/Models/Provider.php`
+Make the CRUD actions (Edit/View/Delete) appear in the actions dropdown and work correctly on the `/providers-inquiries` page.
 
--   **Changed `getApiResourceClass()` from `protected static` to `public static`**
--   **Changed `getFormRequestClass()` from `protected static` to `public static`**
+## Root Causes
 
-These methods are called from `AbstractApiController` (which is NOT in the Model inheritance hierarchy), so they must be `public`. Previously being `protected` caused PHP visibility violations → `$this->resource` stayed null → `new null(...)` threw "Class name must be a valid object or string".
+1. `app/Models/ProviderInquiry.php`:
+    - `getFormRequestClass()` references `ProviderInquiryFormRequest::class` without a `use` import → resolves to non-existent class → breaks API store/update.
+    - Method is `protected` instead of `public` → `AbstractApiController::getRequest()` can't access it.
+    - `getServiceOfferedAttribute()` uses `Menu` class without import → breaks the appended `serviceOffered` attribute.
+2. `ProviderInquiryCreate.vue` has no Services multi-select → `services` JSON column can't be populated/edited from UI.
+3. `ProviderInquiryIndex.vue` has no Services column → services not shown in list.
 
-### 2. `app/Http/Controllers/Api/ProviderController.php`
+## Steps
 
--   Replaced `return $this->getModelResource($this->model)` with explicit resource instantiation:
-    ```php
-    $this->resource = \App\Http\Resources\BaseResource::class;
-    return new $this->resource($this->model);
-    ```
--   This provides a direct fallback in case `resolveModel()` fails to set the resource.
-
-## Root Cause
-
-PHP cannot call `protected static` methods from unrelated classes. Since `AbstractApiController::resolveModel()` calls:
-
-```php
-$this->resource = $this->model::getApiResourceClass(); // protected!
-```
-
-...and `AbstractApiController` is not a subclass of `Model` (or `Provider`), this silently fails or throws an error, leaving `$this->resource = null`.
-
-## Endpoints Fixed
-
-Both endpoints that go through `resolveModel()`:
-
--   ✅ **PUT** `/system/providers/{id}` — `ProviderController::update()`
--   ✅ **DELETE** `/system/providers/{id}` — `AbstractApiController::destroy()`
--   ✅ Any other `Provider` endpoint using the abstract controller
-
-## Deployment
-
-Run `php artisan optimize` or `composer dump-autoload` after deploying to clear class cache.
+1. Fix `ProviderInquiry.php`:
+    - Add `use App\Http\Requests\ProviderInquiryFormRequest;`
+    - Add `use App\Models\Menu;`
+    - Change `getFormRequestClass()` to `public static`.
+2. Add Services multi-select to `ProviderInquiryCreate.vue` (use `Menus` module via RemoteSelector/MultipleSelector).
+3. Add Services column to `ProviderInquiryIndex.vue`.
+4. Verify dropdown actions appear (permission-gated already works with Admin role).

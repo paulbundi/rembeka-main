@@ -7,8 +7,9 @@ class ProviderInquiryController extends Controller
     public function __construct()
     {
         $this->middleware('can-access:provider-inquiries.view')->only('index');
-        $this->middleware('can-access:provider-inquiries.create')->only('create');
-        $this->middleware('can-access:provider-inquiries.update')->only('edit');
+        $this->middleware('can-access:provider-inquiries.create')->only('create', 'store');
+        $this->middleware('can-access:provider-inquiries.update')->only('edit', 'update');
+        $this->middleware('can-access:provider-inquiries.delete')->only('destroy');
     }
 
     /**
@@ -44,6 +45,16 @@ class ProviderInquiryController extends Controller
      */
     public function show(int $id)
     {
-        return view('dashboard.page', ['page' => 'provider-inquiries-create', 'id' => $id]);
+        return view('dashboard.page', ['page' => 'provider-inquiries-show', 'id' => $id]);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return void
+     */
+    public function destroy(int $id)
+    {
+        return view('dashboard.page', ['page' => 'provider-inquiries-index']);
     }
 }

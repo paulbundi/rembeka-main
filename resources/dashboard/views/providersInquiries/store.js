@@ -9,12 +9,11 @@ const EMPTY_ENTITY = {
   last_name: null,
   email: null,
   phone: null,
-  location_id: null,
-  national_id: null,
-  kra_pin: null,
   address: null,
-  assign_service_by: 1,
-  short_description: null,
+  professional_qualifications: null,
+  works_experience: null,
+  services: null,
+  status: null,
 };
 
 const state = {

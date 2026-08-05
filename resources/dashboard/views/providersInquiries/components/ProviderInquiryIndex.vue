@@ -11,6 +11,7 @@ export default {
   },
   data() {
     return {
+      activeDropdown: null,
     };
   },
   mixins: [
@@ -26,6 +27,10 @@ export default {
   created() {
     this.setPaginate(true);
     this.fetchItems();
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
     ...mapActions('ProviderInquiries', ['fetchAll', 'setProperty', 'persist', 'destroy', 'setSelected', 'resetSelected', 'setPaginate']),
@@ -44,6 +49,14 @@ export default {
           this.$toast.success('Provider inquiry deleted Successfully');
         });
       });
+    },
+    toggleDropdown(id) {
+      this.activeDropdown = this.activeDropdown === id ? null : id;
+    },
+    handleClickOutside(event) {
+      if (!event.target.closest('.dropdown')) {
+        this.activeDropdown = null;
+      }
     },
   }
 };
@@ -78,14 +91,14 @@ export default {
                 <td>{{ inquiry.works_experience }}</td>
                 <td>{{ inquiry.created_at | formatDate('LLL') }}</td>
                 <td>
-                  <div class="dropdown show">
-                    <a href="#" data-bs-toggle="dropdown" :id="`dropdownAction${inquiry.id}`" data-bs-display="static" aria-expanded="false" class="">
+                  <div class="dropdown">
+                    <a href="#" @click.prevent="toggleDropdown(inquiry.id)" aria-expanded="false" class="">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end" :aria-labelledby="`dropdownAction${inquiry.id}`">
+                    <div v-if="activeDropdown === inquiry.id" class="dropdown-menu dropdown-menu-end show">
                       <a v-if="canUserAccess('providers-inquiries.update')" class="dropdown-item" :href="`/providers-inquiries/${inquiry.id}/edit`">Edit</a>
                       <a v-if="canUserAccess('providers-inquiries.view')" class="dropdown-item" :href="`/providers-inquiries/${inquiry.id}`">View</a>
-                      <a v-if="canUserAccess('providers-inquiries.delete')" class="dropdown-item" href="#" @click="() => deleteInquiry(inquiry)">Delete</a>
+                      <a v-if="canUserAccess('providers-inquiries.delete')" class="dropdown-item" href="#" @click="deleteInquiry(inquiry)">Delete</a>
                     </div>
                   </div>
                 </td>

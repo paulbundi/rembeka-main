@@ -28,7 +28,7 @@ export default {
     this.fetchItems();
   },
   methods: {
-    ...mapActions('ProviderInquiries', ['fetchAll', 'setProperty', 'persist', 'destroy', 'setSelected', 'resetSelected', 'setPaginate']),
+    ...mapActions('ProviderInquiries', ['fetchAll', 'setProperty', 'persist', 'destroy', 'setSelected', 'resetSelected', 'setPaginate', 'setFormTypeEdit']),
 
     fetchItems() {
       this.setProperty({
@@ -42,6 +42,19 @@ export default {
       this.$confirm().then(() => {
         this.destroy(inquiry.id).then(() => {
           this.$toast.success('Provider inquiry deleted Successfully');
+        });
+      });
+    },
+    changeInquiryStatus(inquiry) {
+      let newInquiry = { ...inquiry, status: inquiry.status !== 1 ? 1 : 0 };
+      this.setFormTypeEdit();
+      this.setSelected(newInquiry);
+      this.$confirm().then(() => {
+        this.persist().then(() => {
+          this.fetchItems();
+          this.$toast.success('Success');
+        }).catch(({ response }) => {
+          catchValidationErrors(this, response);
         });
       });
     },
@@ -89,10 +102,14 @@ export default {
                   <div class="dropdown show">
                     <a href="#" data-bs-toggle="dropdown" :id="`dropdownAction${inquiry.id}`" data-bs-display="static" aria-expanded="false" class="">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                    </a>
+</a>
                     <div class="dropdown-menu dropdown-menu-end" :aria-labelledby="`dropdownAction${inquiry.id}`">
-                      <a v-if="canUserAccess('providers-inquiries.update')" class="dropdown-item" :href="`/providers-inquiries/${inquiry.id}/edit`">Edit</a>
                       <a v-if="canUserAccess('providers-inquiries.view')" class="dropdown-item" :href="`/providers-inquiries/${inquiry.id}`">View</a>
+                      <a v-if="canUserAccess('providers-inquiries.update')" class="dropdown-item" :href="`/providers-inquiries/${inquiry.id}/edit`">Edit</a>
+                      <span v-if="canUserAccess('providers-inquiries.update')">
+                        <a v-if="inquiry.status !== 1" class="dropdown-item" href="#" @click="() => changeInquiryStatus(inquiry)">Activate</a>
+                        <a v-else class="dropdown-item" href="#" @click="() => changeInquiryStatus(inquiry)">Deactivate</a>
+                      </span>
                       <a v-if="canUserAccess('providers-inquiries.delete')" class="dropdown-item" href="#" @click="deleteInquiry(inquiry)">Delete</a>
                     </div>
                   </div>
